@@ -3,6 +3,7 @@ import type { ChangeEvent } from "react";
 import "./App.css";
 
 const ALLOWED_EXTENSIONS = [".txt", ".docx", ".pdf"];
+const DEFAULT_WEIGHT = 5;
 
 type FileScanResult = {
   file_name: string;
@@ -18,10 +19,116 @@ type UploadResponse = {
   unique_github_links: string[];
 };
 
+type AnalysisCategory = {
+  title: string;
+  items: string[];
+};
+
+type AnalysisSelectionState = Record<string, Record<string, boolean>>;
+type CategoryWeightsState = Record<string, number>;
+type ItemWeightsState = Record<string, Record<string, number>>;
+
+const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
+  {
+    title: "General",
+    items: [
+      "Repository Creation Date",
+      "Total Commit Count",
+      "Last Commit Date",
+      "Commit Activity Timeline",
+      "Repository Owner Type (Organization or Personal)",
+      "Lines of Code and Unique Lines of Code",
+    ],
+  },
+  {
+    title: "Collaboration",
+    items: [
+      "Contributor Count",
+      "Branch Overview",
+      "Pull Request Acceptance Rate",
+    ],
+  },
+  {
+    title: "Documentation",
+    items: [
+      "README and Wiki Presence & Quality",
+      "Project Summary and CV Match",
+    ],
+  },
+  {
+    title: "Consistency",
+    items: [
+      "Commit Naming Consistency",
+      "Commit Message and Code Change Alignment",
+      "Consistency of Class, Function, Variable, and File Naming",
+    ],
+  },
+  {
+    title: "Architecture",
+    items: [
+      "Software Architecture Overview",
+      "Project Summary and Functional Match",
+      "Code Duplication",
+      "Tests and Test Coverage",
+    ],
+  },
+  {
+    title: "AI Code Analysis",
+    items: [
+      "Technology Stack Match with CV",
+      "Commit Message and Code Change Alignment (AI)",
+      "Naming and Project Structure Consistency (AI)",
+      "Project Summary and CV Match (AI)",
+      "Estimated AI-Generated Code Percentage",
+    ],
+  },
+];
+
+const createInitialAnalysisSelections = (): AnalysisSelectionState => {
+  return ANALYSIS_CATEGORIES.reduce<AnalysisSelectionState>((categoryAcc, category) => {
+    categoryAcc[category.title] = category.items.reduce<Record<string, boolean>>(
+      (itemAcc, item) => {
+        itemAcc[item] = true;
+        return itemAcc;
+      },
+      {},
+    );
+
+    return categoryAcc;
+  }, {});
+};
+
+const createInitialCategoryWeights = (): CategoryWeightsState => {
+  return ANALYSIS_CATEGORIES.reduce<CategoryWeightsState>((acc, category) => {
+    acc[category.title] = DEFAULT_WEIGHT;
+    return acc;
+  }, {});
+};
+
+const createInitialItemWeights = (): ItemWeightsState => {
+  return ANALYSIS_CATEGORIES.reduce<ItemWeightsState>((categoryAcc, category) => {
+    categoryAcc[category.title] = category.items.reduce<Record<string, number>>(
+      (itemAcc, item) => {
+        itemAcc[item] = DEFAULT_WEIGHT;
+        return itemAcc;
+      },
+      {},
+    );
+
+    return categoryAcc;
+  }, {});
+};
+
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [uploadResult, setUploadResult] = useState<UploadResponse | null>(null);
+  const [analysisSelections, setAnalysisSelections] =
+    useState<AnalysisSelectionState>(createInitialAnalysisSelections);
+  const [categoryWeights, setCategoryWeights] =
+    useState<CategoryWeightsState>(createInitialCategoryWeights);
+  const [itemWeights, setItemWeights] =
+    useState<ItemWeightsState>(createInitialItemWeights);
 
   const acceptedFileTypes = useMemo(() => ALLOWED_EXTENSIONS.join(","), []);
 
@@ -83,7 +190,43 @@ function App() {
     );
   };
 
+  const getSelectedAnalysisMetrics = () => {
+    const selected: string[] = [];
+
+    Object.entries(analysisSelections).forEach(([category, items]) => {
+      Object.entries(items).forEach(([metric, isChecked]) => {
+        if (isChecked) {
+          const categoryWeight = categoryWeights[category];
+          const metricWeight = itemWeights[category]?.[metric];
+
+          selected.push(
+            `${category} (category weight: ${categoryWeight}) -> ${metric} (metric weight: ${metricWeight})`,
+          );
+        }
+      });
+    });
+
+    return selected;
+  };
+
   const handleUpload = async () => {
+    const selectedMetrics = getSelectedAnalysisMetrics();
+
+    console.log("Selected analysis metrics:");
+    selectedMetrics.forEach((metric) => console.log(metric));
+
+    console.log("All category weights:");
+    Object.entries(categoryWeights).forEach(([category, weight]) => {
+      console.log(`${category}: ${weight}`);
+    });
+
+    console.log("All subcategory weights:");
+    Object.entries(itemWeights).forEach(([category, items]) => {
+      Object.entries(items).forEach(([item, weight]) => {
+        console.log(`${category} -> ${item}: ${weight}`);
+      });
+    });
+
     if (selectedFiles.length === 0) {
       setStatusMessage("Please select at least one file before uploading.");
       return;
@@ -118,6 +261,44 @@ function App() {
       console.error(error);
       setStatusMessage("Something went wrong while uploading the files.");
     }
+  };
+
+  const handleAnalysisItemToggle = (categoryTitle: string, itemName: string) => {
+    setAnalysisSelections((previousSelections) => ({
+      ...previousSelections,
+      [categoryTitle]: {
+        ...previousSelections[categoryTitle],
+        [itemName]: !previousSelections[categoryTitle][itemName],
+      },
+    }));
+  };
+
+  const handleCategoryWeightChange = (
+    categoryTitle: string,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const weight = Number(event.target.value);
+
+    setCategoryWeights((previousWeights) => ({
+      ...previousWeights,
+      [categoryTitle]: weight,
+    }));
+  };
+
+  const handleItemWeightChange = (
+    categoryTitle: string,
+    itemName: string,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const weight = Number(event.target.value);
+
+    setItemWeights((previousWeights) => ({
+      ...previousWeights,
+      [categoryTitle]: {
+        ...previousWeights[categoryTitle],
+        [itemName]: weight,
+      },
+    }));
   };
 
   return (
@@ -242,6 +423,116 @@ function App() {
               </div>
             </div>
           )}
+        </section>
+
+        <section className="card">
+          <h2>Repository Analysis Sections</h2>
+          <p className="card-description">
+            Choose which repository metrics should be included in the analysis.
+          </p>
+
+          <div className="results-list">
+            {ANALYSIS_CATEGORIES.map((category) => {
+              const currentCategoryWeight = categoryWeights[category.title] ?? DEFAULT_WEIGHT;
+
+              return (
+                <div key={category.title} className="result-card">
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "1rem",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <h3 style={{ margin: 0 }}>{category.title}</h3>
+
+                    <input
+                      id={`category-weight-${category.title}`}
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="1"
+                      value={currentCategoryWeight}
+                      onChange={(event) =>
+                        handleCategoryWeightChange(category.title, event)
+                      }
+                      style={{
+                        width: "200px",
+                        flexShrink: 0,
+                      }}
+                    />
+                  </div>
+
+                  <ul className="link-list">
+                    {category.items.map((item) => {
+                      const isChecked =
+                        analysisSelections[category.title]?.[item] ?? false;
+                      const currentItemWeight =
+                        itemWeights[category.title]?.[item] ?? DEFAULT_WEIGHT;
+
+                      return (
+                        <li key={item}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.75rem",
+                              justifyContent: "space-between",
+                              paddingBottom: "0.65rem",
+                            }}
+                          >
+                            <label
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.65rem",
+                                cursor: "pointer",
+                                flex: 1,
+                                minWidth: 0,
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() =>
+                                  handleAnalysisItemToggle(category.title, item)
+                                }
+                              />
+                              <span>
+                                {item} (not rdy)
+                              </span>
+                            </label>
+
+                            <input
+                              id={`item-weight-${category.title}-${item}`}
+                              type="range"
+                              min="0"
+                              max="10"
+                              step="1"
+                              value={currentItemWeight}
+                              onChange={(event) =>
+                                handleItemWeightChange(
+                                  category.title,
+                                  item,
+                                  event,
+                                )
+                              }
+                              style={{
+                                width: "110px",
+                                flexShrink: 0,
+                              }}
+                            />
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
         </section>
       </main>
     </div>
