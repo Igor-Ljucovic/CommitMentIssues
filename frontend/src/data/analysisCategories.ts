@@ -38,66 +38,94 @@ const createStandardDateRangeParameters = (): MetricParameterConfig[] => [
   },
 ];
 
+const createBooleanParameters = (): MetricParameterConfig[] => [
+  {
+    key: "hardRequirement",
+    label: "Hard Requirement",
+    type: "boolean-slider",
+  },
+  {
+    key: "recommendedRequirement",
+    label: "Recommended Requirement",
+    type: "boolean-slider",
+  },
+];
+
+const createPercentageRangeParameters = (): MetricParameterConfig[] => [
+  {
+    key: "hardRequirementRange",
+    label: "Hard Requirement Range",
+    type: "percentage-range",
+  },
+  {
+    key: "recommendedRange",
+    label: "Recommended Range",
+    type: "percentage-range",
+  },
+  {
+    key: "idealRange",
+    label: "Ideal Range",
+    type: "percentage-range",
+  },
+];
+
 export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
   {
     title: "General",
     items: [
       {
-        name: "Total Repositories",
+        name: "Total Git Branches (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Repository Creation Date",
+        name: "Repository Creation Date (not rdy)",
         parameters: createStandardDateRangeParameters(),
       },
       {
-        name: "Last Commit Date",
+        name: "Last Commit Date (not rdy)",
         parameters: createStandardDateRangeParameters(),
       },
       {
-        name: "Total Commits",
-        parameters: createStandardIntRangeParameters(),
-        subItems: [
-          {
-            name: "Average Commit Frequency (per month)",
-            parameters: createStandardIntRangeParameters(),
-          },
-          {
-            name: "Average Commit Size",
-            parameters: createStandardIntRangeParameters(),
-            tooltipText:
-              "In lines of code, excluding generated and boilerplate files",
-          },
-        ],
-      },
-      {
-        name: "Total Git Branches",
+        name: "Total Commits (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Total Lines of Code",
+        name: "Average Commits Per Month (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Total Lines of Code (filtered)",
+        name: "Average Commit Size (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+        tooltipText: "In lines of code, excluding generated and boilerplate files",
+      },
+      {
+        name: "Total Lines of Code (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Total Lines of Code (filtered) ⭐ (not rdy)",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "Excluding generated and boilerplate files",
       },
       {
-        name: "Total Files",
+        name: "Total Files (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Total Files (filtered)",
+        name: "Total Files (filtered) ⭐ (not rdy)",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "Excluding generated and boilerplate files",
       },
       {
-        name: "Total Forks",
+        name: "Technology Stack Count (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Stars",
+        name: "Total Forks (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Stars (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
     ],
@@ -105,45 +133,109 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
   {
     title: "Collaboration",
     items: [
-      { name: "Contributor Count" },
-      { name: "Branch Overview" },
-      { name: "Pull Request Acceptance Rate" },
+      {
+        name: "Total Contributors (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Total Pull Requests (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Pull Request Acceptance Rate (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      {
+        name: "Average Pull Request Reviewer Count (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Total Issues (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Issue Resolution Rate (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
     ],
   },
   {
     title: "Documentation",
     items: [
-      { name: "README and Wiki Presence & Quality" },
-      { name: "Project Summary and CV Match" },
-    ],
-  },
-  {
-    title: "Consistency",
-    items: [
-      { name: "Commit Naming Consistency" },
-      { name: "Commit Message and Code Change Alignment" },
       {
-        name: "Consistency of Class, Function, Variable, and File Naming",
+        name: "README Presence (not rdy)",
+        parameters: createBooleanParameters(),
+      },
+      {
+        name: "README Length (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Estimated README Quality ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      {
+        name: "GitHub Wiki Presence (not rdy)",
+        parameters: createBooleanParameters(),
+      },
+      {
+        name: "GitHub Wiki Length (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
+        name: "Estimated GitHub Wiki Quality ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
       },
     ],
   },
   {
-    title: "Architecture",
+    title: "Code & Repository Quality",
     items: [
-      { name: "Software Architecture Overview" },
-      { name: "Project Summary and Functional Match" },
-      { name: "Code Duplication" },
-      { name: "Tests and Test Coverage" },
+      { 
+        name: "Estimated Commit Naming Consistency ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated Commit Message and Code Change Alignment ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated Consistency of Class, Function, Variable, and File Naming ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated Code Duplication ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated Frontend Test Coverage ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated Backend Test Coverage ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated File Architecture Quality ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated AI-Generated Code ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
     ],
   },
   {
-    title: "AI Code Analysis",
+    title: "HR Metrics",
     items: [
-      { name: "Technology Stack Match with CV" },
-      { name: "Commit Message and Code Change Alignment (AI)" },
-      { name: "Naming and Project Structure Consistency (AI)" },
-      { name: "Project Summary and CV Match (AI)" },
-      { name: "Estimated AI-Generated Code Percentage" },
+      { 
+        name: "Estimated Project Summary and CV Match ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
+      { 
+        name: "Estimated Technology Stack and CV Match ⭐ (not rdy)",
+        parameters: createPercentageRangeParameters(),
+      },
     ],
   },
 ];

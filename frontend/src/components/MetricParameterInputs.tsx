@@ -1,7 +1,4 @@
-import type {
-  AnalysisItem,
-  MetricParameterValue,
-} from "../types";
+import type { AnalysisItem, MetricParameterValue } from "../types";
 
 type MetricParameterInputsProps = {
   categoryTitle: string;
@@ -123,6 +120,120 @@ function MetricParameterInputs({
                       minWidth: "120px",
                     }}
                   />
+                </div>
+              </div>
+            ) : parameter.type === "percentage-range" ? (
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.75rem",
+                  flexWrap: "wrap",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.3rem",
+                  }}
+                >
+                  <label style={{ fontSize: "0.85rem" }}>Min</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    placeholder="0"
+                    value={currentValue.min ?? ""}
+                    onChange={(event) =>
+                      onMetricParameterChange(
+                        categoryTitle,
+                        item.name,
+                        parameter.key,
+                        "min",
+                        event.target.value,
+                      )
+                    }
+                    style={{
+                      padding: "0.45rem 0.55rem",
+                      borderRadius: "6px",
+                      border: "1px solid #b8b8b8",
+                      minWidth: "120px",
+                    }}
+                  />
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.3rem",
+                  }}
+                >
+                  <label style={{ fontSize: "0.85rem" }}>Max</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    placeholder="100"
+                    value={currentValue.max ?? ""}
+                    onChange={(event) =>
+                      onMetricParameterChange(
+                        categoryTitle,
+                        item.name,
+                        parameter.key,
+                        "max",
+                        event.target.value,
+                      )
+                    }
+                    style={{
+                      padding: "0.45rem 0.55rem",
+                      borderRadius: "6px",
+                      border: "1px solid #b8b8b8",
+                      minWidth: "120px",
+                    }}
+                  />
+                </div>
+              </div>
+            ) : parameter.type === "boolean-slider" ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.35rem",
+                  maxWidth: "320px",
+                }}
+              >
+                <input
+                  type="range"
+                  min="0"
+                  max="2"
+                  step="1"
+                  value={currentValue.selected ?? "1"}
+                  onChange={(event) =>
+                    onMetricParameterChange(
+                      categoryTitle,
+                      item.name,
+                      parameter.key,
+                      "selected",
+                      event.target.value,
+                    )
+                  }
+                  style={{
+                    width: "100%",
+                  }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "0.82rem",
+                    color: "#666",
+                    paddingInline: "0.1rem",
+                  }}
+                >
+                  <span>No</span>
+                  <span>Either</span>
+                  <span>Yes</span>
                 </div>
               </div>
             ) : (

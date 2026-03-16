@@ -60,10 +60,17 @@ export const createInitialMetricParameters = (): MetricParametersState => {
         itemAcc[item.name] = {};
 
         item.parameters?.forEach((parameter) => {
-          itemAcc[item.name][parameter.key] =
-            parameter.type === "date-range"
-              ? { before: "", after: "" }
-              : { min: "", max: "" };
+          if (parameter.type === "date-range") {
+            itemAcc[item.name][parameter.key] = { before: "", after: "" };
+            return;
+          }
+
+          if (parameter.type === "boolean-slider") {
+            itemAcc[item.name][parameter.key] = { selected: "1" }; // default = Either
+            return;
+          }
+
+          itemAcc[item.name][parameter.key] = { min: "", max: "" };
         });
 
         return itemAcc;

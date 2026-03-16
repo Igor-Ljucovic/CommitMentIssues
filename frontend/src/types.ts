@@ -12,7 +12,11 @@ export type UploadResponse = {
   unique_github_links: string[];
 };
 
-export type MetricParameterType = "int-range" | "date-range";
+export type MetricParameterType =
+  | "int-range"
+  | "date-range"
+  | "boolean-slider"
+  | "percentage-range";
 
 export type MetricParameterConfig = {
   key: string;
@@ -41,6 +45,7 @@ export type MetricParameterValue = {
   max?: string;
   before?: string;
   after?: string;
+  selected?: string;
 };
 
 export type MetricParametersState = Record<

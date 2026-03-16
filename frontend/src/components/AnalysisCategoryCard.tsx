@@ -46,8 +46,6 @@ function AnalysisCategoryCard({
   onItemWeightChange,
   onMetricParameterChange,
 }: AnalysisCategoryCardProps) {
-
-  // CATEGORY CLOSED BY DEFAULT
   const [isCategoryExpanded, setIsCategoryExpanded] = useState(false);
 
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
@@ -61,7 +59,6 @@ function AnalysisCategoryCard({
             item.parameters && item.parameters.length > 0,
           );
 
-          // ITEMS CLOSED BY DEFAULT
           if (hasSubItems || hasParameters) {
             initialState[item.name] = false;
           }
@@ -92,8 +89,6 @@ function AnalysisCategoryCard({
     const hasSubItems = Boolean(item.subItems && item.subItems.length > 0);
     const hasParameters = Boolean(item.parameters && item.parameters.length > 0);
     const isExpandable = hasSubItems || hasParameters;
-
-    // DEFAULT COLLAPSED
     const isExpanded = expandedItems[item.name] ?? false;
 
     return (
@@ -165,7 +160,41 @@ function AnalysisCategoryCard({
                 onChange={() => onAnalysisItemToggle(category.title, item.name)}
               />
 
-              <span>{item.name} (not rdy)</span>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.45rem",
+                  minWidth: 0,
+                }}
+              >
+                <span>{item.name}</span>
+
+                {item.tooltipText ? (
+                  <span
+                    title={item.tooltipText}
+                    aria-label={item.tooltipText}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "1rem",
+                      height: "1rem",
+                      borderRadius: "50%",
+                      border: "1px solid #999",
+                      fontSize: "0.72rem",
+                      color: "#666",
+                      backgroundColor: "#f5f5f5",
+                      cursor: "help",
+                      flexShrink: 0,
+                      lineHeight: 1,
+                      userSelect: "none",
+                    }}
+                  >
+                    i
+                  </span>
+                ) : null}
+              </span>
             </label>
           </div>
 
