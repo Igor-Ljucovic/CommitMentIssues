@@ -42,7 +42,6 @@ async def upload_files(files: list[UploadFile] = File(...)) -> UploadResponse:
     scan_results = get_scan_results(UPLOADS_DIR)
 
     scanned_files: list[FileScanResult] = []
-    unique_github_links_set: set[str] = set()
 
     for file_name, links in sorted(scan_results.items()):
         sorted_links = sorted(links)
@@ -52,13 +51,10 @@ async def upload_files(files: list[UploadFile] = File(...)) -> UploadResponse:
             github_links=sorted_links,
         )
     )
-        unique_github_links_set.update(sorted_links)
 
     return UploadResponse(
         total_files=len(files),
         accepted_files=accepted_count,
-        rejected_files=len(rejected_file_names),
         rejected_file_names=rejected_file_names,
         scanned_files=scanned_files,
-        unique_github_links=sorted(unique_github_links_set),
     )

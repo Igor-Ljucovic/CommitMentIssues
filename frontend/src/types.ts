@@ -6,10 +6,8 @@ export type FileScanResult = {
 export type UploadResponse = {
   total_files: number;
   accepted_files: number;
-  rejected_files: number;
   rejected_file_names: string[];
   scanned_files: FileScanResult[];
-  unique_github_links: string[];
 };
 
 export type MetricParameterType =

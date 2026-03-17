@@ -3,7 +3,6 @@ import type { ChangeEvent } from "react";
 import "./App.css";
 import FileUploadSection from "./components/FileUploadSection";
 import RepositoryAnalysisSection from "./components/RepositoryAnalysisSection";
-import ScanResultsSection from "./components/ScanResultsSection";
 import SelectedFilesList from "./components/SelectedFilesList";
 import type {
   AnalysisSelectionState,
@@ -25,7 +24,6 @@ const ALLOWED_EXTENSIONS = [".txt", ".docx", ".pdf"];
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [statusMessage, setStatusMessage] = useState<string>("");
-  const [uploadResult, setUploadResult] = useState<UploadResponse | null>(null);
   const [analysisSelections, setAnalysisSelections] =
     useState<AnalysisSelectionState>(createInitialAnalysisSelections);
   const [categoryWeights, setCategoryWeights] =
@@ -158,7 +156,6 @@ function App() {
 
     try {
       setStatusMessage("Uploading files...");
-      setUploadResult(null);
 
       const formData = new FormData();
 
@@ -176,10 +173,12 @@ function App() {
       }
 
       const result: UploadResponse = await response.json();
-      setUploadResult(result);
+
+      console.log("Backend response:");
+      console.log(JSON.stringify(result, null, 2));
 
       setStatusMessage(
-        `Upload successful. Accepted ${result.accepted_files} of ${result.total_files} file(s). Found ${result.unique_github_links.length} unique GitHub link(s).`,
+        `Upload successful. Accepted ${result.accepted_files} of ${result.total_files} file(s).`,
       );
     } catch (error) {
       console.error(error);
@@ -264,17 +263,14 @@ function App() {
             acceptedFileTypes={acceptedFileTypes}
             statusMessage={statusMessage}
             onFileChange={handleFileChange}
-            onUpload={handleUpload}
           />
 
           <SelectedFilesList
             selectedFiles={selectedFiles}
             onRemoveFile={handleRemoveFile}
           />
-
-          <ScanResultsSection uploadResult={uploadResult} />
         </section>
-
+        
         <RepositoryAnalysisSection
           analysisSelections={analysisSelections}
           categoryWeights={categoryWeights}
@@ -285,6 +281,18 @@ function App() {
           onItemWeightChange={handleItemWeightChange}
           onMetricParameterChange={handleMetricParameterChange}
         />
+        <div
+          className="actions"
+          style={{
+            marginTop: "30px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <button className="primary-button" onClick={handleUpload}>
+            Analyze GitHub Repositories
+          </button>
+        </div>
       </main>
     </div>
   );

@@ -4,14 +4,12 @@ type FileUploadSectionProps = {
   acceptedFileTypes: string;
   statusMessage: string;
   onFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onUpload: () => void;
 };
 
 function FileUploadSection({
   acceptedFileTypes,
   statusMessage,
   onFileChange,
-  onUpload,
 }: FileUploadSectionProps) {
   return (
     <>
@@ -34,12 +32,6 @@ function FileUploadSection({
           Select multiple TXT, DOCX, or PDF files
         </span>
       </label>
-
-      <div className="actions">
-        <button className="primary-button" onClick={onUpload}>
-          Upload files
-        </button>
-      </div>
 
       {statusMessage && <p className="status-message">{statusMessage}</p>}
     </>
