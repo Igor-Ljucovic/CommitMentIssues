@@ -95,70 +95,66 @@ function App() {
     );
   };
 
-  const getSelectedAnalysisMetrics = () => {
-    const selected: string[] = [];
-
-    Object.entries(analysisSelections).forEach(([category, items]) => {
-      Object.entries(items).forEach(([metric, isChecked]) => {
-        if (isChecked) {
-          const categoryWeight = categoryWeights[category];
-          const metricWeight = itemWeights[category]?.[metric];
-          const metricConfig = metricParameters[category]?.[metric];
-
-          selected.push(
-            `${category} (category weight: ${categoryWeight}) -> ${metric} (metric weight: ${metricWeight})`,
-          );
-
-          if (metricConfig) {
-            Object.entries(metricConfig).forEach(
-              ([parameterKey, parameterValue]) => {
-                selected.push(
-                  `   ${parameterKey}: ${JSON.stringify(parameterValue)}`,
-                );
-              },
-            );
-          }
-        }
-      });
-    });
-
-    return selected;
-  };
-
   const handleUpload = async () => {
-    const selectedMetrics = getSelectedAnalysisMetrics();
-
-    console.log("Selected analysis metrics:");
-    selectedMetrics.forEach((metric) => console.log(metric));
-
-    console.log("All category weights:");
-    Object.entries(categoryWeights).forEach(([category, weight]) => {
-      console.log(`${category}: ${weight}`);
-    });
-
-    console.log("All subcategory weights:");
-    Object.entries(itemWeights).forEach(([category, items]) => {
-      Object.entries(items).forEach(([item, weight]) => {
-        console.log(`${category} -> ${item}: ${weight}`);
-      });
-    });
-
-    console.log("All metric parameter values:");
-    Object.entries(metricParameters).forEach(([category, items]) => {
-      Object.entries(items).forEach(([item, parameters]) => {
-        Object.entries(parameters).forEach(([parameterKey, parameterValue]) => {
-          console.log(
-            `${category} -> ${item} -> ${parameterKey}:`,
-            parameterValue,
-          );
-        });
-      });
-    });
-
     if (selectedFiles.length === 0) {
       setStatusMessage("Please select at least one file before uploading.");
       return;
     }
+
+    const payload: Record<string, unknown> = {
+      files: selectedFiles.map((file) => ({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      })),
+    };
+
+    Object.entries(analysisSelections).forEach(([categoryName, items]) => {
+      const selectedSubcategories: Record<string, unknown> = {};
+
+      Object.entries(items).forEach(([itemName, isChecked]) => {
+        if (!isChecked) {
+          return;
+        }
+
+        const cleanItemName = itemName
+          .replace(/\s*⭐/g, "")
+          .replace(/\s*\(not rdy\)/g, "")
+          .trim();
+
+        const subcategoryPayload: Record<string, unknown> = {
+          weight: itemWeights[categoryName]?.[itemName] ?? 5,
+        };
+
+        const parameters = metricParameters[categoryName]?.[itemName];
+
+        if (parameters) {
+          Object.entries(parameters).forEach(([parameterKey, parameterValue]) => {
+            const cleanedParameterValue = Object.fromEntries(
+              Object.entries(parameterValue).filter(
+                ([, value]) => value !== "" && value !== undefined,
+              ),
+            );
+
+            if (Object.keys(cleanedParameterValue).length > 0) {
+              subcategoryPayload[parameterKey] = cleanedParameterValue;
+            }
+          });
+        }
+
+        selectedSubcategories[cleanItemName] = subcategoryPayload;
+      });
+
+      if (Object.keys(selectedSubcategories).length > 0) {
+        payload[categoryName] = {
+          weight: categoryWeights[categoryName] ?? 5,
+          subcategories: selectedSubcategories,
+        };
+      }
+    });
+
+    console.log("JSON payload sent to backend:");
+    console.log(JSON.stringify(payload, null, 2));
 
     try {
       setStatusMessage("Uploading files...");
