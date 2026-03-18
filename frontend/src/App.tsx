@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/NavBar";
 import HomePage from "./components/pages/HomePage";
 import AnalysisPage from "./components/pages/AnalysisPage";
+import LoginPage from "./components/pages/LoginPage";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/analysis" element={<AnalysisPage />} />
-          <Route path="/login" element={<div className="page-placeholder">Log in page coming soon.</div>} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<div className="page-placeholder">Sign up page coming soon.</div>} />
         </Routes>
       </div>
