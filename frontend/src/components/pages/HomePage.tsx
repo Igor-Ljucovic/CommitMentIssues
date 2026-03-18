@@ -1,237 +1,300 @@
+import { Link } from "react-router-dom";
+
 type HomePageProps = {
   onGetStarted?: () => void;
 };
 
 function HomePage({ onGetStarted }: HomePageProps) {
+  const handleGetStarted = () => {
+    onGetStarted?.();
+  };
+
   return (
-    <section className="card" style={{ marginBottom: "28px" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1.5rem",
-        }}
-      >
-        <div>
-          <p className="eyebrow">CommitMentIssues</p>
-
-          <h1
+    <div className="page">
+      <main className="container">
+        <section
+          className="card"
+          style={{
+            padding: "48px 32px",
+            marginBottom: "28px",
+          }}
+        >
+          <div
             style={{
-              margin: "0 0 12px 0",
-              fontSize: "2.5rem",
-              lineHeight: 1.1,
+              maxWidth: "760px",
+              margin: "0 auto",
+              textAlign: "center",
             }}
           >
-            GitHub repository analysis built to make technical recruiters&apos;
-            lives easier
-          </h1>
+            <p className="eyebrow">CommitMentIssues</p>
 
-          <p
-            className="subtitle"
-            style={{
-              maxWidth: "820px",
-              marginBottom: "0.9rem",
-            }}
-          >
-            CommitMentIssues helps recruiters and hiring teams evaluate GitHub
-            repositories faster, more consistently, and with way less manual
-            effort. Instead of opening candidate repositories one by one and
-            trying to judge them from memory, you can define what matters,
-            assign weights to the metrics, and analyze repositories using a more
-            structured approach.
-          </p>
+            <h1
+              style={{
+                margin: "0 0 16px 0",
+                fontSize: "3rem",
+                lineHeight: 1.08,
+                letterSpacing: "-0.03em",
+              }}
+            >
+              GitHub repository analysis for technical hiring
+            </h1>
 
-          <p
-            className="subtitle"
-            style={{
-              maxWidth: "820px",
-              margin: 0,
-            }}
-          >
-            It works both for individual repository analysis and for
-            higher-volume company workflows where recruiters upload multiple CV,
-            PDF, DOCX, or TXT files, extract GitHub links from them, and use
-            those links as the starting point for candidate repository analysis.
-          </p>
-        </div>
+            <p
+              className="subtitle"
+              style={{
+                maxWidth: "700px",
+                margin: "0 auto 24px auto",
+                fontSize: "1.1rem",
+                lineHeight: 1.7,
+              }}
+            >
+              Evaluate candidate repositories faster with structured metrics,
+              configurable scoring, and a workflow designed for technical
+              recruiters and hiring teams.
+            </p>
 
-        <div
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "12px",
+                marginBottom: "18px",
+              }}
+            >
+              <Link
+                to="/analysis"
+                className="primary-button"
+                onClick={handleGetStarted}
+                style={{ textDecoration: "none" }}
+              >
+                Start analyzing
+              </Link>
+
+              <a
+                href="#how-it-works"
+                className="secondary-button"
+                style={{
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                Learn more
+              </a>
+            </div>
+
+            <p
+              style={{
+                margin: 0,
+                color: "#4b5563",
+                fontSize: "0.95rem",
+                lineHeight: 1.6,
+              }}
+            >
+              Supports both single-repository analysis for personal use and bulk
+              CV/PDF/DOCX/TXT upload workflows for company-side candidate
+              screening.
+            </p>
+          </div>
+        </section>
+
+        <section
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: "1rem",
+            gap: "16px",
+            marginBottom: "28px",
           }}
         >
           <div className="result-card">
-            <h3 style={{ marginTop: 0, marginBottom: "0.65rem" }}>
-              For personal use
+            <h3 style={{ marginTop: 0, marginBottom: "10px" }}>
+              Single repository analysis
             </h3>
-            <p style={{ margin: 0, lineHeight: 1.6 }}>
-              Analyze a single repository when you want a focused review of one
-              candidate, one project, or even your own GitHub repo.
+            <p style={{ margin: 0, lineHeight: 1.65 }}>
+              Review one GitHub repository at a time for personal use, focused
+              candidate evaluation, or self-assessment.
             </p>
           </div>
 
           <div className="result-card">
-            <h3 style={{ marginTop: 0, marginBottom: "0.65rem" }}>
-              For company use
+            <h3 style={{ marginTop: 0, marginBottom: "10px" }}>
+              Bulk candidate workflows
             </h3>
-            <p style={{ margin: 0, lineHeight: 1.6 }}>
-              Upload candidate CVs and other documents in bulk, extract GitHub
-              links automatically, and prepare a more scalable screening process
-              for technical recruitment.
+            <p style={{ margin: 0, lineHeight: 1.65 }}>
+              Upload multiple CV and document files, extract GitHub links, and
+              prepare repositories for large-scale technical screening.
             </p>
           </div>
 
           <div className="result-card">
-            <h3 style={{ marginTop: 0, marginBottom: "0.65rem" }}>
+            <h3 style={{ marginTop: 0, marginBottom: "10px" }}>
               Configurable scoring
             </h3>
-            <p style={{ margin: 0, lineHeight: 1.6 }}>
-              Choose which metrics matter, set weights for categories and
-              subcategories, and tailor the analysis to different roles,
-              expectations, and hiring standards.
+            <p style={{ margin: 0, lineHeight: 1.65 }}>
+              Select the metrics that matter, assign weights, and adapt the
+              analysis to different hiring goals and engineering roles.
             </p>
           </div>
-        </div>
+        </section>
 
-        <div
+        <section
+          id="how-it-works"
+          className="card"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "1rem",
+            marginBottom: "28px",
+            padding: "28px",
           }}
         >
-          <div
-            style={{
-              border: "1px solid #d6d6d6",
-              borderRadius: "12px",
-              padding: "1rem 1.1rem",
-              backgroundColor: "#fafafa",
-            }}
-          >
-            <h3 style={{ marginTop: 0, marginBottom: "0.8rem" }}>
-              Basic repository signals
-            </h3>
-
-            <p style={{ marginTop: 0, lineHeight: 1.65 }}>
-              CommitMentIssues supports straightforward numeric and metadata
-              checks such as repository creation date, last commit date, total
-              commit count, average commits per month, total lines of code,
-              total files, contributors, pull requests, forks, stars, and
-              technology stack size.
-            </p>
-
-            <p style={{ marginBottom: 0, lineHeight: 1.65 }}>
-              These are useful for getting a fast first impression and filtering
-              repositories based on activity, size, recency, popularity, and
-              collaboration patterns.
-            </p>
-          </div>
-
-          <div
-            style={{
-              border: "1px solid #d6d6d6",
-              borderRadius: "12px",
-              padding: "1rem 1.1rem",
-              backgroundColor: "#fafafa",
-            }}
-          >
-            <h3 style={{ marginTop: 0, marginBottom: "0.8rem" }}>
-              More sophisticated quality signals
-            </h3>
-
-            <p style={{ marginTop: 0, lineHeight: 1.65 }}>
-              Beyond raw counts, the platform is designed to support more
-              advanced quality-oriented metrics such as commit naming
-              consistency, commit message and code change alignment, code
-              duplication estimation, naming consistency across files and code
-              elements, file architecture quality, estimated test coverage, and
-              AI-generated code estimation.
-            </p>
-
-            <p style={{ marginBottom: 0, lineHeight: 1.65 }}>
-              This is the part that makes the project especially useful for
-              technical recruiters, because it moves the analysis closer to
-              actual engineering quality instead of stopping at vanity metrics.
-            </p>
-          </div>
-        </div>
-
-        <div className="result-card">
-          <h3 style={{ marginTop: 0, marginBottom: "0.8rem" }}>
-            Why this helps recruiters
-          </h3>
+          <h2 style={{ marginTop: 0, marginBottom: "18px" }}>How it works</h2>
 
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "0.85rem",
+              gap: "16px",
+            }}
+          >
+            <div>
+              <strong>1. Upload repository links or candidate files</strong>
+              <p style={{ margin: "8px 0 0 0", lineHeight: 1.65 }}>
+                Use a single repository for focused analysis or upload multiple
+                CV, PDF, DOCX, and TXT files for company workflows.
+              </p>
+            </div>
+
+            <div>
+              <strong>2. Configure the evaluation criteria</strong>
+              <p style={{ margin: "8px 0 0 0", lineHeight: 1.65 }}>
+                Enable the metrics you care about and assign weights based on
+                role expectations and hiring priorities.
+              </p>
+            </div>
+
+            <div>
+              <strong>3. Analyze repositories more consistently</strong>
+              <p style={{ margin: "8px 0 0 0", lineHeight: 1.65 }}>
+                Combine simple repository signals with deeper code-quality
+                indicators in a more structured screening process.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "16px",
+            marginBottom: "28px",
+          }}
+        >
+          <div className="card" style={{ padding: "24px" }}>
+            <h2 style={{ marginTop: 0, marginBottom: "14px" }}>
+              Basic repository signals
+            </h2>
+            <p style={{ margin: 0, lineHeight: 1.7 }}>
+              Measure concrete repository metadata such as repository age, total
+              commit count, last commit date, contributor count, pull requests,
+              forks, stars, total files, lines of code, and technologies used.
+            </p>
+          </div>
+
+          <div className="card" style={{ padding: "24px" }}>
+            <h2 style={{ marginTop: 0, marginBottom: "14px" }}>
+              Advanced quality signals
+            </h2>
+            <p style={{ margin: 0, lineHeight: 1.7 }}>
+              Go beyond vanity metrics with indicators such as commit naming
+              consistency, commit-message-to-code alignment, code duplication,
+              file architecture quality, naming consistency, and estimated test
+              coverage.
+            </p>
+          </div>
+        </section>
+
+        <section className="card" style={{ padding: "28px", marginBottom: "28px" }}>
+          <h2 style={{ marginTop: 0, marginBottom: "18px" }}>
+            Why this helps technical recruiters
+          </h2>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: "16px",
             }}
           >
             <div>
               <strong>Faster screening</strong>
-              <p style={{ margin: "0.35rem 0 0 0", lineHeight: 1.6 }}>
-                Reduce the time spent manually opening repositories and checking
-                the same things over and over again.
+              <p style={{ margin: "8px 0 0 0", lineHeight: 1.65 }}>
+                Spend less time manually opening repositories and checking the
+                same signals candidate by candidate.
               </p>
             </div>
 
             <div>
               <strong>More consistency</strong>
-              <p style={{ margin: "0.35rem 0 0 0", lineHeight: 1.6 }}>
-                Apply the same analysis logic across candidates instead of
-                relying only on subjective first impressions.
+              <p style={{ margin: "8px 0 0 0", lineHeight: 1.65 }}>
+                Apply a repeatable framework instead of relying only on
+                subjective first impressions.
               </p>
             </div>
 
             <div>
               <strong>Role-specific evaluation</strong>
-              <p style={{ margin: "0.35rem 0 0 0", lineHeight: 1.6 }}>
-                Change weights and acceptable ranges depending on whether the
-                role is backend, frontend, full-stack, QA, or something else.
+              <p style={{ margin: "8px 0 0 0", lineHeight: 1.65 }}>
+                Adjust metric weights and criteria for backend, frontend,
+                full-stack, QA, or other technical roles.
               </p>
             </div>
 
             <div>
-              <strong>Better recruiter-engineer alignment</strong>
-              <p style={{ margin: "0.35rem 0 0 0", lineHeight: 1.6 }}>
-                Turn vague repository review into a more transparent framework
-                that technical and non-technical stakeholders can both discuss.
+              <strong>Better hiring discussions</strong>
+              <p style={{ margin: "8px 0 0 0", lineHeight: 1.65 }}>
+                Make repository review easier to explain and compare across
+                recruiters, engineers, and hiring managers.
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div
+        <section
+          className="card"
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "0.9rem",
-            alignItems: "center",
+            padding: "32px",
+            textAlign: "center",
           }}
         >
-          <button
-            type="button"
-            className="primary-button"
-            onClick={onGetStarted}
-          >
-            Start analyzing
-          </button>
+          <h2 style={{ marginTop: 0, marginBottom: "12px" }}>
+            Ready to analyze candidate repositories?
+          </h2>
 
-          <span
+          <p
             style={{
+              maxWidth: "640px",
+              margin: "0 auto 20px auto",
               color: "#4b5563",
-              fontSize: "0.95rem",
+              lineHeight: 1.7,
             }}
           >
-            Built for recruiter-friendly GitHub analysis, from single-repo
-            reviews to multi-candidate document workflows.
-          </span>
-        </div>
-      </div>
-    </section>
+            Start with a single repository or upload multiple candidate files
+            and build a more structured technical screening workflow.
+          </p>
+
+          <Link
+            to="/analysis"
+            className="primary-button"
+            onClick={handleGetStarted}
+            style={{ textDecoration: "none" }}
+          >
+            Go to analysis
+          </Link>
+        </section>
+      </main>
+    </div>
   );
 }
 

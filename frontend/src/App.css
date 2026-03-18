@@ -228,6 +228,110 @@
   margin-top: 24px;
 }
 
+.app-shell {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid #e5e7eb;
+  backdrop-filter: blur(10px);
+}
+
+.navbar__left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navbar__brand {
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.02em;
+}
+
+.navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar__login {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 10px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.navbar__login:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.navbar__signup {
+  text-decoration: none;
+  background: #111827;
+  color: white;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 10px;
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease;
+}
+
+.navbar__signup:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  padding: 12px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: white;
+  color: #111827;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.secondary-button:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+.page-placeholder {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 32px 20px;
+  color: #111827;
+  font-size: 1.1rem;
+}
+
 @media (max-width: 640px) {
   .page {
     padding: 24px 14px;

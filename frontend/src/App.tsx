@@ -1,15 +1,21 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import Navbar from "./components/NavBar";
 import HomePage from "./components/pages/HomePage";
 import AnalysisPage from "./components/pages/AnalysisPage";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/analysis" element={<AnalysisPage />} />
-      </Routes>
+      <div className="app-shell">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/analysis" element={<AnalysisPage />} />
+          <Route path="/login" element={<div className="page-placeholder">Log in page coming soon.</div>} />
+          <Route path="/signup" element={<div className="page-placeholder">Sign up page coming soon.</div>} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
