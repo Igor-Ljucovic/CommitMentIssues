@@ -34,7 +34,7 @@ function LoginPage() {
         console.log("Login request payload:");
         console.log(JSON.stringify(logPayload, null, 2));
 
-        const response = await fetch("http://localhost:8000/login", {
+        const response = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

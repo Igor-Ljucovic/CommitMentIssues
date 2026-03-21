@@ -163,7 +163,7 @@ function App() {
         formData.append("files", file);
       });
 
-      const response = await fetch("http://localhost:8000/upload", {
+      const response = await fetch("http://localhost:8000/uploads", {
         method: "POST",
         body: formData,
       });
@@ -263,7 +263,6 @@ function App() {
             acceptedFileTypes={acceptedFileTypes}
             statusMessage={statusMessage}
             onFileChange={handleFileChange}
-            //onUpload={handleUpload}
           />
 
           <SelectedFilesList

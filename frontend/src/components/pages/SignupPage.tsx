@@ -10,6 +10,36 @@ function SignupPage() {
 
   const navigate = useNavigate();
 
+  const extractBackendErrorMessage = (data: unknown): string => {
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "detail" in data &&
+      Array.isArray((data as { detail: unknown[] }).detail) &&
+      (data as { detail: unknown[] }).detail.length > 0
+    ) {
+      const firstError = (data as { detail: unknown[] }).detail[0];
+
+      if (
+        typeof firstError === "object" &&
+        firstError !== null &&
+        "msg" in firstError &&
+        typeof (firstError as { msg: unknown }).msg === "string"
+      ) {
+        const fullMessage = (firstError as { msg: string }).msg;
+        const commaIndex = fullMessage.indexOf(",");
+
+        if (commaIndex !== -1) {
+          return fullMessage.slice(commaIndex + 1).trim();
+        }
+
+        return fullMessage.trim();
+      }
+    }
+
+    return "Signup failed.";
+  };
+
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
@@ -40,7 +70,7 @@ function SignupPage() {
       console.log("Signup request payload:");
       console.log(JSON.stringify(logPayload, null, 2));
 
-      const response = await fetch("http://localhost:8000/signup", {
+       const response = await fetch("http://localhost:8000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,19 +78,28 @@ function SignupPage() {
         body: JSON.stringify(payload),
       });
 
+      const data = await response.json();
+
+      console.log("Signup response status:", response.status);
+      console.log("Signup response data:", data);
+
       if (!response.ok) {
-        throw new Error("Signup failed.");
+        throw new Error(extractBackendErrorMessage(data));
       }
 
-      const data = await response.json();
       console.log("Signup success:", data);
 
       setStatusMessage("Account created successfully!");
 
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error(error);
-      setStatusMessage("Signup failed. Please try again.");
+
+      if (error instanceof Error) {
+        setStatusMessage(error.message);
+      } else {
+        setStatusMessage("Signup failed. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }

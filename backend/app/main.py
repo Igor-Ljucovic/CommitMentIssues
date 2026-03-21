@@ -1,21 +1,29 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes import router
+from backend.app.api.auth_routes import router as auth_router
+from backend.app.api.uploads_routes import router as uploads_router
+from app.core.config import settings
+from app.db.session import Base, engine
 
-app = FastAPI(title="CommitMentIssues API")
+from app.models.user import User
+
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="CommitMentIssues Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[settings.FRONTEND_ORIGIN],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(router)
+app.include_router(auth_router)
+app.include_router(uploads_router)
 
 
 @app.get("/")
-def root() -> dict[str, str]:
-    return {"message": "CommitMentIssues backend is running"}
+def root():
+    return {"message": "Backend is running."}
