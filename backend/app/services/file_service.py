@@ -11,7 +11,7 @@ from app.link_extractor.github_links import (
     is_github_repo_url,
     normalize_github_repo_url,
 )
-from backend.app.schemas.upload_schemas import UploadResponse, UploadedFileResponse
+from app.schemas.upload_schemas import UploadResponse, UploadedFileResponse
 from app.utils.file_utils import is_allowed_file
 
 def extract_links_from_txt_bytes(file_bytes: bytes) -> list[str]:

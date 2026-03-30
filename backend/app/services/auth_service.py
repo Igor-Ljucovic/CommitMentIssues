@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from backend.app.schemas.auth_schemas import AuthRequestBase
+from app.schemas.auth_schemas import AuthRequestBase
 from app.core.security import hash_password, verify_password, create_access_token
 from app.repositories.user_repository import create_user, get_user_by_email
 

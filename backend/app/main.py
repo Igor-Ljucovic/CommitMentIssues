@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.api.auth_routes import router as auth_router
-from backend.app.api.uploads_routes import router as uploads_router
+from app.api.auth_routes import router as auth_router
+from app.api.uploads_routes import router as uploads_router
 from app.core.config import settings
 from app.db.session import Base, engine
 

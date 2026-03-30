@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from backend.app.schemas.auth_schemas import AuthRequestBase
+from app.schemas.auth_schemas import AuthRequestBase
 from app.services.auth_service import (
     DuplicateEmailError,
     login_user,
