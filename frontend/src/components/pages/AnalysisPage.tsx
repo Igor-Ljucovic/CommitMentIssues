@@ -21,6 +21,13 @@ import {
 
 const ALLOWED_EXTENSIONS = [".txt", ".docx", ".pdf"];
 
+type AnalysisResponse = {
+  file_repo_ratings: {
+    name: string;
+    average_rating: number;
+  }[];
+};
+
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [statusMessage, setStatusMessage] = useState<string>("");
@@ -93,12 +100,7 @@ function App() {
     );
   };
 
-  const handleUpload = async () => {
-    if (selectedFiles.length === 0) {
-      setStatusMessage("Please select at least one file before uploading.");
-      return;
-    }
-
+  const buildAnalysisPayload = (): Record<string, unknown> => {
     const payload: Record<string, unknown> = {
       files: selectedFiles.map((file) => ({
         name: file.name,
@@ -151,38 +153,101 @@ function App() {
       }
     });
 
-    console.log("JSON payload sent to backend:");
+    return payload;
+  };
+
+  const handleUpload = async (): Promise<UploadResponse> => {
+    if (selectedFiles.length === 0) {
+      throw new Error("Please select at least one file before uploading.");
+    }
+
+    const formData = new FormData();
+
+    selectedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    const uploadRequestPreview = selectedFiles.map((file) => ({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    }));
+
+    console.log("FormData payload sent to /uploads:");
+    console.log(JSON.stringify({ files: uploadRequestPreview }, null, 2));
+
+    const response = await fetch("http://localhost:8000/uploads", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Upload failed.");
+    }
+
+    const result: UploadResponse = await response.json();
+
+    console.log("/uploads backend response:");
+    console.log(JSON.stringify(result, null, 2));
+
+    return result;
+  };
+
+  const handleAnalysis = async (): Promise<AnalysisResponse> => {
+    if (selectedFiles.length === 0) {
+      throw new Error("Please select at least one file before analyzing.");
+    }
+
+    const payload = buildAnalysisPayload();
+
+    console.log("JSON payload sent to /analysis:");
     console.log(JSON.stringify(payload, null, 2));
 
+    const response = await fetch("http://localhost:8000/analysis", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error("Analysis failed.");
+    }
+
+    const result: AnalysisResponse = await response.json();
+
+    console.log("/analysis backend response:");
+    console.log(JSON.stringify(result, null, 2));
+
+    return result;
+  };
+
+  const handleAnalyzeRepositories = async () => {
+    if (selectedFiles.length === 0) {
+      setStatusMessage("Please select at least one file before analyzing.");
+      return;
+    }
+
     try {
-      setStatusMessage("Uploading files...");
+      setStatusMessage("Uploading files and analyzing repositories...");
 
-      const formData = new FormData();
-
-      selectedFiles.forEach((file) => {
-        formData.append("files", file);
-      });
-
-      const response = await fetch("http://localhost:8000/uploads", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Upload failed.");
-      }
-
-      const result: UploadResponse = await response.json();
-
-      console.log("Backend response:");
-      console.log(JSON.stringify(result, null, 2));
+      const uploadResult = await handleUpload();
+      const analysisResult = await handleAnalysis();
 
       setStatusMessage(
-        `Upload successful. Accepted ${result.accepted_files} of ${result.total_files} file(s).`,
+        `Upload successful. Accepted ${uploadResult.accepted_files} of ${uploadResult.total_files} file(s). Analysis completed for ${analysisResult.file_repo_ratings.length} file(s).`,
       );
     } catch (error) {
       console.error(error);
-      setStatusMessage("Something went wrong while uploading the files.");
+
+      if (error instanceof Error) {
+        setStatusMessage(error.message);
+      } else {
+        setStatusMessage(
+          "Something went wrong while uploading files and analyzing repositories.",
+        );
+      }
     }
   };
 
@@ -270,7 +335,7 @@ function App() {
             onRemoveFile={handleRemoveFile}
           />
         </section>
-        
+
         <RepositoryAnalysisSection
           analysisSelections={analysisSelections}
           categoryWeights={categoryWeights}
@@ -281,6 +346,7 @@ function App() {
           onItemWeightChange={handleItemWeightChange}
           onMetricParameterChange={handleMetricParameterChange}
         />
+
         <div
           className="actions"
           style={{
@@ -289,7 +355,10 @@ function App() {
             justifyContent: "center",
           }}
         >
-          <button className="primary-button" onClick={handleUpload}>
+          <button
+            className="primary-button"
+            onClick={handleAnalyzeRepositories}
+          >
             Analyze GitHub Repositories
           </button>
         </div>

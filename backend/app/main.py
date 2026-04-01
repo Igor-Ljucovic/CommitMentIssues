@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.auth_routes import router as auth_router
 from app.api.uploads_routes import router as uploads_router
+from app.api.analysis_routes import router as analysis_router
 from app.core.config import settings
 from app.db.session import Base, engine
 
@@ -24,7 +25,7 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(uploads_router)
-
+app.include_router(analysis_router)
 
 @app.get("/")
 def root():
