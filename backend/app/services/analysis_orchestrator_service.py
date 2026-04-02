@@ -1,39 +1,87 @@
-import hashlib
+from app.schemas.analysis_request_schemas import AnalysisRequest, AnalysisCategoryConfig, RepositoryInput
+from app.schemas.analysis_response_schemas import (
+    AnalysisResponse,
+    FileAnalysisResult,
+    RepositoryAnalysisResult,
+    RepositoryMetricResult,
+)
+from app.services.github_data_service import get_total_commit_count_for_repository
 
-from app.schemas.analysis_request import AnalysisRequest
-from app.schemas.analysis_response import AnalysisResponse, FileRepoRating
+
+def _is_metric_requested(
+    category_configs: dict[str, AnalysisCategoryConfig],
+    category_name: str,
+    subcategory_name: str,
+) -> bool:
+    category = category_configs.get(category_name)
+    if category is None:
+        return False
+
+    return subcategory_name in category.subcategories
 
 
-def _generate_sample_rating(file_name: str) -> float:
-    """
-    Generates a deterministic pseudo-random rating in the range [5.50, 9.50]
-    based on the file name, so the same file always gets the same sample score.
-    This is just a placeholder for demonstration purposes and will be replaced later.
-    """
-    digest = hashlib.sha256(file_name.strip().lower().encode("utf-8")).hexdigest()
-    numeric_value = int(digest[:8], 16)
+async def _build_total_commits_metric(repository: RepositoryInput) -> RepositoryMetricResult:
+    result = await get_total_commit_count_for_repository(repository)
 
-    min_rating = 5.50
-    max_rating = 9.50
-
-    normalized = numeric_value / 0xFFFFFFFF
-    rating = min_rating + (max_rating - min_rating) * normalized
-
-    return round(rating, 2)
+    return RepositoryMetricResult(
+        metric_key="total_commits",
+        display_name="Total Commits",
+        value=result["total_commit_count"],
+        status="success",
+        message=f'Commit count fetched from branch "{result["branch_name"]}".',
+    )
 
 
 async def analyze_repositories(request: AnalysisRequest) -> AnalysisResponse:
-    if not request.files:
-        raise ValueError("At least one file must be provided for analysis.")
+    category_configs = request.get_category_configs()
+    warnings: list[str] = []
 
-    file_repo_ratings: list[FileRepoRating] = []
+    repositories = request.get_repository_inputs()
 
-    for file in request.files:
-        file_repo_ratings.append(
-            FileRepoRating(
-                name=file.name,
-                average_rating=_generate_sample_rating(file.name),
-            )
+    if not repositories:
+        warnings.append(
+            "No repositories were provided in the analysis request, so GitHub-based metrics could not be calculated."
+        )
+        return AnalysisResponse(files=[], warnings=warnings)
+
+    file_map: dict[int | None, FileAnalysisResult] = {}
+
+    for repository in repositories:
+        metrics: list[RepositoryMetricResult] = []
+
+        if _is_metric_requested(category_configs, "General", "Total Commits"):
+            try:
+                total_commits_metric = await _build_total_commits_metric(repository)
+                metrics.append(total_commits_metric)
+            except Exception as exc:
+                metrics.append(
+                    RepositoryMetricResult(
+                        metric_key="total_commits",
+                        display_name="Total Commits",
+                        value=None,
+                        status="failed",
+                        message=str(exc),
+                    )
+                )
+
+        repo_result = RepositoryAnalysisResult(
+            repository_url=repository.repo_url,
+            metrics=metrics,
         )
 
-    return AnalysisResponse(file_repo_ratings=file_repo_ratings)
+        file_id = repository.source_file_id
+        file_name = repository.source_file_name or "Unknown"
+
+        if file_id not in file_map:
+            file_map[file_id] = FileAnalysisResult(
+                file_id=file_id,
+                file_name=file_name,
+                repositories=[],
+            )
+
+        file_map[file_id].repositories.append(repo_result)
+
+    return AnalysisResponse(
+        files=list(file_map.values()),
+        warnings=warnings,
+    )

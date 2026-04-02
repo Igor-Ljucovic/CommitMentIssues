@@ -5,12 +5,13 @@ from app.api.auth_routes import router as auth_router
 from app.api.uploads_routes import router as uploads_router
 from app.api.analysis_routes import router as analysis_router
 from app.core.config import settings
-from app.db.session import engine
 from app.db.base import Base
+from app.db.session import engine
 
-# Import models to ensure they are registered with SQLAlchemy (under the hood),
-# even though they are not directly used in this file.
+# Import models so SQLAlchemy registers them before create_all runs.
+# (Models like "User" are "unused", but they are used under the hood)
 from app.models.user import User
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -27,6 +28,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(uploads_router)
 app.include_router(analysis_router)
+
 
 @app.get("/")
 def root():

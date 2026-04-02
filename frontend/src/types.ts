@@ -3,11 +3,17 @@ export type FileScanResult = {
   github_links: string[];
 };
 
+export type UploadedFileResponse = {
+  id: number;
+  original_file_name: string;
+  github_links: string[];
+};
+
 export type UploadResponse = {
   total_files: number;
   accepted_files: number;
   rejected_file_names: string[];
-  scanned_files: FileScanResult[];
+  files: UploadedFileResponse[];
 };
 
 export type MetricParameterType =

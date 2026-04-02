@@ -22,10 +22,21 @@ import {
 const ALLOWED_EXTENSIONS = [".txt", ".docx", ".pdf"];
 
 type AnalysisResponse = {
-  file_repo_ratings: {
-    name: string;
-    average_rating: number;
+  files: {
+    file_id: number | null;
+    file_name: string;
+    repositories: {
+      repository_url: string;
+      metrics: {
+        metric_key: string;
+        display_name: string;
+        value: string | number | boolean | null;
+        status: string;
+        message?: string | null;
+      }[];
+    }[];
   }[];
+  warnings: string[];
 };
 
 function App() {
@@ -100,13 +111,11 @@ function App() {
     );
   };
 
-  const buildAnalysisPayload = (): Record<string, unknown> => {
+  const buildAnalysisPayload = (
+    uploadResult: UploadResponse,
+  ): Record<string, unknown> => {
     const payload: Record<string, unknown> = {
-      files: selectedFiles.map((file) => ({
-        name: file.name,
-        size: file.size,
-        type: file.type,
-      })),
+      files: uploadResult.files,
     };
 
     Object.entries(analysisSelections).forEach(([categoryName, items]) => {
@@ -193,12 +202,14 @@ function App() {
     return result;
   };
 
-  const handleAnalysis = async (): Promise<AnalysisResponse> => {
-    if (selectedFiles.length === 0) {
-      throw new Error("Please select at least one file before analyzing.");
+  const handleAnalysis = async (
+    uploadResult: UploadResponse,
+  ): Promise<AnalysisResponse> => {
+    if (uploadResult.files.length === 0) {
+      throw new Error("No uploaded files are available for analysis.");
     }
 
-    const payload = buildAnalysisPayload();
+    const payload = buildAnalysisPayload(uploadResult);
 
     console.log("JSON payload sent to /analysis:");
     console.log(JSON.stringify(payload, null, 2));
@@ -233,11 +244,23 @@ function App() {
       setStatusMessage("Uploading files and analyzing repositories...");
 
       const uploadResult = await handleUpload();
-      const analysisResult = await handleAnalysis();
+      const analysisResult = await handleAnalysis(uploadResult);
 
-      setStatusMessage(
-        `Upload successful. Accepted ${uploadResult.accepted_files} of ${uploadResult.total_files} file(s). Analysis completed for ${analysisResult.file_repo_ratings.length} file(s).`,
-      );
+      const warningText =
+        analysisResult.warnings.length > 0
+          ? ` Warnings: ${analysisResult.warnings.join(" ")}`
+          : "";
+
+      const totalRepositoryCount = analysisResult.files.reduce(
+  (sum, file) => sum + file.repositories.length,
+  0,
+);
+
+    setStatusMessage(
+      `Upload successful. Accepted ${uploadResult.accepted_files} of ${uploadResult.total_files} file(s). Analysis completed for ${totalRepositoryCount} repositor${
+        totalRepositoryCount === 1 ? "y" : "ies"
+      }.${warningText}`,
+    );
     } catch (error) {
       console.error(error);
 
