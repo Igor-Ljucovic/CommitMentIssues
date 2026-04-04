@@ -30,7 +30,7 @@ type AnalysisResponse = {
       metrics: {
         metric_key: string;
         display_name: string;
-        value: string | number | boolean | null;
+        value: string | number | null;
         status: string;
         message?: string | null;
       }[];

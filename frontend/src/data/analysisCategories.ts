@@ -38,19 +38,6 @@ const createStandardDateRangeParameters = (): MetricParameterConfig[] => [
   },
 ];
 
-const createBooleanParameters = (): MetricParameterConfig[] => [
-  {
-    key: "hardRequirement",
-    label: "Hard Requirement",
-    type: "boolean-slider",
-  },
-  {
-    key: "recommendedRequirement",
-    label: "Recommended Requirement",
-    type: "boolean-slider",
-  },
-];
-
 const createPercentageRangeParameters = (): MetricParameterConfig[] => [
   {
     key: "hardRequirementRange",
@@ -78,7 +65,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Repository Creation Date (not rdy)",
+        name: "First Commit Date (not rdy)",
         parameters: createStandardDateRangeParameters(),
       },
       {
@@ -163,8 +150,8 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
     title: "Documentation",
     items: [
       {
-        name: "README Presence (not rdy)",
-        parameters: createBooleanParameters(),
+        name: "README Total Commits (not rdy)",
+        parameters: createStandardIntRangeParameters(),
       },
       {
         name: "README Length (not rdy)",
@@ -175,8 +162,8 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createPercentageRangeParameters(),
       },
       {
-        name: "GitHub Wiki Presence (not rdy)",
-        parameters: createBooleanParameters(),
+        name: "GitHub Wiki Total Commits (not rdy)",
+        parameters: createStandardIntRangeParameters(),
       },
       {
         name: "GitHub Wiki Length (not rdy)",
