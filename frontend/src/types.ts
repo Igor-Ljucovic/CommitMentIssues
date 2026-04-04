@@ -19,7 +19,6 @@ export type UploadResponse = {
 export type MetricParameterType =
   | "int-range"
   | "date-range"
-  | "boolean-slider"
   | "percentage-range";
 
 export type MetricParameterConfig = {

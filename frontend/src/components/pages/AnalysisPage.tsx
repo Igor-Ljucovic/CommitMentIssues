@@ -18,6 +18,7 @@ import {
   createInitialItemWeights,
   createInitialMetricParameters,
 } from "../../utils/initialState";
+import { ANALYSIS_CATEGORIES } from "../../data/analysisCategories";
 
 const ALLOWED_EXTENSIONS = [".txt", ".docx", ".pdf"];
 
@@ -111,6 +112,34 @@ function App() {
     );
   };
 
+  const isPercentageParameter = (
+    categoryName: string,
+    itemName: string,
+    parameterKey: string,
+  ): boolean => {
+    const category = ANALYSIS_CATEGORIES.find(
+      (c) => c.title === categoryName,
+    );
+
+    if (!category) return false;
+
+    const item = category.items.find((i) => i.name === itemName);
+    if (!item) return false;
+
+    const parameter = item.parameters?.find((p) => p.key === parameterKey);
+
+    return parameter?.type === "percentage-range";
+  };
+
+  const convertPercentageValue = (value: string): string => {
+    if (!value.trim()) return value;
+
+    const num = Number(value);
+    if (Number.isNaN(num)) return value;
+
+    return String(num / 100);
+  };
+
   const buildAnalysisPayload = (
     uploadResult: UploadResponse,
   ): Record<string, unknown> => {
@@ -140,9 +169,18 @@ function App() {
         if (parameters) {
           Object.entries(parameters).forEach(([parameterKey, parameterValue]) => {
             const cleanedParameterValue = Object.fromEntries(
-              Object.entries(parameterValue).filter(
-                ([, value]) => value !== "" && value !== undefined,
-              ),
+              Object.entries(parameterValue)
+                .filter(([, value]) => value !== "" && value !== undefined)
+                .map(([valueKey, rawValue]) => {
+                  if (
+                    isPercentageParameter(categoryName, itemName, parameterKey) &&
+                    typeof rawValue === "string"
+                  ) {
+                    return [valueKey, convertPercentageValue(rawValue)];
+                  }
+
+                  return [valueKey, rawValue];
+                }),
             );
 
             if (Object.keys(cleanedParameterValue).length > 0) {
