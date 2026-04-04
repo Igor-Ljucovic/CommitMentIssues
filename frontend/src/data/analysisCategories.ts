@@ -65,7 +65,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "First Commit Date (not rdy)",
+        name: "First Commit Date",
         parameters: createStandardDateRangeParameters(),
       },
       {
@@ -73,7 +73,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardDateRangeParameters(),
       },
       {
-        name: "Total Commits (not rdy)",
+        name: "Total Commits",
         parameters: createStandardIntRangeParameters(),
       },
       {
@@ -129,7 +129,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Pull Request Acceptance Rate (not rdy)",
+        name: "Pull Request Acceptance Rate",
         parameters: createPercentageRangeParameters(),
       },
       {
@@ -162,7 +162,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createPercentageRangeParameters(),
       },
       {
-        name: "GitHub Wiki Total Commits (not rdy)",
+        name: "GitHub Wiki Total Commits",
         parameters: createStandardIntRangeParameters(),
       },
       {
