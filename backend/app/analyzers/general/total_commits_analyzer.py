@@ -1,4 +1,4 @@
-from app.analyzers.rating.metric_rating_calculator import calculate_metric_rating
+from app.rating.metric_rating_calculator import calculate_metric_rating
 from app.schemas.analysis_request_schemas import AnalysisSubcategoryConfig, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
 from app.services.github_data_service import get_total_commit_count_for_repository

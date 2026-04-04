@@ -89,22 +89,22 @@ class NumericRange(BaseModel):
     def has_any_value(self) -> bool:
         return self.min is not None or self.max is not None
 
-    def get_min_decimal(self) -> Decimal | None:
+    def get_min_float(self) -> float | None:
         if self.min is None or str(self.min).strip() == "":
             return None
 
         try:
-            return Decimal(str(self.min).strip())
-        except (InvalidOperation, ValueError) as exc:
+            return float(str(self.min).strip())
+        except (TypeError, ValueError) as exc:
             raise ValueError(f'Invalid numeric min value: "{self.min}"') from exc
 
-    def get_max_decimal(self) -> Decimal | None:
+    def get_max_float(self) -> float | None:
         if self.max is None or str(self.max).strip() == "":
             return None
 
         try:
-            return Decimal(str(self.max).strip())
-        except (InvalidOperation, ValueError) as exc:
+            return float(str(self.max).strip())
+        except (TypeError, ValueError) as exc:
             raise ValueError(f'Invalid numeric max value: "{self.max}"') from exc
 
 
