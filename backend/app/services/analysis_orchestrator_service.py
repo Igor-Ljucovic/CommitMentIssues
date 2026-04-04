@@ -1,39 +1,25 @@
-from app.schemas.analysis_request_schemas import AnalysisRequest, AnalysisCategoryConfig, RepositoryInput
+from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer import (
+    analyze_pull_request_acceptance_rate,
+)
+from app.analyzers.documentation.github_wiki_total_commits_analyzer import (
+    analyze_github_wiki_commit_count,
+)
+from app.analyzers.general.first_commit_date_analyzer import (
+    analyze_first_commit_date,
+)
+from app.analyzers.general.total_commits_analyzer import (
+    analyze_total_commits,
+)
+from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import (
     AnalysisResponse,
     FileAnalysisResult,
     RepositoryAnalysisResult,
     RepositoryMetricResult,
 )
-from app.services.github_data_service import get_total_commit_count_for_repository
-
-
-def _is_metric_requested(
-    category_configs: dict[str, AnalysisCategoryConfig],
-    category_name: str,
-    subcategory_name: str,
-) -> bool:
-    category = category_configs.get(category_name)
-    if category is None:
-        return False
-
-    return subcategory_name in category.subcategories
-
-
-async def _build_total_commits_metric(repository: RepositoryInput) -> RepositoryMetricResult:
-    result = await get_total_commit_count_for_repository(repository)
-
-    return RepositoryMetricResult(
-        metric_key="total_commits",
-        display_name="Total Commits",
-        value=result["total_commit_count"],
-        status="success",
-        message=f'Commit count fetched from branch "{result["branch_name"]}".',
-    )
 
 
 async def analyze_repositories(request: AnalysisRequest) -> AnalysisResponse:
-    category_configs = request.get_category_configs()
     warnings: list[str] = []
 
     repositories = request.get_repository_inputs()
@@ -49,9 +35,13 @@ async def analyze_repositories(request: AnalysisRequest) -> AnalysisResponse:
     for repository in repositories:
         metrics: list[RepositoryMetricResult] = []
 
-        if _is_metric_requested(category_configs, "General", "Total Commits"):
+        total_commits_config = request.get_subcategory_config("General", "Total Commits")
+        if total_commits_config is not None:
             try:
-                total_commits_metric = await _build_total_commits_metric(repository)
+                total_commits_metric = await analyze_total_commits(
+                    repository=repository,
+                    subcategory_config=total_commits_config,
+                )
                 metrics.append(total_commits_metric)
             except Exception as exc:
                 metrics.append(
@@ -59,6 +49,80 @@ async def analyze_repositories(request: AnalysisRequest) -> AnalysisResponse:
                         metric_key="total_commits",
                         display_name="Total Commits",
                         value=None,
+                        rating=None,
+                        requirement_failed=None,
+                        status="failed",
+                        message=str(exc),
+                    )
+                )
+
+        first_commit_date_config = request.get_subcategory_config(
+            "General",
+            "First Commit Date",
+        )
+        if first_commit_date_config is not None:
+            try:
+                first_commit_date_metric = await analyze_first_commit_date(
+                    repository=repository,
+                    subcategory_config=first_commit_date_config,
+                )
+                metrics.append(first_commit_date_metric)
+            except Exception as exc:
+                metrics.append(
+                    RepositoryMetricResult(
+                        metric_key="first_commit_date",
+                        display_name="First Commit Date",
+                        value=None,
+                        rating=None,
+                        requirement_failed=None,
+                        status="failed",
+                        message=str(exc),
+                    )
+                )
+
+        pull_request_acceptance_rate_config = request.get_subcategory_config(
+            "Collaboration",
+            "Pull Request Acceptance Rate",
+        )
+        if pull_request_acceptance_rate_config is not None:
+            try:
+                pull_request_acceptance_rate_metric = await analyze_pull_request_acceptance_rate(
+                    repository=repository,
+                    subcategory_config=pull_request_acceptance_rate_config,
+                )
+                metrics.append(pull_request_acceptance_rate_metric)
+            except Exception as exc:
+                metrics.append(
+                    RepositoryMetricResult(
+                        metric_key="pull_request_acceptance_rate",
+                        display_name="Pull Request Acceptance Rate",
+                        value=None,
+                        rating=None,
+                        requirement_failed=None,
+                        status="failed",
+                        message=str(exc),
+                    )
+                )
+
+        github_wiki_total_commits_config = request.get_subcategory_config(
+            "Documentation",
+            "GitHub Wiki Total Commits",
+        )
+        if github_wiki_total_commits_config is not None:
+            try:
+                github_wiki_total_commits_metric = await analyze_github_wiki_commit_count(
+                    repository=repository,
+                    subcategory_config=github_wiki_total_commits_config,
+                )
+                metrics.append(github_wiki_total_commits_metric)
+            except Exception as exc:
+                metrics.append(
+                    RepositoryMetricResult(
+                        metric_key="github_wiki_total_commits",
+                        display_name="GitHub Wiki Total Commits",
+                        value=None,
+                        rating=None,
+                        requirement_failed=None,
                         status="failed",
                         message=str(exc),
                     )

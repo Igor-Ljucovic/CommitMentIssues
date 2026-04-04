@@ -1,3 +1,5 @@
+from datetime import date
+from decimal import Decimal, InvalidOperation
 from typing import Any
 from urllib.parse import urlparse
 
@@ -82,26 +84,78 @@ class NumericRange(BaseModel):
     min: str | None = None
     max: str | None = None
 
+    model_config = ConfigDict(extra="forbid")
+
+    def has_any_value(self) -> bool:
+        return self.min is not None or self.max is not None
+
+    def get_min_decimal(self) -> Decimal | None:
+        if self.min is None or str(self.min).strip() == "":
+            return None
+
+        try:
+            return Decimal(str(self.min).strip())
+        except (InvalidOperation, ValueError) as exc:
+            raise ValueError(f'Invalid numeric min value: "{self.min}"') from exc
+
+    def get_max_decimal(self) -> Decimal | None:
+        if self.max is None or str(self.max).strip() == "":
+            return None
+
+        try:
+            return Decimal(str(self.max).strip())
+        except (InvalidOperation, ValueError) as exc:
+            raise ValueError(f'Invalid numeric max value: "{self.max}"') from exc
+
 
 class DateRange(BaseModel):
     before: str | None = None
     after: str | None = None
 
+    model_config = ConfigDict(extra="forbid")
 
-class BooleanRequirement(BaseModel):
-    selected: str | None = None
+    def has_any_value(self) -> bool:
+        return self.before is not None or self.after is not None
+
+    def get_before_date(self) -> date | None:
+        if self.before is None or self.before.strip() == "":
+            return None
+
+        try:
+            return date.fromisoformat(self.before.strip())
+        except ValueError as exc:
+            raise ValueError(f'Invalid date value for "before": "{self.before}"') from exc
+
+    def get_after_date(self) -> date | None:
+        if self.after is None or self.after.strip() == "":
+            return None
+
+        try:
+            return date.fromisoformat(self.after.strip())
+        except ValueError as exc:
+            raise ValueError(f'Invalid date value for "after": "{self.after}"') from exc
 
 
 class AnalysisSubcategoryConfig(BaseModel):
     weight: int | float | None = None
-    hardRequirementRange: NumericRange | DateRange | None = None
+    requirementRange: NumericRange | DateRange | None = None
     recommendedRange: NumericRange | DateRange | None = None
     idealRange: NumericRange | DateRange | None = None
-    hardRequirement: BooleanRequirement | None = None
-    recommendedRequirement: BooleanRequirement | None = None
-    idealRequirement: BooleanRequirement | None = None
 
     model_config = ConfigDict(extra="allow")
+
+    def has_any_rating_criteria(self) -> bool:
+        return any(
+            [
+                self._has_configured_range(self.requirementRange),
+                self._has_configured_range(self.recommendedRange),
+                self._has_configured_range(self.idealRange),
+            ]
+        )
+
+    @staticmethod
+    def _has_configured_range(range_value: NumericRange | DateRange | None) -> bool:
+        return range_value is not None and range_value.has_any_value()
 
 
 class AnalysisCategoryConfig(BaseModel):
@@ -142,10 +196,20 @@ class AnalysisRequest(BaseModel):
 
         return categories
 
+    def get_subcategory_config(
+        self,
+        category_name: str,
+        subcategory_name: str,
+    ) -> AnalysisSubcategoryConfig | None:
+        category_configs = self.get_category_configs()
+        category = category_configs.get(category_name)
+
+        if category is None:
+            return None
+
+        return category.subcategories.get(subcategory_name)
+
     def get_repository_inputs(self) -> list[RepositoryInput]:
-        # currently DOESN'T skip files that have exactly the same repository URLs
-        # as 1 previous file, I had it implemented like that at first, but it
-        # could cause confusion so I scrapped that idea.
         repositories: list[RepositoryInput] = []
 
         for file in self.files:
