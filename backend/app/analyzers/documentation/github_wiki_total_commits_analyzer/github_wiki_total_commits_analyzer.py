@@ -3,52 +3,17 @@ import shutil
 import subprocess
 import tempfile
 
-from app.clients.github_graphql_client import (
-    fetch_first_commit_date,
-    fetch_github_wiki_enabled,
-    fetch_pull_request_acceptance_rate,
-    fetch_total_commit_count,
-)
 from app.core.config import settings
-from app.schemas.analysis_request_schemas import RepositoryInput
+from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_total_commits_fetch import fetch_github_wiki_enabled
+from app.rating.metric_rating_calculator import calculate_metric_rating
+from app.schemas.analysis_request_schemas import AnalysisSubcategoryConfig, RepositoryInput
+from app.schemas.analysis_response_schemas import RepositoryMetricResult
 
 
-async def get_total_commit_count_for_repository(
+async def analyze_github_wiki_total_commits(
     repository: RepositoryInput,
-) -> dict:
-    owner, repository_name = repository.get_owner_and_repository_name()
-
-    return await fetch_total_commit_count(
-        owner=owner,
-        repository_name=repository_name,
-    )
-
-
-async def get_first_commit_date_for_repository(
-    repository: RepositoryInput,
-) -> dict:
-    owner, repository_name = repository.get_owner_and_repository_name()
-
-    return await fetch_first_commit_date(
-        owner=owner,
-        repository_name=repository_name,
-    )
-
-
-async def get_pull_request_acceptance_rate_for_repository(
-    repository: RepositoryInput,
-) -> dict:
-    owner, repository_name = repository.get_owner_and_repository_name()
-
-    return await fetch_pull_request_acceptance_rate(
-        owner=owner,
-        repository_name=repository_name,
-    )
-
-
-async def get_github_wiki_commit_count_for_repository(
-    repository: RepositoryInput,
-) -> dict:
+    subcategory_config: AnalysisSubcategoryConfig | None,
+) -> RepositoryMetricResult:
     owner, repository_name = repository.get_owner_and_repository_name()
 
     wiki_enabled_result = await fetch_github_wiki_enabled(
@@ -57,21 +22,30 @@ async def get_github_wiki_commit_count_for_repository(
     )
 
     if not wiki_enabled_result["has_wiki_enabled"]:
-        return {
-            "wiki_commit_count": 0,
-        }
+        github_wiki_total_commits = 0
+    else:
+        github_wiki_total_commits = _get_github_wiki_total_commits(
+            owner=owner,
+            repository_name=repository_name,
+        )
 
-    wiki_commit_count = _get_wiki_commit_count_with_git(
-        owner=owner,
-        repository_name=repository_name,
+    rating, requirement_failed = calculate_metric_rating(
+        value=github_wiki_total_commits,
+        subcategory_config=subcategory_config,
     )
 
-    return {
-        "wiki_commit_count": wiki_commit_count,
-    }
+    return RepositoryMetricResult(
+        metric_key="github_wiki_total_commits",
+        display_name="GitHub Wiki Total Commits",
+        value=github_wiki_total_commits,
+        rating=rating,
+        requirement_failed=requirement_failed,
+        status="success",
+        message="GitHub wiki total commits fetched successfully.",
+    )
 
 
-def _get_wiki_commit_count_with_git(
+def _get_github_wiki_total_commits(
     owner: str,
     repository_name: str,
 ) -> int:

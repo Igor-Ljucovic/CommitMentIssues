@@ -1,13 +1,13 @@
-from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer import (
+from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_analyzer import (
     analyze_pull_request_acceptance_rate,
 )
-from app.analyzers.documentation.github_wiki_total_commits_analyzer import (
-    analyze_github_wiki_commit_count,
+from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_total_commits_analyzer import (
+    analyze_github_wiki_total_commits,
 )
-from app.analyzers.general.first_commit_date_analyzer import (
+from app.analyzers.general.first_commit_date_analyzer.first_commit_date_analyzer import (
     analyze_first_commit_date,
 )
-from app.analyzers.general.total_commits_analyzer import (
+from app.analyzers.general.total_commits_analyzer.total_commits_analyzer import (
     analyze_total_commits,
 )
 from app.schemas.analysis_request_schemas import AnalysisRequest
@@ -110,7 +110,7 @@ async def analyze_repositories(request: AnalysisRequest) -> AnalysisResponse:
         )
         if github_wiki_total_commits_config is not None:
             try:
-                github_wiki_total_commits_metric = await analyze_github_wiki_commit_count(
+                github_wiki_total_commits_metric = await analyze_github_wiki_total_commits(
                     repository=repository,
                     subcategory_config=github_wiki_total_commits_config,
                 )

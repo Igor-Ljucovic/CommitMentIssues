@@ -1,18 +1,24 @@
+from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_fetch import fetch_pull_request_acceptance_rate
 from app.rating.metric_rating_calculator import calculate_metric_rating
 from app.schemas.analysis_request_schemas import AnalysisSubcategoryConfig, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
-from app.services.github_data_service import get_pull_request_acceptance_rate_for_repository
 
 
-async def analyze_pull_request_acceptance_rate(
+async def analyze_pull_request_acceptance_rate (
     repository: RepositoryInput,
     subcategory_config: AnalysisSubcategoryConfig | None,
 ) -> RepositoryMetricResult:
-    result = await get_pull_request_acceptance_rate_for_repository(repository)
-    pull_request_acceptance_rate = result["pull_request_acceptance_rate"]
+    owner, repository_name = repository.get_owner_and_repository_name()
+
+    result = await fetch_pull_request_acceptance_rate (
+        owner=owner,
+        repository_name=repository_name,
+    )
+    
+    pull_request_acceptance_rate  = result["pull_request_acceptance_rate"]
 
     rating, requirement_failed = calculate_metric_rating(
-        value=pull_request_acceptance_rate,
+        value=pull_request_acceptance_rate ,
         subcategory_config=subcategory_config,
     )
 
