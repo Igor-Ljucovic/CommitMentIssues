@@ -1,4 +1,4 @@
-from app.clients.github_graphql_client import _execute_github_graphql_query
+from app.clients.github_graphql_client import execute_github_graphql_query
 from app.analyzers.general.total_commits_analyzer.total_commits_query import TOTAL_COMMITS_GRAPHQL_QUERY
 
 
@@ -6,7 +6,7 @@ async def fetch_total_commits(
     owner: str,
     repository_name: str,
 ) -> dict:
-    repository = await _execute_github_graphql_query(
+    repository = await execute_github_graphql_query(
         query=TOTAL_COMMITS_GRAPHQL_QUERY,
         variables={
             "owner": owner,

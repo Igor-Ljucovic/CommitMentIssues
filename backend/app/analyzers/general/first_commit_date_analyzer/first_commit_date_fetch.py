@@ -1,4 +1,4 @@
-from app.clients.github_graphql_client import _execute_github_graphql_query
+from app.clients.github_graphql_client import execute_github_graphql_query
 from app.analyzers.general.first_commit_date_analyzer.first_commit_date_query import FIRST_COMMIT_DATE_GRAPHQL_QUERY
 
 
@@ -13,7 +13,7 @@ async def fetch_first_commit_date(
     resolved_repository_name = None
 
     while True:
-        repository = await _execute_github_graphql_query(
+        repository = await execute_github_graphql_query(
             query=FIRST_COMMIT_DATE_GRAPHQL_QUERY,
             variables={
                 "owner": owner,

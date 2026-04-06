@@ -3,7 +3,7 @@ import httpx
 from app.core.config import settings
 
 
-async def _execute_github_graphql_query(query: str, variables: dict) -> dict:
+async def execute_github_graphql_query(query: str, variables: dict) -> dict:
     if not settings.GITHUB_TOKEN:
         raise PermissionError("GitHub token is not configured on the server.")
 

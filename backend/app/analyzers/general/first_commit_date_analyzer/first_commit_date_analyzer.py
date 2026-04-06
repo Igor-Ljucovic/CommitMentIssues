@@ -2,7 +2,10 @@ from app.analyzers.general.first_commit_date_analyzer.first_commit_date_fetch im
 from app.rating.metric_rating_calculator import calculate_metric_rating
 from app.schemas.analysis_request_schemas import AnalysisSubcategoryConfig, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
-
+from app.analyzers.general.first_commit_date_analyzer.first_commit_date_constants import (
+    FIRST_COMMIT_DATE_METRIC_KEY,
+    FIRST_COMMIT_DATE_DISPLAY_NAME,
+)
 
 async def analyze_first_commit_date(
     repository: RepositoryInput,
@@ -15,7 +18,7 @@ async def analyze_first_commit_date(
         repository_name=repository_name,
     )
     
-    first_commit_date = result["first_commit_date"]
+    first_commit_date = result[FIRST_COMMIT_DATE_METRIC_KEY]
 
     rating, requirement_failed = calculate_metric_rating(
         value=first_commit_date,
@@ -23,8 +26,8 @@ async def analyze_first_commit_date(
     )
 
     return RepositoryMetricResult(
-        metric_key="first_commit_date",
-        display_name="First Commit Date",
+        metric_key=FIRST_COMMIT_DATE_METRIC_KEY,
+        display_name=FIRST_COMMIT_DATE_DISPLAY_NAME,
         value=first_commit_date,
         rating=rating,
         requirement_failed=requirement_failed,

@@ -2,7 +2,10 @@ from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_requ
 from app.rating.metric_rating_calculator import calculate_metric_rating
 from app.schemas.analysis_request_schemas import AnalysisSubcategoryConfig, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
-
+from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_constants import (
+    PULL_REQUEST_ACCEPTANCE_RATE_METRIC_KEY,
+    PULL_REQUEST_ACCEPTANCE_RATE_DISPLAY_NAME,
+)
 
 async def analyze_pull_request_acceptance_rate (
     repository: RepositoryInput,
@@ -23,8 +26,8 @@ async def analyze_pull_request_acceptance_rate (
     )
 
     return RepositoryMetricResult(
-        metric_key="pull_request_acceptance_rate",
-        display_name="Pull Request Acceptance Rate",
+        metric_key=PULL_REQUEST_ACCEPTANCE_RATE_METRIC_KEY,
+        display_name=PULL_REQUEST_ACCEPTANCE_RATE_DISPLAY_NAME,
         value=pull_request_acceptance_rate,
         rating=rating,
         requirement_failed=requirement_failed,
