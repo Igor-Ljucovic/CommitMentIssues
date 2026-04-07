@@ -9,6 +9,8 @@ from app.analyzers.general.total_commits_analyzer.total_commits_constants import
     TOTAL_COMMITS_CATEGORY_NAME,
     TOTAL_COMMITS_SUBCATEGORY_NAME,
 )
+from app.common.metric_status import MetricStatus
+
 
 async def execute_total_commits(
     request: AnalysisRequest,
@@ -35,6 +37,6 @@ async def execute_total_commits(
             weight=None,
             rating=None,
             requirement_failed=None,
-            status="failed",
+            status=MetricStatus.FAILED,
             message=str(exc),
         )

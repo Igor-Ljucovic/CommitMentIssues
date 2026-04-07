@@ -9,6 +9,8 @@ from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_
     GITHUB_WIKI_TOTAL_COMMITS_CATEGORY_NAME,
     GITHUB_WIKI_TOTAL_COMMITS_SUBCATEGORY_NAME,
 )
+from app.common.metric_status import MetricStatus
+
 
 async def execute_github_wiki_total_commits(
     request: AnalysisRequest,
@@ -35,6 +37,6 @@ async def execute_github_wiki_total_commits(
             weight=None,
             rating=None,
             requirement_failed=None,
-            status="failed",
+            status=MetricStatus.FAILED,
             message=str(exc),
         )

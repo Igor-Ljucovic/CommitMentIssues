@@ -2,6 +2,10 @@ from app.clients.github_graphql_client import execute_github_graphql_query
 from app.analyzers.general.first_commit_date_analyzer.first_commit_date_query import (
     FIRST_COMMIT_DATE_GRAPHQL_QUERY,
 )
+from app.analyzers.general.first_commit_date_analyzer.first_commit_date_constants import (
+    FIRST_COMMIT_DATE_METRIC_KEY,
+    BRANCH_NAME
+)
 
 
 async def fetch_first_commit_date(
@@ -42,8 +46,9 @@ async def fetch_first_commit_date(
             return {
                 "owner": repository["owner"]["login"],
                 "repository_name": repository["name"],
-                "branch_name": default_branch_ref["name"],
-                "first_commit_date": oldest_commit_date_seen[:10],
+                BRANCH_NAME: default_branch_ref["name"],
+                # [:10] for 1st 10 chars only (YYYY-MM-DD)
+                FIRST_COMMIT_DATE_METRIC_KEY: oldest_commit_date_seen[:10],
             }
 
         cursor = page_info.get("endCursor")

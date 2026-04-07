@@ -9,6 +9,8 @@ from app.analyzers.general.first_commit_date_analyzer.first_commit_date_constant
     FIRST_COMMIT_DATE_CATEGORY_NAME,
     FIRST_COMMIT_DATE_SUBCATEGORY_NAME,
 )
+from app.common.metric_status import MetricStatus
+
 
 async def execute_first_commit_date(
     request: AnalysisRequest,
@@ -35,6 +37,6 @@ async def execute_first_commit_date(
             weight=None,
             rating=None,
             requirement_failed=None,
-            status="failed",
+            status=MetricStatus.FAILED,
             message=str(exc),
         )

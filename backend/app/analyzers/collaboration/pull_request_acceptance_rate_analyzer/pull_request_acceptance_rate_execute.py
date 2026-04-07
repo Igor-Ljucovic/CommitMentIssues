@@ -9,6 +9,8 @@ from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_requ
     PULL_REQUEST_ACCEPTANCE_RATE_CATEGORY_NAME,
     PULL_REQUEST_ACCEPTANCE_RATE_SUBCATEGORY_NAME,
 )
+from app.common.metric_status import MetricStatus
+
 
 async def execute_pull_request_acceptance_rate(
     request: AnalysisRequest,
@@ -35,6 +37,6 @@ async def execute_pull_request_acceptance_rate(
             weight=None,
             rating=None,
             requirement_failed=None,
-            status="failed",
+            status=MetricStatus.FAILED,
             message=str(exc),
         )

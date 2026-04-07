@@ -2,6 +2,10 @@ from app.clients.github_graphql_client import execute_github_graphql_query
 from app.analyzers.general.total_commits_analyzer.total_commits_query import (
     TOTAL_COMMITS_GRAPHQL_QUERY,
 )
+from app.analyzers.general.total_commits_analyzer.total_commits_constants import (
+    TOTAL_COMMITS_METRIC_KEY,
+    BRANCH_NAME
+)
 
 
 async def fetch_total_commits(
@@ -31,6 +35,6 @@ async def fetch_total_commits(
     return {
         "owner": repository["owner"]["login"],
         "repository_name": repository["name"],
-        "branch_name": default_branch_ref["name"],
-        "total_commits": total_commits,
+        BRANCH_NAME: default_branch_ref["name"],
+        TOTAL_COMMITS_METRIC_KEY: total_commits,
     }

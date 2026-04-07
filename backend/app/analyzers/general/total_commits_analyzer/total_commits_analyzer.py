@@ -5,7 +5,9 @@ from app.schemas.analysis_response_schemas import RepositoryMetricResult
 from app.analyzers.general.total_commits_analyzer.total_commits_constants import (
     TOTAL_COMMITS_METRIC_KEY,
     TOTAL_COMMITS_DISPLAY_NAME,
+    BRANCH_NAME
 )
+from app.common.metric_status import MetricStatus
 
 
 async def analyze_total_commits(
@@ -33,6 +35,6 @@ async def analyze_total_commits(
         weight=subcategory_config.weight,
         rating=rating,
         requirement_failed=requirement_failed,
-        status="success",
-        message=f'Commit count fetched from branch "{result["branch_name"]}".',
+        status=MetricStatus.SUCCESS,
+        message=f'Commit count fetched from branch "{result[BRANCH_NAME]}".',
     )
