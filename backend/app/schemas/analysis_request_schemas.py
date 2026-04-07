@@ -1,5 +1,4 @@
 from datetime import date
-from decimal import Decimal, InvalidOperation
 from typing import Any
 from urllib.parse import urlparse
 
@@ -138,18 +137,33 @@ class DateRange(BaseModel):
 
 class AnalysisSubcategoryConfig(BaseModel):
     weight: int | float | None = None
-    requirementRange: NumericRange | DateRange | None = None
-    recommendedRange: NumericRange | DateRange | None = None
-    idealRange: NumericRange | DateRange | None = None
+    requirement_range: NumericRange | DateRange | None = Field(
+        default=None,
+        validation_alias="requirementRange",
+        serialization_alias="requirementRange",
+    )
+    recommended_range: NumericRange | DateRange | None = Field(
+        default=None,
+        validation_alias="recommendedRange",
+        serialization_alias="recommendedRange",
+    )
+    ideal_range: NumericRange | DateRange | None = Field(
+        default=None,
+        validation_alias="idealRange",
+        serialization_alias="idealRange",
+    )
 
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(
+        extra="allow",
+        populate_by_name=True,
+    )
 
     def has_any_rating_criteria(self) -> bool:
         return any(
             [
-                self._has_configured_range(self.requirementRange),
-                self._has_configured_range(self.recommendedRange),
-                self._has_configured_range(self.idealRange),
+                self._has_configured_range(self.requirement_range),
+                self._has_configured_range(self.recommended_range),
+                self._has_configured_range(self.ideal_range),
             ]
         )
 

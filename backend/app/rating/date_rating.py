@@ -19,20 +19,11 @@ def calculate_date_rating(
     date_value = to_date(value)
     ordinal_value = float(date_value.toordinal())
 
-    requirement_range = get_date_range_or_none(
-        subcategory_config.requirementRange
-    )
-    recommended_range = get_date_range_or_none(
-        subcategory_config.recommendedRange
-    )
-    ideal_range = get_date_range_or_none(
-        subcategory_config.idealRange
-    )
+    requirement_range = get_date_range_or_none(subcategory_config.requirement_range)
+    recommended_range = get_date_range_or_none(subcategory_config.recommended_range)
+    ideal_range = get_date_range_or_none(subcategory_config.ideal_range)
 
-    if (
-        requirement_range is not None
-        and not is_in_date_range(date_value, requirement_range)
-    ):
+    if (requirement_range is not None and not is_in_date_range(date_value, requirement_range)):
         return FAILED_REQUIREMENT_RANGE_RATING, True
 
     rating = value_to_rating(
@@ -66,9 +57,9 @@ def has_any_date_range_criteria(config: AnalysisSubcategoryConfig) -> bool:
     return any(
         isinstance(range_value, DateRange) and range_value.has_any_value()
         for range_value in [
-            config.requirementRange,
-            config.recommendedRange,
-            config.idealRange,
+            config.requirement_range,
+            config.recommended_range,
+            config.ideal_range,
         ]
     )
 

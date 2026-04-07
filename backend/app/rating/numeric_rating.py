@@ -19,19 +19,22 @@ def calculate_numeric_rating(
     numeric_value = to_float(value)
 
     requirement_range = get_numeric_range_or_none(
-        subcategory_config.requirementRange
+        subcategory_config.requirement_range
     )
     recommended_range = get_numeric_range_or_none(
-        subcategory_config.recommendedRange
+        subcategory_config.recommended_range
     )
     ideal_range = get_numeric_range_or_none(
-        subcategory_config.idealRange
+        subcategory_config.ideal_range
     )
 
     if (
         requirement_range is not None
-        and not is_in_range(numeric_value, requirement_range.get_min_float(), 
-                                    requirement_range.get_max_float())
+        and not is_in_range(
+            numeric_value,
+            requirement_range.get_min_float(),
+            requirement_range.get_max_float(),
+        )
     ):
         return FAILED_REQUIREMENT_RANGE_RATING, True
 
@@ -50,9 +53,9 @@ def has_any_numeric_range_criteria(config: AnalysisSubcategoryConfig) -> bool:
     return any(
         isinstance(range_value, NumericRange) and range_value.has_any_value()
         for range_value in [
-            config.requirementRange,
-            config.recommendedRange,
-            config.idealRange,
+            config.requirement_range,
+            config.recommended_range,
+            config.ideal_range,
         ]
     )
 
