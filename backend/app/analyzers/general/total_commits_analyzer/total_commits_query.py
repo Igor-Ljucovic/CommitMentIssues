@@ -1,6 +1,6 @@
 TOTAL_COMMITS_GRAPHQL_QUERY = """
 query GetRepositoryCommitCount($owner: String!, $name: String!) {
-  repository(owner: $owner, name: $name) {
+  repository(owner: $owner, name: $owner) {
     name
     owner {
       login

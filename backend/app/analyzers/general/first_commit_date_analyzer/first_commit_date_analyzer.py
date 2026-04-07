@@ -29,6 +29,7 @@ async def analyze_first_commit_date(
         metric_key=FIRST_COMMIT_DATE_METRIC_KEY,
         display_name=FIRST_COMMIT_DATE_DISPLAY_NAME,
         value=first_commit_date,
+        weight=subcategory_config.weight,
         rating=rating,
         requirement_failed=requirement_failed,
         status="success",

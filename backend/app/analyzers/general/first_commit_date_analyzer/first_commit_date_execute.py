@@ -32,6 +32,7 @@ async def execute_first_commit_date(
             metric_key=FIRST_COMMIT_DATE_METRIC_KEY,
             display_name=FIRST_COMMIT_DATE_DISPLAY_NAME,
             value=None,
+            weight=None,
             rating=None,
             requirement_failed=None,
             status="failed",

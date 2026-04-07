@@ -32,6 +32,7 @@ async def execute_github_wiki_total_commits(
             metric_key=GITHUB_WIKI_TOTAL_COMMITS_METRIC_KEY,
             display_name=GITHUB_WIKI_TOTAL_COMMITS_DISPLAY_NAME,
             value=None,
+            weight=None,
             rating=None,
             requirement_failed=None,
             status="failed",

@@ -30,6 +30,7 @@ async def analyze_total_commits(
         metric_key=TOTAL_COMMITS_METRIC_KEY,
         display_name=TOTAL_COMMITS_DISPLAY_NAME,
         value=total_commits,
+        weight=subcategory_config.weight,
         rating=rating,
         requirement_failed=requirement_failed,
         status="success",

@@ -32,6 +32,7 @@ async def execute_total_commits(
             metric_key=TOTAL_COMMITS_METRIC_KEY,
             display_name=TOTAL_COMMITS_DISPLAY_NAME,
             value=None,
+            weight=None,
             rating=None,
             requirement_failed=None,
             status="failed",

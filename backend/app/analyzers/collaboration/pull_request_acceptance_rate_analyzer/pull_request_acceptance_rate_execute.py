@@ -32,6 +32,7 @@ async def execute_pull_request_acceptance_rate(
             metric_key=PULL_REQUEST_ACCEPTANCE_RATE_METRIC_KEY,
             display_name=PULL_REQUEST_ACCEPTANCE_RATE_DISPLAY_NAME,
             value=None,
+            weight=None,
             rating=None,
             requirement_failed=None,
             status="failed",

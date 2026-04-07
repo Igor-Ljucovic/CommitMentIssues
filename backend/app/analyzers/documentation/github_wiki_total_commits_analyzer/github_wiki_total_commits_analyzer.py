@@ -33,6 +33,7 @@ async def analyze_github_wiki_total_commits(
         display_name=GITHUB_WIKI_TOTAL_COMMITS_DISPLAY_NAME,
         value=github_wiki_total_commits,
         rating=rating,
+        weight=subcategory_config.weight,
         requirement_failed=requirement_failed,
         status="success",
         message="GitHub wiki total commits fetched successfully.",

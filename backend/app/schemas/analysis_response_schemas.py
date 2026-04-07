@@ -4,7 +4,8 @@ from pydantic import BaseModel, Field
 class RepositoryMetricResult(BaseModel):
     metric_key: str = Field(..., min_length=1)
     display_name: str = Field(..., min_length=1)
-    value: str | int | float | None = None
+    value: str | int | float | bool | None = None
+    weight: float | None = None
     rating: float | None = None
     requirement_failed: bool | None = None
     status: str = Field(..., min_length=1)
@@ -13,6 +14,9 @@ class RepositoryMetricResult(BaseModel):
 
 class RepositoryAnalysisResult(BaseModel):
     repository_url: str = Field(..., min_length=1)
+    rating: float | None = None
+    requirement_failed_metrics: list[str] | None = None
+    status_failed_metrics: list[str] | None = None
     metrics: list[RepositoryMetricResult] = Field(default_factory=list)
 
 
