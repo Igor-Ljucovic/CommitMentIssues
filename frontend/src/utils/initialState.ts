@@ -65,11 +65,6 @@ export const createInitialMetricParameters = (): MetricParametersState => {
             return;
           }
 
-          if (parameter.type === "boolean-slider") {
-            itemAcc[item.name][parameter.key] = { selected: "1" }; // default = Either
-            return;
-          }
-
           itemAcc[item.name][parameter.key] = { min: "", max: "" };
         });
 
