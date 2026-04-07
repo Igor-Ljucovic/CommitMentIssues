@@ -4,8 +4,8 @@ export const DEFAULT_WEIGHT = 5;
 
 const createStandardIntRangeParameters = (): MetricParameterConfig[] => [
   {
-    key: "hardRequirementRange",
-    label: "Hard Requirement Range",
+    key: "requirementRange",
+    label: "Requirement Range",
     type: "int-range",
   },
   {
@@ -22,8 +22,8 @@ const createStandardIntRangeParameters = (): MetricParameterConfig[] => [
 
 const createStandardDateRangeParameters = (): MetricParameterConfig[] => [
   {
-    key: "hardRequirementRange",
-    label: "Hard Requirement Range",
+    key: "requirementRange",
+    label: "Requirement Range",
     type: "date-range",
   },
   {
@@ -40,8 +40,8 @@ const createStandardDateRangeParameters = (): MetricParameterConfig[] => [
 
 const createPercentageRangeParameters = (): MetricParameterConfig[] => [
   {
-    key: "hardRequirementRange",
-    label: "Hard Requirement Range",
+    key: "requirementRange",
+    label: "Requirement Range",
     type: "percentage-range",
   },
   {
