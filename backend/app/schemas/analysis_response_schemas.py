@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class RepositoryMetricResult(BaseModel):
     metric_key: str = Field(..., min_length=1)
-    display_name: str = Field(..., min_length=1)
+    metric_name: str = Field(..., min_length=1)
     value: str | int | float | bool | None = None
     weight: float | None = None
     rating: float | None = None

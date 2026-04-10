@@ -28,7 +28,7 @@ type AnalysisResponse = {
       repository_url: string;
       metrics: {
         metric_key: string;
-        display_name: string;
+        metric_name: string;
         value: string | number | null;
         status: string;
         message?: string | null;

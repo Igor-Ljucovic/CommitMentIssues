@@ -3,7 +3,7 @@ from app.analyzers.general.first_commit_date_analyzer.first_commit_date_fetch im
 )
 from app.analyzers.general.first_commit_date_analyzer.first_commit_date_constants import (
     FIRST_COMMIT_DATE_METRIC_KEY,
-    FIRST_COMMIT_DATE_DISPLAY_NAME,
+    FIRST_COMMIT_DATE_METRIC_NAME,
     FIRST_COMMIT_DATE_CATEGORY_NAME,
     FIRST_COMMIT_DATE_SUBCATEGORY_NAME,
     BRANCH_NAME,
@@ -35,7 +35,7 @@ async def get_first_commit_date_metric(
 
         return RepositoryMetricResult(
             metric_key=FIRST_COMMIT_DATE_METRIC_KEY,
-            display_name=FIRST_COMMIT_DATE_DISPLAY_NAME,
+            metric_name=FIRST_COMMIT_DATE_METRIC_NAME,
             value=result[FIRST_COMMIT_DATE_METRIC_KEY],
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
@@ -44,7 +44,7 @@ async def get_first_commit_date_metric(
     except Exception as exc:
         return RepositoryMetricResult(
             metric_key=FIRST_COMMIT_DATE_METRIC_KEY,
-            display_name=FIRST_COMMIT_DATE_DISPLAY_NAME,
+            metric_name=FIRST_COMMIT_DATE_METRIC_NAME,
             value=None,
             weight=None,
             status=MetricStatus.FAILED,

@@ -10,17 +10,17 @@ def calculate_metric_ratings(request: AnalysisRequest, response: AnalysisRespons
     for file in response.files:
         for repo in file.repositories:
             for metric in repo.metrics:
-                subcategory_config = _find_subcategory_config(request, metric.display_name)
+                subcategory_config = _find_subcategory_config(request, metric.metric_name)
                 _apply_metric_rating(metric, subcategory_config)
     return response
 
 
 def _find_subcategory_config(
     request: AnalysisRequest,
-    display_name: str,
+    metric_name: str,
 ) -> AnalysisSubcategoryConfig | None:
     for _, category in request.get_category_configs().items():
-        config = category.subcategories.get(display_name)
+        config = category.subcategories.get(metric_name)
         if config is not None:
             return config
     return None

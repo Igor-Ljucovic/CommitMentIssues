@@ -26,10 +26,10 @@ def calculate_repository_ratings(
                     total_weight += metric_weight
 
                 if metric.requirement_failed is True:
-                    requirement_failed_metrics.append(metric.display_name)
+                    requirement_failed_metrics.append(metric.metric_name)
 
                 if metric.status != "success":
-                    status_failed_metrics.append(metric.display_name)
+                    status_failed_metrics.append(metric.metric_name)
 
             repository.rating = round(weighted_sum / total_weight, 2) if total_weight > 0 else 0.0
 

@@ -1,6 +1,6 @@
 from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_constants import (
     PULL_REQUEST_ACCEPTANCE_RATE_METRIC_KEY,
-    PULL_REQUEST_ACCEPTANCE_RATE_DISPLAY_NAME,
+    PULL_REQUEST_ACCEPTANCE_RATE_METRIC_NAME,
     PULL_REQUEST_ACCEPTANCE_RATE_CATEGORY_NAME,
     PULL_REQUEST_ACCEPTANCE_RATE_SUBCATEGORY_NAME,
     CLOSED_UNMERGED_PULL_REQUESTS,
@@ -36,7 +36,7 @@ async def get_pull_request_acceptance_rate_metric(
 
         return RepositoryMetricResult(
             metric_key=PULL_REQUEST_ACCEPTANCE_RATE_METRIC_KEY,
-            display_name=PULL_REQUEST_ACCEPTANCE_RATE_DISPLAY_NAME,
+            metric_name=PULL_REQUEST_ACCEPTANCE_RATE_METRIC_NAME,
             value=result["pull_request_acceptance_rate"],
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
@@ -48,7 +48,7 @@ async def get_pull_request_acceptance_rate_metric(
     except Exception as exc:
         return RepositoryMetricResult(
             metric_key=PULL_REQUEST_ACCEPTANCE_RATE_METRIC_KEY,
-            display_name=PULL_REQUEST_ACCEPTANCE_RATE_DISPLAY_NAME,
+            metric_name=PULL_REQUEST_ACCEPTANCE_RATE_METRIC_NAME,
             value=None,
             weight=None,
             status=MetricStatus.FAILED,

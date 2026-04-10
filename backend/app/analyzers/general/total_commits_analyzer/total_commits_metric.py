@@ -1,7 +1,7 @@
 from app.analyzers.general.total_commits_analyzer.total_commits_fetch import fetch_total_commits
 from app.analyzers.general.total_commits_analyzer.total_commits_constants import (
     TOTAL_COMMITS_METRIC_KEY,
-    TOTAL_COMMITS_DISPLAY_NAME,
+    TOTAL_COMMITS_METRIC_NAME,
     TOTAL_COMMITS_CATEGORY_NAME,
     TOTAL_COMMITS_SUBCATEGORY_NAME,
     BRANCH_NAME,
@@ -33,7 +33,7 @@ async def get_total_commits_metric(
 
         return RepositoryMetricResult(
             metric_key=TOTAL_COMMITS_METRIC_KEY,
-            display_name=TOTAL_COMMITS_DISPLAY_NAME,
+            metric_name=TOTAL_COMMITS_METRIC_NAME,
             value=result[TOTAL_COMMITS_METRIC_KEY],
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
@@ -42,7 +42,7 @@ async def get_total_commits_metric(
     except Exception as exc:
         return RepositoryMetricResult(
             metric_key=TOTAL_COMMITS_METRIC_KEY,
-            display_name=TOTAL_COMMITS_DISPLAY_NAME,
+            metric_name=TOTAL_COMMITS_METRIC_NAME,
             value=None,
             weight=None,
             status=MetricStatus.FAILED,
