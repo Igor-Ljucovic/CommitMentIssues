@@ -1,16 +1,16 @@
 from collections.abc import Awaitable, Callable
 
-from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_execute import (
-    execute_pull_request_acceptance_rate,
+from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_metric import (
+    get_pull_request_acceptance_rate_metric,
 )
-from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_total_commits_execute import (
-    execute_github_wiki_total_commits,
+from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_total_commits_metric import (
+    get_github_wiki_total_commits_metric,
 )
-from app.analyzers.general.first_commit_date_analyzer.first_commit_date_execute import (
-    execute_first_commit_date,
+from app.analyzers.general.first_commit_date_analyzer.first_commit_date_metric import (
+    get_first_commit_date_metric,
 )
-from app.analyzers.general.total_commits_analyzer.total_commits_execute import (
-    execute_total_commits,
+from app.analyzers.general.total_commits_analyzer.total_commits_metric import (
+    get_total_commits_metric,
 )
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import (
@@ -55,10 +55,10 @@ async def analyze_repositories_github_graphql(request: AnalysisRequest) -> Analy
     for repository in repositories:
         metrics: list[RepositoryMetricResult] = []
 
-        await _append_metric_if_present(metrics, execute_total_commits, request, repository)
-        await _append_metric_if_present(metrics, execute_first_commit_date, request, repository)
-        await _append_metric_if_present(metrics, execute_pull_request_acceptance_rate, request, repository)
-        await _append_metric_if_present(metrics, execute_github_wiki_total_commits, request, repository)
+        await _append_metric_if_present(metrics, get_total_commits_metric, request, repository)
+        await _append_metric_if_present(metrics, get_first_commit_date_metric, request, repository)
+        await _append_metric_if_present(metrics, get_pull_request_acceptance_rate_metric, request, repository)
+        await _append_metric_if_present(metrics, get_github_wiki_total_commits_metric, request, repository)
 
         repo_result = RepositoryAnalysisResult(
             repository_url=repository.repo_url,
