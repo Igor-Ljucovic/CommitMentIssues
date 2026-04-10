@@ -5,7 +5,6 @@ from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_
 from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_total_commits_fetch import (
     fetch_github_wiki_total_commits,
 )
-from app.rating.metric_rating_calculator import calculate_metric_rating
 from app.schemas.analysis_request_schemas import AnalysisSubcategoryConfig, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
 from app.common.metric_status import MetricStatus
@@ -22,20 +21,11 @@ async def analyze_github_wiki_total_commits(
         repository_name=repository_name,
     )
 
-    github_wiki_total_commits = result[GITHUB_WIKI_TOTAL_COMMITS_METRIC_KEY]
-
-    rating, requirement_failed = calculate_metric_rating(
-        value=github_wiki_total_commits,
-        subcategory_config=subcategory_config,
-    )
-
     return RepositoryMetricResult(
         metric_key=GITHUB_WIKI_TOTAL_COMMITS_METRIC_KEY,
         display_name=GITHUB_WIKI_TOTAL_COMMITS_DISPLAY_NAME,
-        value=github_wiki_total_commits,
-        rating=rating,
+        value=result[GITHUB_WIKI_TOTAL_COMMITS_METRIC_KEY],
         weight=subcategory_config.weight,
-        requirement_failed=requirement_failed,
         status=MetricStatus.SUCCESS,
         message="GitHub wiki total commits fetched successfully.",
     )
