@@ -194,48 +194,6 @@ function MetricParameterInputs({
                   />
                 </div>
               </div>
-            ) : parameter.type === "boolean-slider" ? (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.35rem",
-                  maxWidth: "320px",
-                }}
-              >
-                <input
-                  type="range"
-                  min="0"
-                  max="2"
-                  step="1"
-                  value={currentValue.selected ?? "1"}
-                  onChange={(event) =>
-                    onMetricParameterChange(
-                      categoryTitle,
-                      item.name,
-                      parameter.key,
-                      "selected",
-                      event.target.value,
-                    )
-                  }
-                  style={{
-                    width: "100%",
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: "0.82rem",
-                    color: "#666",
-                    paddingInline: "0.1rem",
-                  }}
-                >
-                  <span>No</span>
-                  <span>Either</span>
-                  <span>Yes</span>
-                </div>
-              </div>
             ) : (
               <div
                 style={{
