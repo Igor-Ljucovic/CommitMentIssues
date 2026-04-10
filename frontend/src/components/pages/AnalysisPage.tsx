@@ -6,7 +6,6 @@ import RepositoryAnalysisSection from "../../components/RepositoryAnalysisSectio
 import SelectedFilesList from "../../components/SelectedFilesList";
 import type {
   AnalysisSelectionState,
-  CategoryWeightsState,
   ItemWeightsState,
   MetricParametersState,
   MetricParameterValue,
@@ -14,7 +13,6 @@ import type {
 } from "../../types";
 import {
   createInitialAnalysisSelections,
-  createInitialCategoryWeights,
   createInitialItemWeights,
   createInitialMetricParameters,
 } from "../../utils/initialState";
@@ -45,8 +43,6 @@ function App() {
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [analysisSelections, setAnalysisSelections] =
     useState<AnalysisSelectionState>(createInitialAnalysisSelections);
-  const [categoryWeights, setCategoryWeights] =
-    useState<CategoryWeightsState>(createInitialCategoryWeights);
   const [itemWeights, setItemWeights] =
     useState<ItemWeightsState>(createInitialItemWeights);
   const [metricParameters, setMetricParameters] =
@@ -194,7 +190,6 @@ function App() {
 
       if (Object.keys(selectedSubcategories).length > 0) {
         payload[categoryName] = {
-          weight: categoryWeights[categoryName] ?? 5,
           subcategories: selectedSubcategories,
         };
       }
@@ -290,15 +285,15 @@ function App() {
           : "";
 
       const totalRepositoryCount = analysisResult.files.reduce(
-  (sum, file) => sum + file.repositories.length,
-  0,
-);
+        (sum, file) => sum + file.repositories.length,
+        0,
+      );
 
-    setStatusMessage(
-      `Upload successful. Accepted ${uploadResult.accepted_files} of ${uploadResult.total_files} file(s). Analysis completed for ${totalRepositoryCount} repositor${
-        totalRepositoryCount === 1 ? "y" : "ies"
-      }.${warningText}`,
-    );
+      setStatusMessage(
+        `Upload successful. Accepted ${uploadResult.accepted_files} of ${uploadResult.total_files} file(s). Analysis completed for ${totalRepositoryCount} repositor${
+          totalRepositoryCount === 1 ? "y" : "ies"
+        }.${warningText}`,
+      );
     } catch (error) {
       console.error(error);
 
@@ -319,18 +314,6 @@ function App() {
         ...previousSelections[categoryTitle],
         [itemName]: !previousSelections[categoryTitle][itemName],
       },
-    }));
-  };
-
-  const handleCategoryWeightChange = (
-    categoryTitle: string,
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
-    const weight = Number(event.target.value);
-
-    setCategoryWeights((previousWeights) => ({
-      ...previousWeights,
-      [categoryTitle]: weight,
     }));
   };
 
@@ -399,11 +382,9 @@ function App() {
 
         <RepositoryAnalysisSection
           analysisSelections={analysisSelections}
-          categoryWeights={categoryWeights}
           itemWeights={itemWeights}
           metricParameters={metricParameters}
           onAnalysisItemToggle={handleAnalysisItemToggle}
-          onCategoryWeightChange={handleCategoryWeightChange}
           onItemWeightChange={handleItemWeightChange}
           onMetricParameterChange={handleMetricParameterChange}
         />

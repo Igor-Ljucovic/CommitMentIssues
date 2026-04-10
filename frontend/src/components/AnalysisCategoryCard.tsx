@@ -9,7 +9,6 @@ import MetricParameterInputs from "./MetricParameterInputs";
 
 type AnalysisCategoryCardProps = {
   category: AnalysisCategory;
-  categoryWeight: number;
   analysisSelectionsForCategory: Record<string, boolean>;
   itemWeightsForCategory: Record<string, number>;
   metricParametersForCategory: Record<
@@ -17,10 +16,6 @@ type AnalysisCategoryCardProps = {
     Record<string, MetricParameterValue>
   >;
   onAnalysisItemToggle: (categoryTitle: string, itemName: string) => void;
-  onCategoryWeightChange: (
-    categoryTitle: string,
-    event: ChangeEvent<HTMLInputElement>,
-  ) => void;
   onItemWeightChange: (
     categoryTitle: string,
     itemName: string,
@@ -37,12 +32,10 @@ type AnalysisCategoryCardProps = {
 
 function AnalysisCategoryCard({
   category,
-  categoryWeight,
   analysisSelectionsForCategory,
   itemWeightsForCategory,
   metricParametersForCategory,
   onAnalysisItemToggle,
-  onCategoryWeightChange,
   onItemWeightChange,
   onMetricParameterChange,
 }: AnalysisCategoryCardProps) {
@@ -204,7 +197,7 @@ function AnalysisCategoryCard({
             min="0"
             max="10"
             step="1"
-            value={currentItemWeight}
+            value={currentItemWeight ?? DEFAULT_WEIGHT}
             onChange={(event) =>
               onItemWeightChange(category.title, item.name, event)
             }
@@ -239,44 +232,27 @@ function AnalysisCategoryCard({
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1rem",
+          gap: "0.6rem",
           marginBottom: "1rem",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          <button
-            type="button"
-            onClick={() => setIsCategoryExpanded((previous) => !previous)}
-            style={{
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              fontSize: "1rem",
-              padding: 0,
-              width: "1rem",
-              flexShrink: 0,
-            }}
-          >
-            {isCategoryExpanded ? "▼" : "▶"}
-          </button>
-
-          <h3 style={{ margin: 0 }}>{category.title}</h3>
-        </div>
-
-        <input
-          id={`category-weight-${category.title}`}
-          type="range"
-          min="0"
-          max="10"
-          step="1"
-          value={categoryWeight}
-          onChange={(event) => onCategoryWeightChange(category.title, event)}
+        <button
+          type="button"
+          onClick={() => setIsCategoryExpanded((previous) => !previous)}
           style={{
-            width: "200px",
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            fontSize: "1rem",
+            padding: 0,
+            width: "1rem",
             flexShrink: 0,
           }}
-        />
+        >
+          {isCategoryExpanded ? "▼" : "▶"}
+        </button>
+
+        <h3 style={{ margin: 0 }}>{category.title}</h3>
       </div>
 
       {isCategoryExpanded ? (

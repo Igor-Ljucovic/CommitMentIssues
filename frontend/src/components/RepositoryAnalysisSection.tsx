@@ -1,8 +1,7 @@
 import type { ChangeEvent } from "react";
-import { ANALYSIS_CATEGORIES, DEFAULT_WEIGHT } from "../data/analysisCategories";
+import { ANALYSIS_CATEGORIES } from "../data/analysisCategories";
 import type {
   AnalysisSelectionState,
-  CategoryWeightsState,
   ItemWeightsState,
   MetricParametersState,
   MetricParameterValue,
@@ -11,14 +10,9 @@ import AnalysisCategoryCard from "./AnalysisCategoryCard";
 
 type RepositoryAnalysisSectionProps = {
   analysisSelections: AnalysisSelectionState;
-  categoryWeights: CategoryWeightsState;
   itemWeights: ItemWeightsState;
   metricParameters: MetricParametersState;
   onAnalysisItemToggle: (categoryTitle: string, itemName: string) => void;
-  onCategoryWeightChange: (
-    categoryTitle: string,
-    event: ChangeEvent<HTMLInputElement>,
-  ) => void;
   onItemWeightChange: (
     categoryTitle: string,
     itemName: string,
@@ -35,11 +29,9 @@ type RepositoryAnalysisSectionProps = {
 
 function RepositoryAnalysisSection({
   analysisSelections,
-  categoryWeights,
   itemWeights,
   metricParameters,
   onAnalysisItemToggle,
-  onCategoryWeightChange,
   onItemWeightChange,
   onMetricParameterChange,
 }: RepositoryAnalysisSectionProps) {
@@ -55,14 +47,12 @@ function RepositoryAnalysisSection({
           <AnalysisCategoryCard
             key={category.title}
             category={category}
-            categoryWeight={categoryWeights[category.title] ?? DEFAULT_WEIGHT}
             analysisSelectionsForCategory={
               analysisSelections[category.title] ?? {}
             }
             itemWeightsForCategory={itemWeights[category.title] ?? {}}
             metricParametersForCategory={metricParameters[category.title] ?? {}}
             onAnalysisItemToggle={onAnalysisItemToggle}
-            onCategoryWeightChange={onCategoryWeightChange}
             onItemWeightChange={onItemWeightChange}
             onMetricParameterChange={onMetricParameterChange}
           />
