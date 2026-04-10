@@ -1,7 +1,7 @@
 from typing import Any
-from backend.app.rating.metric_rating.common import DEFAULT_RATING
-from backend.app.rating.metric_rating.date_rating import calculate_date_rating, has_any_date_range_criteria
-from backend.app.rating.metric_rating.numeric_rating import calculate_numeric_rating, has_any_numeric_range_criteria
+from app.rating.metric_rating.common import DEFAULT_RATING
+from app.rating.metric_rating.date_rating import calculate_date_rating, has_any_date_range_criteria
+from app.rating.metric_rating.numeric_rating import calculate_numeric_rating, has_any_numeric_range_criteria
 from app.schemas.analysis_request_schemas import AnalysisRequest, AnalysisSubcategoryConfig
 from app.schemas.analysis_response_schemas import AnalysisResponse, RepositoryMetricResult
 

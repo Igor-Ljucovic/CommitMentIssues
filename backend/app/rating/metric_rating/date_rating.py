@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import Any
 
-from app.rating.common import (
+from app.rating.metric_rating.common import (
     FAILED_REQUIREMENT_RANGE_RATING,
     value_to_rating,
 )
