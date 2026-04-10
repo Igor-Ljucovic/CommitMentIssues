@@ -23,6 +23,9 @@ class RepositoryAnalysisResult(BaseModel):
 class FileAnalysisResult(BaseModel):
     file_id: int | None = None
     file_name: str
+    rating: float | None = None
+    requirement_failed_repositories: list[str] | None = None
+    status_failed_repositories: list[str] | None = None
     repositories: list[RepositoryAnalysisResult] = Field(default_factory=list)
 
 
