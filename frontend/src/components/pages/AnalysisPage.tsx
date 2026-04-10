@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
 import "../../App.css";
 import FileUploadSection from "../../components/FileUploadSection";
@@ -41,6 +41,8 @@ type AnalysisResponse = {
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [statusMessage, setStatusMessage] = useState<string>("");
+  const [uploadResult, setUploadResult] = useState<UploadResponse | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [analysisSelections, setAnalysisSelections] =
     useState<AnalysisSelectionState>(createInitialAnalysisSelections);
   const [itemWeights, setItemWeights] =
@@ -108,6 +110,62 @@ function App() {
     );
   };
 
+  const handleUpload = async (files: File[]): Promise<void> => {
+    if (files.length === 0) {
+      setUploadResult(null);
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      files.forEach((file) => formData.append("files", file));
+
+      console.log("JSON payload sent to /uploads:");
+      console.log(
+        JSON.stringify({
+          files: files.map((file) => ({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+          })),
+        }, null, 2),
+      );
+
+      const response = await fetch("http://localhost:8000/uploads", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed.");
+      }
+
+      const result: UploadResponse = await response.json();
+
+      console.log("/uploads backend response:");
+      console.log(JSON.stringify(result, null, 2));
+
+      setUploadResult(result);
+      setStatusMessage(
+        `Upload successful. Accepted ${result.accepted_files} of ${result.total_files} file(s).`,
+      );
+    } catch (error) {
+      console.error(error);
+      setUploadResult(null);
+      setStatusMessage(
+        error instanceof Error ? error.message : "Something went wrong while uploading files.",
+      );
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleUpload(selectedFiles);
+  }, [selectedFiles]);
+
   const isPercentageParameter = (
     categoryName: string,
     itemName: string,
@@ -137,10 +195,10 @@ function App() {
   };
 
   const buildAnalysisPayload = (
-    uploadResult: UploadResponse,
+    uploadData: UploadResponse,
   ): Record<string, unknown> => {
     const payload: Record<string, unknown> = {
-      files: uploadResult.files,
+      files: uploadData.files,
     };
 
     Object.entries(analysisSelections).forEach(([categoryName, items]) => {
@@ -198,51 +256,14 @@ function App() {
     return payload;
   };
 
-  const handleUpload = async (): Promise<UploadResponse> => {
-    if (selectedFiles.length === 0) {
-      throw new Error("Please select at least one file before uploading.");
-    }
-
-    const formData = new FormData();
-
-    selectedFiles.forEach((file) => {
-      formData.append("files", file);
-    });
-
-    const uploadRequestPreview = selectedFiles.map((file) => ({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-    }));
-
-    console.log("FormData payload sent to /uploads:");
-    console.log(JSON.stringify({ files: uploadRequestPreview }, null, 2));
-
-    const response = await fetch("http://localhost:8000/uploads", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error("Upload failed.");
-    }
-
-    const result: UploadResponse = await response.json();
-
-    console.log("/uploads backend response:");
-    console.log(JSON.stringify(result, null, 2));
-
-    return result;
-  };
-
   const handleAnalysis = async (
-    uploadResult: UploadResponse,
+    uploadData: UploadResponse,
   ): Promise<AnalysisResponse> => {
-    if (uploadResult.files.length === 0) {
+    if (uploadData.files.length === 0) {
       throw new Error("No uploaded files are available for analysis.");
     }
 
-    const payload = buildAnalysisPayload(uploadResult);
+    const payload = buildAnalysisPayload(uploadData);
 
     console.log("JSON payload sent to /analysis:");
     console.log(JSON.stringify(payload, null, 2));
@@ -268,15 +289,19 @@ function App() {
   };
 
   const handleAnalyzeRepositories = async () => {
-    if (selectedFiles.length === 0) {
+    if (!uploadResult) {
       setStatusMessage("Please select at least one file before analyzing.");
       return;
     }
 
-    try {
-      setStatusMessage("Uploading files and analyzing repositories...");
+    if (isUploading) {
+      setStatusMessage("Files are still uploading, please wait.");
+      return;
+    }
 
-      const uploadResult = await handleUpload();
+    try {
+      setStatusMessage("Analyzing repositories...");
+
       const analysisResult = await handleAnalysis(uploadResult);
 
       const warningText =
@@ -290,7 +315,7 @@ function App() {
       );
 
       setStatusMessage(
-        `Upload successful. Accepted ${uploadResult.accepted_files} of ${uploadResult.total_files} file(s). Analysis completed for ${totalRepositoryCount} repositor${
+        `Analysis completed for ${totalRepositoryCount} repositor${
           totalRepositoryCount === 1 ? "y" : "ies"
         }.${warningText}`,
       );
@@ -301,7 +326,7 @@ function App() {
         setStatusMessage(error.message);
       } else {
         setStatusMessage(
-          "Something went wrong while uploading files and analyzing repositories.",
+          "Something went wrong while analyzing repositories.",
         );
       }
     }
@@ -400,8 +425,9 @@ function App() {
           <button
             className="primary-button"
             onClick={handleAnalyzeRepositories}
+            disabled={isUploading || !uploadResult}
           >
-            Analyze GitHub Repositories
+            {isUploading ? "Uploading files..." : "Analyze GitHub Repositories"}
           </button>
         </div>
       </main>
