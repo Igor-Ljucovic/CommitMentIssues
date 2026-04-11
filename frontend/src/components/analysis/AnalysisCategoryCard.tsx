@@ -3,8 +3,8 @@ import type {
   AnalysisCategory,
   AnalysisItem,
   MetricParameterValue,
-} from "../types";
-import { DEFAULT_WEIGHT } from "../data/analysisCategories";
+} from "@/types/types";
+import { DEFAULT_WEIGHT } from "@/data/analysisCategories";
 import MetricParameterInputs from "./MetricParameterInputs";
 
 type AnalysisCategoryCardProps = {

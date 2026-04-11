@@ -1,11 +1,11 @@
 import type { ChangeEvent } from "react";
-import { ANALYSIS_CATEGORIES } from "../data/analysisCategories";
+import { ANALYSIS_CATEGORIES } from "../../data/analysisCategories";
 import type {
   AnalysisSelectionState,
   ItemWeightsState,
   MetricParametersState,
   MetricParameterValue,
-} from "../types";
+} from "../../types/types";
 import AnalysisCategoryCard from "./AnalysisCategoryCard";
 
 type RepositoryAnalysisSectionProps = {

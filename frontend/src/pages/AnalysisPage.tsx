@@ -1,22 +1,22 @@
 import { useMemo, useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
-import "../../App.css";
-import FileUploadSection from "../../components/FileUploadSection";
-import RepositoryAnalysisSection from "../../components/RepositoryAnalysisSection";
-import SelectedFilesList from "../../components/SelectedFilesList";
+import "@/App.css";
+import FileUploadSection from "@/components/analysis/FileUploadSection";
+import RepositoryAnalysisSection from "@/components/analysis/RepositoryAnalysisSection";
+import SelectedFilesList from "@/components/analysis/SelectedFilesList";
 import type {
   AnalysisSelectionState,
   ItemWeightsState,
   MetricParametersState,
   MetricParameterValue,
   UploadResponse,
-} from "../../types";
+} from "@/types/types";
 import {
   createInitialAnalysisSelections,
   createInitialItemWeights,
   createInitialMetricParameters,
-} from "../../utils/initialState";
-import { ANALYSIS_CATEGORIES } from "../../data/analysisCategories";
+} from "@/utils/initialState";
+import { ANALYSIS_CATEGORIES } from "@/data/analysisCategories";
 
 const ALLOWED_EXTENSIONS = [".txt", ".docx", ".pdf"];
 

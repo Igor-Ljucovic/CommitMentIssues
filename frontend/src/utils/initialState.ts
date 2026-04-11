@@ -6,7 +6,7 @@ import type {
   ItemWeightsState,
   MetricParametersState,
   MetricParameterValue,
-} from "../types";
+} from "../types/types";
 
 const getAllItems = (items: AnalysisItem[]): AnalysisItem[] => {
   return items.flatMap((item) => [

@@ -1,4 +1,4 @@
-import type { AnalysisCategory, MetricParameterConfig } from "../types";
+import type { AnalysisCategory, MetricParameterConfig } from "../types/types";
 
 export const DEFAULT_WEIGHT = 5;
 

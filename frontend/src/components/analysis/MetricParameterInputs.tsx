@@ -1,4 +1,4 @@
-import type { AnalysisItem, MetricParameterValue } from "../types";
+import type { AnalysisItem, MetricParameterValue } from "@/types/types";
 
 type MetricParameterInputsProps = {
   categoryTitle: string;
