@@ -18,6 +18,7 @@ class Settings(BaseSettings):
 
     GITHUB_TOKEN: str
     GITHUB_GRAPHQL_URL: str = "https://api.github.com/graphql"
+    GITHUB_REST_API_BASE_URL: str = "https://api.github.com"
     GITHUB_REQUEST_TIMEOUT_SECONDS: int = 30
 
     model_config = SettingsConfigDict(
