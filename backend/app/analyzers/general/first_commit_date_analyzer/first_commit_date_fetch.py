@@ -1,4 +1,4 @@
-from app.clients.github_graphql_client import execute_github_graphql_query
+from app.clients.github.github_graphql_client import execute_github_graphql_query
 from app.analyzers.general.first_commit_date_analyzer.first_commit_date_query import (
     FIRST_COMMIT_DATE_GRAPHQL_QUERY,
 )

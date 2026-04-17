@@ -1,4 +1,4 @@
-from app.clients.github_graphql_client import execute_github_graphql_query
+from app.clients.github.github_graphql_client import execute_github_graphql_query
 from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_query import (
     PULL_REQUEST_ACCEPTANCE_RATE_GRAPHQL_QUERY,
 )

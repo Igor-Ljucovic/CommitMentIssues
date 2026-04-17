@@ -1,4 +1,4 @@
-from app.clients.github_graphql_client import execute_github_graphql_query
+from app.clients.github.github_graphql_client import execute_github_graphql_query
 from app.analyzers.general.total_commits_analyzer.total_commits_query import (
     TOTAL_COMMITS_GRAPHQL_QUERY,
 )
