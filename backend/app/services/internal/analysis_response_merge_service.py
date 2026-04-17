@@ -1,35 +1,39 @@
 from copy import deepcopy
 
 from app.schemas.analysis_response_schemas import (
+    AnalysisResponse,
     FileAnalysisResult,
     RepositoryAnalysisResult,
-    AnalysisResponse
 )
 
 
 def merge_analysis_responses(
-    github_response: AnalysisResponse,
-    openai_response: AnalysisResponse,
+    responses: list[AnalysisResponse],
 ) -> AnalysisResponse:
-    result = deepcopy(github_response)
+    if not responses:
+        return AnalysisResponse(files=[], warnings=[])
+
+    result = deepcopy(responses[0])
 
     file_map: dict[tuple[int | None, str], FileAnalysisResult] = {
         (file_result.file_id, file_result.file_name): file_result
         for file_result in result.files
     }
 
-    for openai_file in openai_response.files:
-        file_key = (openai_file.file_id, openai_file.file_name)
+    for response in responses[1:]:
+        for incoming_file in response.files:
+            file_key = (incoming_file.file_id, incoming_file.file_name)
 
-        if file_key not in file_map:
-            file_map[file_key] = deepcopy(openai_file)
-            result.files.append(file_map[file_key])
-            continue
+            if file_key not in file_map:
+                copied_file = deepcopy(incoming_file)
+                file_map[file_key] = copied_file
+                result.files.append(copied_file)
+                continue
 
-        existing_file = file_map[file_key]
-        _merge_repositories(existing_file, openai_file)
+            existing_file = file_map[file_key]
+            _merge_repositories(existing_file, incoming_file)
 
-    result.warnings.extend(openai_response.warnings)
+        result.warnings.extend(response.warnings)
 
     return result
 
