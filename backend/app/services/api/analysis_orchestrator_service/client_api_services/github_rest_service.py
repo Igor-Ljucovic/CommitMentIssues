@@ -1,6 +1,6 @@
 from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import AnalysisResponse
-from app.services.client_api_helper_service import run_repository_analysis
+from app.services.api.analysis_orchestrator_service.utils.client_api_helper_service import run_repository_analysis
 
 
 async def analyze_repositories_github_rest(

@@ -6,9 +6,9 @@ from app.rating.repository_rating_calculator import calculate_repository_ratings
 from app.rating.metric_rating.metric_rating_calculator import calculate_metric_ratings
 from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import AnalysisResponse
-from app.services.github_graphql_service import analyze_repositories_github_graphql
-from app.services.openai_rest_service import analyze_repositories_openai_rest
-from app.services.analysis_response_merge_service import merge_analysis_responses
+from app.services.api.analysis_orchestrator_service.client_api_services.github_graphql_service import analyze_repositories_github_graphql
+from app.services.api.analysis_orchestrator_service.client_api_services.openai_rest_service import analyze_repositories_openai_rest
+from app.services.internal.analysis_response_merge_service import merge_analysis_responses
 
 
 async def analyze(request: AnalysisRequest) -> AnalysisResponse:
