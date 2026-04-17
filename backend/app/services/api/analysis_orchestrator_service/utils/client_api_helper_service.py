@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import Awaitable, Callable
 
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
@@ -14,17 +15,22 @@ MetricExecutor = Callable[
     Awaitable[RepositoryMetricResult | None],
 ]
 
-
-async def _append_metric_if_present(
-    metrics: list[RepositoryMetricResult],
-    executor: MetricExecutor,
+async def _analyze_repository(
     request: AnalysisRequest,
     repository: RepositoryInput,
-) -> None:
-    metric = await executor(request, repository)
+    metric_executors: list[MetricExecutor],
+) -> RepositoryAnalysisResult:
+    # All metrics for 1 repository run concurrently.
+    metric_results = await asyncio.gather(
+        *(executor(request, repository) for executor in metric_executors)
+    )
 
-    if metric is not None:
-        metrics.append(metric)
+    metrics = [m for m in metric_results if m is not None]
+
+    return RepositoryAnalysisResult(
+        repository_url=repository.repo_url,
+        metrics=metrics,
+    )
 
 
 async def run_repository_analysis(
@@ -40,24 +46,18 @@ async def run_repository_analysis(
         warnings.append(no_repositories_warning)
         return AnalysisResponse(files=[], warnings=warnings)
 
+    # All repositories run concurrently
+    repo_results = await asyncio.gather(
+        *(
+            _analyze_repository(request, repository, metric_executors)
+            for repository in repositories
+        )
+    )
+
+    # Preserve file order
     file_map: dict[int | None, FileAnalysisResult] = {}
 
-    for repository in repositories:
-        metrics: list[RepositoryMetricResult] = []
-
-        for executor in metric_executors:
-            await _append_metric_if_present(
-                metrics=metrics,
-                executor=executor,
-                request=request,
-                repository=repository,
-            )
-
-        repo_result = RepositoryAnalysisResult(
-            repository_url=repository.repo_url,
-            metrics=metrics,
-        )
-
+    for repository, repo_result in zip(repositories, repo_results):
         file_id = repository.source_file_id
         file_name = repository.source_file_name or "Unknown"
 
