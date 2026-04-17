@@ -1,0 +1,6 @@
+TOTAL_FILES_METRIC_KEY = "total_files"
+TOTAL_FILES_METRIC_NAME = "Total Files"
+TOTAL_FILES_CATEGORY_NAME = "General"
+TOTAL_FILES_SUBCATEGORY_NAME = "Total Files"
+
+DEFAULT_BRANCH_NAME = "default_branch_name"
