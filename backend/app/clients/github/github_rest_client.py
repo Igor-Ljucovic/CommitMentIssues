@@ -91,6 +91,19 @@ async def execute_github_rest_get(
     )
 
 
+async def execute_github_rest_get_bytes(path: str) -> bytes:
+    url = f"https://api.github.com{path}" if path.startswith("/") else path
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {settings.GITHUB_TOKEN}",
+        "X-GitHub-Api-Version": "2026-03-10",
+    }
+    async with httpx.AsyncClient(follow_redirects=True, timeout=120.0) as client:
+        response = await client.get(url, headers=headers)
+        response.raise_for_status()
+        return response.content
+
+
 async def fetch_github_rest_last_page_number(
     endpoint: str,
     *,
