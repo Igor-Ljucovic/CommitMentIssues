@@ -1,0 +1,5 @@
+LAST_COMMIT_DATE_METRIC_KEY = "last_commit_date"
+LAST_COMMIT_DATE_METRIC_NAME = "Last Commit Date"
+LAST_COMMIT_DATE_CATEGORY_NAME = "General"
+LAST_COMMIT_DATE_SUBCATEGORY_NAME = "Last Commit Date"
+BRANCH_NAME = "branch_name"

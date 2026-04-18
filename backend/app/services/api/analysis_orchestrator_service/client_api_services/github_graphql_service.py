@@ -7,6 +7,12 @@ from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_
 from app.analyzers.general.first_commit_date_analyzer.first_commit_date_metric import (
     get_first_commit_date_metric,
 )
+from app.analyzers.general.first_commit_date_analyzer.first_commit_date_metric import (
+    get_first_commit_date_metric,
+)
+from app.analyzers.general.last_commit_date_analyzer.last_commit_date_metric import (
+    get_last_commit_date_metric,
+)
 from app.analyzers.general.total_commits_analyzer.total_commits_metric import (
     get_total_commits_metric,
 )
@@ -23,6 +29,7 @@ async def analyze_repositories_github_graphql(
         metric_executors=[
             get_total_commits_metric,
             get_first_commit_date_metric,
+            get_last_commit_date_metric,
             get_pull_request_acceptance_rate_metric,
             get_github_wiki_total_commits_metric,
         ],
