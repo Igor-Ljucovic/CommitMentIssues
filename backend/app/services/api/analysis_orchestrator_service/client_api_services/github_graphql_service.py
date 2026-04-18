@@ -16,6 +16,9 @@ from app.analyzers.general.last_commit_date_analyzer.last_commit_date_metric imp
 from app.analyzers.general.total_commits_analyzer.total_commits_metric import (
     get_total_commits_metric,
 )
+from app.analyzers.general.average_commits_per_month_analyzer.average_commits_per_month_metric import (
+    get_average_commits_per_month_metric,
+)
 from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import AnalysisResponse
 from app.services.api.analysis_orchestrator_service.utils.client_api_helper_service import run_repository_analysis
@@ -30,6 +33,7 @@ async def analyze_repositories_github_graphql(
             get_total_commits_metric,
             get_first_commit_date_metric,
             get_last_commit_date_metric,
+            get_average_commits_per_month_metric,
             get_pull_request_acceptance_rate_metric,
             get_github_wiki_total_commits_metric,
         ],
