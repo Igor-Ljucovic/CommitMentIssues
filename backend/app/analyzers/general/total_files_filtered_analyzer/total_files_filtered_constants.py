@@ -6,6 +6,7 @@ TOTAL_FILES_FILTERED_SUBCATEGORY_NAME = "Total Files (filtered)"
 DEFAULT_BRANCH_NAME = "default_branch_name"
 
 SUPPORTED_CODE_FILE_EXTENSIONS = {
+    # Most common programming languages
     ".py",
     ".pyw",
 
@@ -25,9 +26,8 @@ SUPPORTED_CODE_FILE_EXTENSIONS = {
     ".hh",
     ".hxx",
     ".cs",
-
-    # Java / Kotlin / Scala / Groovy
     ".java",
+
     ".kt",
     ".kts",
     ".scala",
@@ -67,8 +67,10 @@ SUPPORTED_CODE_FILE_EXTENSIONS = {
     ".vue",
     ".svelte",
 
+    # Databases
     ".sql",
 
+    # Less popular programming languages
     ".fs",
     ".fsi",
     ".fsx",
@@ -133,4 +135,79 @@ EXCLUDED_PATH_PARTS = {
     "__pycache__/",
     ".pytest_cache/",
     ".mypy_cache/",
+}
+
+# Extensions that usually do not represent actual source code files
+# or are commonly documentation/assets/generated.
+EXCLUDED_FILE_EXTENSIONS = {
+    ".md",
+    ".txt",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".xml",
+    ".csv",
+    ".tsv",
+    ".log",
+    ".lock",
+    ".toml",
+    ".ini",
+    ".cfg",
+    ".conf",
+    ".env",
+    ".gitignore",
+    ".gitattributes",
+    ".editorconfig",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".bmp",
+    ".webp",
+    ".svg",
+    ".ico",
+    ".pdf",
+    ".mp3",
+    ".wav",
+    ".mp4",
+    ".mov",
+    ".avi",
+    ".webm",
+    ".zip",
+    ".tar",
+    ".gz",
+    ".rar",
+    ".7z",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".eot",
+    ".map",
+    ".min.js",
+    ".min.css",
+}
+
+# Exact filenames that should usually not count as actual coding files.
+EXCLUDED_FILE_NAMES = {
+    "readme",
+    "license",
+    "licence",
+    "copying",
+    "changelog",
+    "authors",
+    "contributors",
+    "dockerfile",
+    "makefile",
+    ".gitignore",
+    ".gitattributes",
+    ".editorconfig",
+    ".dockerignore",
+    ".env",
+    ".env.example",
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "poetry.lock",
+    "composer.lock",
+    "cargo.lock",
 }
