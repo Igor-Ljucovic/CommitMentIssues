@@ -21,7 +21,7 @@ export const createInitialAnalysisSelections = (): AnalysisSelectionState => {
       categoryAcc[category.title] = getAllItems(category.items).reduce<
         Record<string, boolean>
       >((itemAcc, item) => {
-        itemAcc[item.name] = true;
+        itemAcc[item.name] = false;
         return itemAcc;
       }, {});
 
