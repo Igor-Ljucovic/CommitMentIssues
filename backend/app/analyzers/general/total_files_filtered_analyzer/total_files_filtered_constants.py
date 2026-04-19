@@ -69,6 +69,16 @@ SUPPORTED_CODE_FILE_EXTENSIONS = {
 
     # Databases
     ".sql",
+    ".psql",
+    ".pgsql",
+    ".mysql",
+    ".ddl",
+    ".dml",
+    ".prisma",
+    ".dbml",
+    ".sql.j2",
+    ".hql",
+    ".cql",
 
     # Less popular programming languages
     ".fs",
