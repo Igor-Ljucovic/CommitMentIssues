@@ -69,7 +69,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardDateRangeParameters(),
       },
       {
-        name: "Last Commit Date (not rdy)",
+        name: "Last Commit Date",
         parameters: createStandardDateRangeParameters(),
       },
       {
@@ -77,7 +77,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Average Commits Per Month (not rdy)",
+        name: "Average Commits Per Month",
         parameters: createStandardIntRangeParameters(),
       },
       {
@@ -86,7 +86,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         tooltipText: "In lines of code, excluding generated and boilerplate files",
       },
       {
-        name: "Total Lines of Code (not rdy)",
+        name: "Total Lines of Code",
         parameters: createStandardIntRangeParameters(),
       },
       {
@@ -95,7 +95,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         tooltipText: "Excluding generated and boilerplate files",
       },
       {
-        name: "Total Files (not rdy)",
+        name: "Total Files",
         parameters: createStandardIntRangeParameters(),
       },
       {
@@ -158,7 +158,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Estimated README Quality ⭐ (not rdy)",
+        name: "Estimated README Quality ⭐",
         parameters: createPercentageRangeParameters(),
       },
       {
