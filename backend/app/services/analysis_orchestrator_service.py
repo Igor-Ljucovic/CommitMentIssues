@@ -30,7 +30,7 @@ async def analyze(request: AnalysisRequest) -> AnalysisResponse:
             openai_rest_response,
         ]
     )
-
+    
     # the request contains the criteria for each of the metrics, 
     # the response doesn't, but gets the ratings for each metric
     response = calculate_metric_ratings(request, response)

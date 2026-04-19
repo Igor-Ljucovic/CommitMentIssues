@@ -1,6 +1,6 @@
 from typing import Any
 
-from backend.app.clients.openai.openai_rest_client import execute_openai_request
+from app.clients.openai.openai_rest_client import execute_openai_request
 
 
 async def analyze_metric_with_openai(
