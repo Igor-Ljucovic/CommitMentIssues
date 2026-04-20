@@ -1,3 +1,4 @@
+from typing import Any
 from pydantic import BaseModel, Field
 
 
@@ -9,6 +10,7 @@ class RepositoryMetricResult(BaseModel):
     rating: float | None = None
     requirement_failed: bool | None = None
     status: str = Field(..., min_length=1)
+    metadata: dict[str, Any] | None = None
     message: str | None = None
 
 
