@@ -39,6 +39,7 @@ async def get_first_commit_date_metric(
             value=result[FIRST_COMMIT_DATE_METRIC_KEY],
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
+            metadata={FIRST_COMMIT_DATE_METRIC_KEY: result[FIRST_COMMIT_DATE_METRIC_KEY]},
             message=f'First commit date fetched from branch "{result[BRANCH_NAME]}".',
         )
     except Exception as exc:
@@ -48,5 +49,6 @@ async def get_first_commit_date_metric(
             value=None,
             weight=None,
             status=MetricStatus.FAILED,
+            metadata=None,
             message=str(exc),
         )

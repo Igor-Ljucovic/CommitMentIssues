@@ -39,6 +39,7 @@ async def get_last_commit_date_metric(
             value=result[LAST_COMMIT_DATE_METRIC_KEY],
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
+            metadata={LAST_COMMIT_DATE_METRIC_KEY: result[LAST_COMMIT_DATE_METRIC_KEY]},
             message=f'Last commit date fetched from branch "{result[BRANCH_NAME]}".',
         )
 
@@ -49,5 +50,6 @@ async def get_last_commit_date_metric(
             value=None,
             weight=None,
             status=MetricStatus.FAILED,
+            metadata=None,
             message=str(exc),
         )

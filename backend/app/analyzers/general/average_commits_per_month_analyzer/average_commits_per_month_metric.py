@@ -1,33 +1,34 @@
-from app.analyzers.general.average_commits_per_month_analyzer.average_commits_per_month_constants import (
-    AVERAGE_COMMITS_PER_MONTH_METRIC_KEY,
-    AVERAGE_COMMITS_PER_MONTH_METRIC_NAME,
-    AVERAGE_COMMITS_PER_MONTH_CATEGORY_NAME,
-    AVERAGE_COMMITS_PER_MONTH_SUBCATEGORY_NAME,
-)
+from app.analyzers.common.metric_utils import get_metadata_value
 from app.analyzers.general.average_commits_per_month_analyzer.average_commits_per_month_calculate import (
     calculate_average_commits_per_month,
 )
-from app.analyzers.general.total_commits_analyzer.total_commits_fetch import (
-    fetch_total_commits,
-)
-from app.analyzers.general.first_commit_date_analyzer.first_commit_date_fetch import (
-    fetch_first_commit_date,
-)
-from app.analyzers.general.last_commit_date_analyzer.last_commit_date_fetch import (
-    fetch_last_commit_date,
-)
-from app.analyzers.general.last_commit_date_analyzer.last_commit_date_constants import (
-    LAST_COMMIT_DATE_METRIC_KEY,
-)
-from app.analyzers.general.total_commits_analyzer.total_commits_constants import (
-    TOTAL_COMMITS_METRIC_KEY,
+from app.analyzers.general.average_commits_per_month_analyzer.average_commits_per_month_constants import (
+    AVERAGE_COMMITS_PER_MONTH_CATEGORY_NAME,
+    AVERAGE_COMMITS_PER_MONTH_METRIC_KEY,
+    AVERAGE_COMMITS_PER_MONTH_METRIC_NAME,
+    AVERAGE_COMMITS_PER_MONTH_SUBCATEGORY_NAME,
 )
 from app.analyzers.general.first_commit_date_analyzer.first_commit_date_constants import (
     FIRST_COMMIT_DATE_METRIC_KEY,
 )
-from app.schemas.analysis_response_schemas import RepositoryMetricResult
+from app.analyzers.general.first_commit_date_analyzer.first_commit_date_fetch import (
+    fetch_first_commit_date,
+)
+from app.analyzers.general.last_commit_date_analyzer.last_commit_date_constants import (
+    LAST_COMMIT_DATE_METRIC_KEY,
+)
+from app.analyzers.general.last_commit_date_analyzer.last_commit_date_fetch import (
+    fetch_last_commit_date,
+)
+from app.analyzers.general.total_commits_analyzer.total_commits_constants import (
+    TOTAL_COMMITS_METRIC_KEY,
+)
+from app.analyzers.general.total_commits_analyzer.total_commits_fetch import (
+    fetch_total_commits,
+)
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
+from app.schemas.analysis_response_schemas import RepositoryMetricResult
 
 
 async def _get_average_commits_per_month_metric(
@@ -94,20 +95,32 @@ async def _get_average_commits_per_month_metric(
             status=MetricStatus.FAILED,
             message=str(exc),
         )
-    
+
 
 async def get_average_commits_per_month_metric(
     request: AnalysisRequest,
     repository: RepositoryInput,
     prior_results: list[RepositoryMetricResult],
 ) -> RepositoryMetricResult | None:
-    def get_value(key):
-        return next((m.value for m in prior_results if m.metric_key == key), None)
-
     return await _get_average_commits_per_month_metric(
         request,
         repository,
-        total_commits=get_value(TOTAL_COMMITS_METRIC_KEY),
-        first_commit_date=get_value(FIRST_COMMIT_DATE_METRIC_KEY),
-        last_commit_date=get_value(LAST_COMMIT_DATE_METRIC_KEY),
+        total_commits=get_metadata_value(
+            prior_results,
+            lambda metric: metric.metric_key == TOTAL_COMMITS_METRIC_KEY,
+            TOTAL_COMMITS_METRIC_KEY,
+            int,
+        ),
+        first_commit_date=get_metadata_value(
+            prior_results,
+            lambda metric: metric.metric_key == FIRST_COMMIT_DATE_METRIC_KEY,
+            FIRST_COMMIT_DATE_METRIC_KEY,
+            str,
+        ),
+        last_commit_date=get_metadata_value(
+            prior_results,
+            lambda metric: metric.metric_key == LAST_COMMIT_DATE_METRIC_KEY,
+            LAST_COMMIT_DATE_METRIC_KEY,
+            str,
+        ),
     )
