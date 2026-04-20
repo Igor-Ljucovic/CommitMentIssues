@@ -2,6 +2,9 @@ from app.analyzers.general.total_files_analyzer.total_files_constants import (
     DEFAULT_BRANCH_NAME,
     TOTAL_FILES_METRIC_KEY,
 )
+from app.analyzers.common.tree_utils import (
+    count_matching_tree_entries,
+)
 from app.clients.github.github_rest_client import execute_github_rest_get
 
 
@@ -32,11 +35,10 @@ async def fetch_total_files(
     if not isinstance(tree_entries, list):
         raise RuntimeError("Could not read repository tree entries.")
 
-    # count only files ("blob"-s, but not "tree"-s (directories))
-    total_files = sum(
-        1
-        for entry in tree_entries
-        if entry.get("type") == "blob"
+    total_files =  total_files = count_matching_tree_entries(
+        tree_entries,
+        # Blob = file, tree = directory
+        predicate=lambda entry: entry.get("type") == "blob"
     )
 
     return {
@@ -45,4 +47,5 @@ async def fetch_total_files(
         "repository_name": repository_data.get("name", repository_name),
         DEFAULT_BRANCH_NAME: default_branch,
         TOTAL_FILES_METRIC_KEY: total_files,
+        # "tree_entries": tree_entries,
     }

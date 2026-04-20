@@ -7,15 +7,7 @@ from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_co
 )
 
 
-def total_files_filtered_calculate(tree_entries):
-    return sum(
-            1
-            for entry in tree_entries
-            if _should_count_file(entry)
-        )
-
-
-def _should_count_file(entry: dict) -> bool:
+def total_files_filtered_calculate(entry: dict) -> bool:
     # blob = file, tree = directory
     if entry.get("type") != "blob":
         return False

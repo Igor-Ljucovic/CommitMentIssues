@@ -5,6 +5,9 @@ from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_co
     TOTAL_FILES_FILTERED_METRIC_NAME,
     TOTAL_FILES_FILTERED_SUBCATEGORY_NAME,
 )
+from app.analyzers.general.total_files_analyzer.total_files_constants import (
+    TOTAL_FILES_METRIC_KEY,
+)
 from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_fetch import (
     fetch_total_files_filtered,
 )
@@ -32,16 +35,19 @@ async def get_total_files_filtered_metric(
             owner=owner,
             repository_name=repository_name,
         )
-
+        
         return RepositoryMetricResult(
             metric_key=TOTAL_FILES_FILTERED_METRIC_KEY,
             metric_name=TOTAL_FILES_FILTERED_METRIC_NAME,
             value=result[TOTAL_FILES_FILTERED_METRIC_KEY],
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
+            # TOTAL_FILES_METRIC_KEY is used in another
+            # metric to reduce redundant API calls
+            metadata={TOTAL_FILES_METRIC_KEY: result[TOTAL_FILES_METRIC_KEY]},
             message=(
                 f'Filtered file count fetched from default branch '
-                f'"{result[DEFAULT_BRANCH_NAME]}".'
+                f'"{result[DEFAULT_BRANCH_NAME]}". '
             ),
         )
     except Exception as exc:
@@ -51,5 +57,6 @@ async def get_total_files_filtered_metric(
             value=None,
             weight=None,
             status=MetricStatus.FAILED,
+            metadata=None,
             message=str(exc),
         )
