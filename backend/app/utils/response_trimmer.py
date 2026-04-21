@@ -11,12 +11,12 @@ EXCLUDED_METRIC_FIELDS = {"metric_key", "weight", "status", "message", "requirem
 
 
 def trim_analysis_response(response: AnalysisResponse) -> list[dict]:
-    return [trim_file(file) for file in response.files]
+    return [_trim_file(file) for file in response.files]
 
 
-def trim_file(file: FileAnalysisResult) -> dict:
+def _trim_file(file: FileAnalysisResult) -> dict:
     trimmed = file.model_dump()
-    trimmed["repositories"] = [trim_repository(repo) for repo in file.repositories]
+    trimmed["repositories"] = [_trim_repository(repo) for repo in file.repositories]
 
     _exclude_file_null_requirement_failed_repositories(trimmed)
     _exclude_file_null_status_failed_repositories(trimmed)
@@ -24,9 +24,9 @@ def trim_file(file: FileAnalysisResult) -> dict:
     return trimmed
 
 
-def trim_repository(repo: RepositoryAnalysisResult) -> dict:
+def _trim_repository(repo: RepositoryAnalysisResult) -> dict:
     trimmed = repo.model_dump()
-    trimmed["metrics"] = [trim_metric(metric) for metric in repo.metrics]
+    trimmed["metrics"] = [_trim_metric(metric) for metric in repo.metrics]
 
     _exclude_repo_null_requirement_failed_metrics(trimmed)
     _exclude_repo_null_status_failed_metrics(trimmed)
@@ -34,7 +34,7 @@ def trim_repository(repo: RepositoryAnalysisResult) -> dict:
     return trimmed
 
 
-def trim_metric(metric: RepositoryMetricResult) -> dict:
+def _trim_metric(metric: RepositoryMetricResult) -> dict:
     trimmed = metric.model_dump()
 
     for key in EXCLUDED_METRIC_FIELDS:
