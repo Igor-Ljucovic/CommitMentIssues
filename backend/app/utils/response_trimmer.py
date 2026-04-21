@@ -6,7 +6,8 @@ from app.schemas.analysis_response_schemas import (
 )
 
 
-EXCLUDED_METRIC_FIELDS = {"metric_key", "weight", "status", "message", "requirement_failed"}
+EXCLUDED_METRIC_FIELDS = {"metric_key", "weight", "status", "message", "requirement_failed",
+                          "metadata"}
 
 
 def trim_analysis_response(response: AnalysisResponse) -> list[dict]:
