@@ -60,14 +60,12 @@ def calculate_estimated_commit_naming_quality(
 
 def calculate_estimated_commit_naming_quality_breakdown(
     commit_messages: list[str],
-    sample_size: int =  ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SIZE,
-    seed: int | None = ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SEED,
 ) -> CommitNamingQualityBreakdown:
     sampled_commits = random_list_sample(
-        commits=commit_messages,
-        sample_size=sample_size,
-        seed=seed,
-    )
+        samples=commit_messages,
+        sample_size=ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SIZE, 
+        seed=ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SEED,
+        )
     analyses = _analyze_commits(sampled_commits)
 
     consistency_score = _score_consistency(analyses)
@@ -90,7 +88,7 @@ def calculate_estimated_commit_naming_quality_breakdown(
     total_score = max(0.0, min(MAX_TOTAL_SCORE, total_score))
 
     return CommitNamingQualityBreakdown(
-        sample_size=len(sampled_commits),
+        sample_size=ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SIZE,
         sampled_commits=sampled_commits,
         consistency_score=round(consistency_score, 4),
         length_score=round(length_score, 4),

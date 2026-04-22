@@ -44,18 +44,20 @@ async def get_estimated_commit_naming_quality_metric(
         return RepositoryMetricResult(
             metric_key=ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_KEY,
             metric_name=ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_NAME,
-            value=breakdown.total_score * 0.1,
+            value=round(breakdown.total_score * 0.1, 2),
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
-            metadata={
-                "consistency_score": breakdown.consistency_score,
-                "length_score": breakdown.length_score,
-                "conventional_words_score": breakdown.conventional_words_score,
-                "bad_practice_score": breakdown.bad_practice_score,
-            },
+            # metadata is used for debugging only
+            # metadata={
+            #     "consistency_score": breakdown.consistency_score,
+            #     "length_score": breakdown.length_score,
+            #     "conventional_words_score": breakdown.conventional_words_score,
+            #     "bad_practice_score": breakdown.bad_practice_score,
+            #     "commit_names": breakdown.sampled_commits,
+            # },
             message=(
                 f'Commit naming quality calculated from '
-                f'{breakdown.sample_size} sampled commit names '
+                f'{len(breakdown.sampled_commits)} sampled commit names '
                 f'on branch "{result[BRANCH_NAME]}".'
             ),
         )

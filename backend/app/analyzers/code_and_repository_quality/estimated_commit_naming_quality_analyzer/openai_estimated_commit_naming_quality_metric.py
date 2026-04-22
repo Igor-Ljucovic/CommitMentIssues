@@ -19,7 +19,7 @@ from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInpu
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
 
 
-async def get_ai_estimated_commit_naming_quality_metric(
+async def get_openai_estimated_commit_naming_quality_metric(
     request: AnalysisRequest,
     repository: RepositoryInput,
 ) -> RepositoryMetricResult | None:
