@@ -179,7 +179,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
     title: "Code & Repository Quality",
     items: [
       { 
-        name: "Estimated Commit Naming Consistency ⭐ (not rdy)",
+        name: "Estimated Commit Naming Quality ⭐ (not rdy)",
         parameters: createPercentageRangeParameters(),
       },
       { 
