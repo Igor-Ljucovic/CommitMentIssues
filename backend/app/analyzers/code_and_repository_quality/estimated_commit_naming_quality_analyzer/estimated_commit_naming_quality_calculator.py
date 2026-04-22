@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 import re
 from dataclasses import dataclass, field
 
@@ -17,6 +16,7 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
     PER_BAD_PRACTICE_OCCURRENCE_PENALTY,
     PER_INCONSISTENT_COMMIT_PENALTY,
 )
+from app.analyzers.common.list_utils import random_list_sample
 
 
 TOKEN_REGEX = re.compile(r"[A-Za-z0-9_+-]+")
@@ -63,7 +63,7 @@ def calculate_estimated_commit_naming_quality_breakdown(
     sample_size: int =  ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SIZE,
     seed: int | None = ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SEED,
 ) -> CommitNamingQualityBreakdown:
-    sampled_commits = _sample_commits(
+    sampled_commits = random_list_sample(
         commits=commit_messages,
         sample_size=sample_size,
         seed=seed,
@@ -99,22 +99,6 @@ def calculate_estimated_commit_naming_quality_breakdown(
         total_score=round(total_score, 4),
         commit_analyses=analyses,
     )
-
-
-def _sample_commits(
-    commits: list[str],
-    sample_size: int,
-    seed: int | None,
-) -> list[str]:
-    if sample_size <= 0:
-        raise ValueError("sample_size must be greater than 0.")
-
-    if not commits:
-        return []
-
-    actual_size = min(sample_size, len(commits))
-    rng = random.Random(seed)
-    return rng.sample(commits, actual_size)
 
 
 def _tokenize(text: str) -> list[str]:

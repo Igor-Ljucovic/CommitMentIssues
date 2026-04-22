@@ -1,5 +1,4 @@
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.estimated_commit_naming_quality_calculator import (
-    calculate_estimated_commit_naming_quality,
     calculate_estimated_commit_naming_quality_breakdown,
 )
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.estimated_commit_naming_quality_constants import (
@@ -30,8 +29,7 @@ async def get_estimated_commit_naming_quality_metric(
     if subcategory_config is None:
         return None
 
-    try:
-        print("oprvi deo")    
+    try:   
         owner, repository_name = repository.get_owner_and_repository_name()
 
         result = await fetch_estimated_commit_naming_quality_data(
@@ -39,21 +37,14 @@ async def get_estimated_commit_naming_quality_metric(
             repository_name=repository_name,
         )
 
-        commit_messages = result[COMMIT_MESSAGES]
-        print("drugi deo")    
         breakdown = calculate_estimated_commit_naming_quality_breakdown(
-            commit_messages=commit_messages,
+            commit_messages=result[COMMIT_MESSAGES],
         )
-        score = calculate_estimated_commit_naming_quality(
-            commit_messages=commit_messages,
-        )
-        print(score)
-        print(breakdown)
-        print("treci deo")    
+
         return RepositoryMetricResult(
             metric_key=ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_KEY,
             metric_name=ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_NAME,
-            value=score,
+            value=breakdown.total_score * 0.1,
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
             metadata={
