@@ -50,7 +50,7 @@ async def _analyze_repository(
     )
 
 
-async def run_repository_analysis(
+async def analyze_repository(
     request: AnalysisRequest,
     metric_executors: list[MetricExecutor],
     no_repositories_warning: str,
