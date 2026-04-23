@@ -10,7 +10,7 @@ from app.analyzers.general.first_commit_date_analyzer.first_commit_date_metric i
 from app.analyzers.general.last_commit_date_analyzer.last_commit_date_metric import get_last_commit_date_metric
 from app.analyzers.general.total_commits_analyzer.total_commits_metric import get_total_commits_metric
 from app.analyzers.general.total_forks_analyzer.total_forks_metric import get_total_forks_metric
-from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.openai_estimated_commit_naming_quality_metric import get_ai_estimated_commit_naming_quality_metric
+
 
 async def analyze_repositories_github_graphql(
     request: AnalysisRequest,
@@ -24,7 +24,6 @@ async def analyze_repositories_github_graphql(
             get_pull_request_acceptance_rate_metric,
             get_github_wiki_total_commits_metric,
             get_total_forks_metric,
-            get_ai_estimated_commit_naming_quality_metric,
         ],
         subsequent_phases=[
             [get_average_commits_per_month_metric],

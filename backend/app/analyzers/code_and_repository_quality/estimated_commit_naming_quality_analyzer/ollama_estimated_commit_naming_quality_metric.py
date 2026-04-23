@@ -8,18 +8,16 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.estimated_commit_naming_quality_fetch import (
     fetch_estimated_commit_naming_quality_data,
 )
-from backend.app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ai_estimated_commit_naming_quality_prompt import (
+from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ai_estimated_commit_naming_quality_prompt import (
     build_estimated_commit_naming_quality_prompt,
-)
-from app.clients.openai.openai_rest_client_execute import (
-    analyze_metric_with_openai,
 )
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
+from app.services.api.local_llm_service import analyze_metric_with_local_llm
 
 
-async def get_openai_estimated_commit_naming_quality_metric(
+async def get_ollama_estimated_commit_naming_quality_metric(
     request: AnalysisRequest,
     repository: RepositoryInput,
 ) -> RepositoryMetricResult | None:
@@ -40,16 +38,16 @@ async def get_openai_estimated_commit_naming_quality_metric(
         )
 
         prompt = build_estimated_commit_naming_quality_prompt(result[COMMIT_MESSAGES])
-        ai_result = await analyze_metric_with_openai(prompt)
+        ai_result = await analyze_metric_with_local_llm(prompt)
 
         rating = ai_result.get("rating")
         explanation = ai_result.get("explanation")
 
         if not isinstance(rating, float):
-            raise RuntimeError("OpenAI did not return a valid numeric rating.")
+            raise RuntimeError("Ollama did not return a valid numeric rating.")
 
         if not isinstance(explanation, str) or not explanation.strip():
-            raise RuntimeError("OpenAI did not return a valid explanation.")
+            raise RuntimeError("Ollama did not return a valid explanation.")
 
         return RepositoryMetricResult(
             metric_key=ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_KEY,

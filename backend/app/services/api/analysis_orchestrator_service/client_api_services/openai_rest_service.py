@@ -1,6 +1,9 @@
 from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_readme_quality_metric import (
     get_github_readme_quality_metric,
 )
+from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ollama_estimated_commit_naming_quality_metric import (
+    get_ollama_estimated_commit_naming_quality_metric
+)
 from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import AnalysisResponse
 from app.services.api.analysis_orchestrator_service.utils.client_api_helper_service import (
@@ -15,6 +18,7 @@ async def analyze_repositories_openai_rest(
         request=request,
         metric_executors=[
             get_github_readme_quality_metric,
+            get_ollama_estimated_commit_naming_quality_metric,
         ],
         no_repositories_warning=(
             "No repositories were provided in the analysis request, "

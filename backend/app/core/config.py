@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     OPENAI_REQUEST_TIMEOUT_SECONDS: int = 60
 
+    LOCAL_LLM_PROVIDER: str = "ollama"
+    LOCAL_LLM_BASE_URL: str = "http://localhost:11434"
+    LOCAL_LLM_MODEL: str = "qwen2.5-coder:7b"
+
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
         extra="ignore",

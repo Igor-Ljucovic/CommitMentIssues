@@ -20,7 +20,7 @@ def build_estimated_commit_naming_quality_prompt(
     formatted_commit_messages_sample = "\n".join(
         f"{index + 1}. {message}"
         for index, message in enumerate(commit_messages_sample)
-    )
+    )[:5000]
 
     template = """
 You are analyzing the naming quality of Git commit messages in a GitHub repository.
@@ -64,17 +64,18 @@ Rules:
 - Short commit messages are not automatically bad if they are still clear.
 - Long commit messages are not automatically bad if they are still readable and specific.
 
+Return ONLY valid JSON in this format:
+
+{{
+  "rating": number (0.0-10.0, for example, 7.78),
+  "explanation": string (0-250 characters, for example, "The commit messages are generally 
+  well-formatted and provide good context, but the wording is slightly inconsistent.")
+}}
+
 Commit messages:
 \"\"\"
 {formatted_commit_messages_sample}
 \"\"\"
-
-Return ONLY valid JSON in this format:
-
-{{
-  "rating": 6.8,
-  "explanation": "The commit names are mostly descriptive and technical, but the naming convention is somewhat inconsistent and several messages are longer than ideal."
-}}
 """.strip()
 
     return template.format(
