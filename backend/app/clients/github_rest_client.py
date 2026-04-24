@@ -1,6 +1,4 @@
 from typing import Any
-from urllib.parse import parse_qs, urlparse
-
 import httpx
 
 from app.core.config import settings
@@ -14,7 +12,7 @@ async def execute_github_rest_request(
     json_body: dict[str, Any] | None = None,
     extra_headers: dict[str, str] | None = None,
 ) -> Any:
-    response = await execute_github_rest_request_raw(
+    response = await _execute_github_rest_request_raw(
         method=method,
         endpoint=endpoint,
         params=params,
@@ -32,7 +30,7 @@ async def execute_github_rest_request(
     return response.text
 
 
-async def execute_github_rest_request_raw(
+async def _execute_github_rest_request_raw(
     method: str,
     endpoint: str,
     *,
@@ -77,72 +75,11 @@ async def execute_github_rest_request_raw(
     return response
 
 
-async def execute_github_rest_get(
-    endpoint: str,
-    *,
-    params: dict[str, Any] | None = None,
-    extra_headers: dict[str, str] | None = None,
-) -> Any:
-    return await execute_github_rest_request(
-        method="GET",
-        endpoint=endpoint,
-        params=params,
-        extra_headers=extra_headers,
-    )
-
-
-async def execute_github_rest_get_bytes(path: str) -> bytes:
-    url = f"https://api.github.com{path}" if path.startswith("/") else path
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {settings.GITHUB_TOKEN}",
-        "X-GitHub-Api-Version": "2026-03-10",
-    }
+async def github_rest_get_bytes(url: str, headers: dict[str, str]) -> bytes:
     async with httpx.AsyncClient(follow_redirects=True, timeout=120.0) as client:
         response = await client.get(url, headers=headers)
         response.raise_for_status()
         return response.content
-
-
-async def fetch_github_rest_last_page_number(
-    endpoint: str,
-    *,
-    params: dict[str, Any] | None = None,
-    extra_headers: dict[str, str] | None = None,
-) -> int:
-    response = await execute_github_rest_request_raw(
-        method="GET",
-        endpoint=endpoint,
-        params=params,
-        extra_headers=extra_headers,
-    )
-
-    return extract_last_page_number_from_response(response)
-
-
-def extract_last_page_number_from_response(response: httpx.Response) -> int:
-    last_link = response.links.get("last", {}).get("url")
-
-    if last_link is not None:
-        parsed_url = urlparse(last_link)
-        parsed_query = parse_qs(parsed_url.query)
-        page_values = parsed_query.get("page")
-
-        if page_values:
-            try:
-                return int(page_values[0])
-            except ValueError as exc:
-                raise RuntimeError(
-                    "GitHub pagination returned an invalid last page number."
-                ) from exc
-
-    response_data = response.json()
-    if isinstance(response_data, list):
-        return len(response_data)
-
-    raise RuntimeError(
-        "Could not determine total item count from GitHub REST response."
-    )
 
 
 def _raise_for_github_rest_error(response: httpx.Response) -> None:

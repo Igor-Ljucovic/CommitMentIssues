@@ -1,4 +1,4 @@
-from app.clients.github.github_graphql_client import execute_github_graphql_query
+from app.services.github_graphql_service import fetch_github_graphql_resource
 from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_query import (
     PULL_REQUEST_ACCEPTANCE_RATE_GRAPHQL_QUERY,
 )
@@ -9,11 +9,12 @@ from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_requ
     RESOLVED_PULL_REQUESTS,
 )
 
+
 async def fetch_pull_request_acceptance_rate(
     owner: str,
     repository_name: str,
 ) -> dict:
-    repository = await execute_github_graphql_query(
+    repository = await fetch_github_graphql_resource(
         query=PULL_REQUEST_ACCEPTANCE_RATE_GRAPHQL_QUERY,
         variables={
             "owner": owner,

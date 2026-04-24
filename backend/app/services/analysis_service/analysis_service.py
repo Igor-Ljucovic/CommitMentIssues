@@ -8,7 +8,7 @@ from app.rating.metric_rating.metric_rating_calculator import calculate_metric_r
 from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import AnalysisResponse
 
-from app.services.api.analysis_service.analyze_repository_metrics import analyze_repository_metrics
+from app.services.analysis_service.analyze_repository_metrics import analyze_repository_metrics
 
 
 async def analyze(request: AnalysisRequest) -> AnalysisResponse:

@@ -1,4 +1,4 @@
-from app.services.api.analysis_service.analyze_repository import analyze_repository
+from app.services.analysis_service.analyze_repository import analyze_repository
 
 from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import AnalysisResponse

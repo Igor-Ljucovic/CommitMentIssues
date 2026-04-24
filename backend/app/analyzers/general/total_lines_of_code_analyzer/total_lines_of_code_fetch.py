@@ -7,9 +7,9 @@ from app.analyzers.general.total_lines_of_code_analyzer.total_lines_of_code_cons
     SKIPPED_BINARY_FILES,
     TOTAL_LINES_OF_CODE_METRIC_KEY,
 )
-from app.clients.github.github_rest_client import (
-    execute_github_rest_get,
-    execute_github_rest_get_bytes,
+from app.services.github_rest_service import (
+    fetch_github_rest_resource,
+    fetch_github_rest_bytes,
 )
 
 
@@ -17,7 +17,7 @@ async def fetch_total_lines_of_code(
     owner: str,
     repository_name: str,
 ) -> dict:
-    repository_data = await execute_github_rest_get(
+    repository_data = await fetch_github_rest_resource(
         f"/repos/{owner}/{repository_name}"
     )
 
@@ -26,7 +26,7 @@ async def fetch_total_lines_of_code(
         raise RuntimeError("Could not determine the repository default branch.")
 
     # Single request for the entire repo content (tar file from GitHub's CDN).
-    tarball_bytes = await execute_github_rest_get_bytes(
+    tarball_bytes = await fetch_github_rest_bytes(
         f"/repos/{owner}/{repository_name}/tarball/{default_branch}"
     )
 

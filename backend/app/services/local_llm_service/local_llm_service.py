@@ -4,7 +4,7 @@ from typing import Any, Callable, Awaitable
 from app.core.config import settings
 
 
-async def local_llm_analyze(
+async def rate_metric_with_local_llm(
     local_llm: Callable[..., Awaitable[dict[str, Any]]],
     prompt: str,
     llm_model: str,

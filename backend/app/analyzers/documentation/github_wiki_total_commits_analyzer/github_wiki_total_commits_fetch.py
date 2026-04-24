@@ -9,7 +9,7 @@ from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_
 from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_total_commits_query import (
     GITHUB_WIKI_ENABLED_QUERY,
 )
-from app.clients.github.github_graphql_client import execute_github_graphql_query
+from app.services.github_graphql_service import fetch_github_graphql_resource
 from app.core.config import settings
 
 # Unlike other fetch methods, GitHub GraphQL does not provide wiki commit counts.
@@ -25,7 +25,7 @@ async def fetch_github_wiki_total_commits(
     owner: str,
     repository_name: str,
 ) -> dict:
-    repository = await execute_github_graphql_query(
+    repository = await fetch_github_graphql_resource(
         query=GITHUB_WIKI_ENABLED_QUERY,
         variables={
             "owner": owner,

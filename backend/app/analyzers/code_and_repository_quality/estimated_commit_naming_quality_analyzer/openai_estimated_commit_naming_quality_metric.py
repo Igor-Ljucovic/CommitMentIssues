@@ -8,12 +8,10 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.estimated_commit_naming_quality_fetch import (
     fetch_estimated_commit_naming_quality_data,
 )
-from backend.app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ai_estimated_commit_naming_quality_prompt import (
+from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ai_estimated_commit_naming_quality_prompt import (
     build_estimated_commit_naming_quality_prompt,
 )
-from app.clients.openai.openai_rest_client_execute import (
-    analyze_metric_with_openai,
-)
+from app.services.openai_service import rate_metric_with_openai
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
@@ -40,7 +38,7 @@ async def get_openai_estimated_commit_naming_quality_metric(
         )
 
         prompt = build_estimated_commit_naming_quality_prompt(result[COMMIT_MESSAGES])
-        ai_result = await analyze_metric_with_openai(prompt)
+        ai_result = await rate_metric_with_openai(prompt=prompt)
 
         rating = ai_result.get("rating")
         explanation = ai_result.get("explanation")

@@ -43,8 +43,4 @@ async def execute_github_graphql_query(query: str, variables: dict) -> dict:
         )
         raise RuntimeError(f"GitHub GraphQL error: {first_error_message}")
 
-    repository = data.get("data", {}).get("repository")
-    if repository is None:
-        raise ValueError("Repository was not found or is not accessible.")
-
-    return repository
+    return data

@@ -5,14 +5,14 @@ from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_rea
     ESTIMATED_README_QUALITY_METRIC_KEY,
     README_CONTENT,
 )
-from app.clients.github.github_rest_client import execute_github_rest_get
+from app.services.github_rest_service import fetch_github_rest_resource
 
 
 async def fetch_estimated_readme_quality_input(
     owner: str,
     repository_name: str,
 ) -> dict[str, Any]:
-    readme_data = await execute_github_rest_get(
+    readme_data = await fetch_github_rest_resource(
         f"/repos/{owner}/{repository_name}/readme"
     )
 

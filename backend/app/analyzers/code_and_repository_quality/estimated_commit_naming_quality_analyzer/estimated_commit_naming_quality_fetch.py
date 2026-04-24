@@ -5,7 +5,7 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.estimated_commit_naming_quality_query import (
     ESTIMATED_COMMIT_NAMING_QUALITY_GRAPHQL_QUERY,
 )
-from app.clients.github.github_graphql_client import execute_github_graphql_query
+from app.services.github_graphql_service import fetch_github_graphql_resource
 
 
 async def fetch_estimated_commit_naming_quality_data(
@@ -19,7 +19,7 @@ async def fetch_estimated_commit_naming_quality_data(
     repository_actual_name: str | None = None
 
     while True:
-        repository = await execute_github_graphql_query(
+        repository = await fetch_github_graphql_resource(
             query=ESTIMATED_COMMIT_NAMING_QUALITY_GRAPHQL_QUERY,
             variables={
                 "owner": owner,

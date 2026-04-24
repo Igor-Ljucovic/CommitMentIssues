@@ -13,9 +13,7 @@ from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_rea
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
-from app.clients.openai.openai_rest_client_execute import (
-    analyze_metric_with_openai,
-)
+from app.services.openai_service import rate_metric_with_openai
 
 
 async def get_github_readme_quality_metric(
@@ -39,7 +37,7 @@ async def get_github_readme_quality_metric(
         )
         prompt = build_estimated_readme_quality_prompt(readme_data=readme_data)
 
-        ai_result = await analyze_metric_with_openai(prompt=prompt)
+        ai_result = await rate_metric_with_openai(prompt=prompt)
 
         rating = round(float(ai_result["rating"]) / 100, 2)
         

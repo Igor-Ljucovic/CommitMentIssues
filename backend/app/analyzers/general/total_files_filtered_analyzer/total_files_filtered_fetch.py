@@ -11,14 +11,14 @@ from app.analyzers.common.tree_utils import (
 from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_calculate import (
     total_files_filtered_calculate,
 )
-from app.clients.github.github_rest_client import execute_github_rest_get
+from app.services.github_rest_service import fetch_github_rest_resource
 
 
 async def fetch_total_files_filtered(
     owner: str,
     repository_name: str,
 ) -> dict:
-    repository_data = await execute_github_rest_get(
+    repository_data = await fetch_github_rest_resource(
         f"/repos/{owner}/{repository_name}"
     )
 
@@ -26,7 +26,7 @@ async def fetch_total_files_filtered(
     if not default_branch:
         raise RuntimeError("Could not determine the repository default branch.")
 
-    tree_data = await execute_github_rest_get(
+    tree_data = await fetch_github_rest_resource(
         f"/repos/{owner}/{repository_name}/git/trees/{default_branch}",
         params={"recursive": "1"},
     )

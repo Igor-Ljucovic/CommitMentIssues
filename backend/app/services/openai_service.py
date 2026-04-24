@@ -1,9 +1,10 @@
 from typing import Any
+import json
 
-from app.clients.openai.openai_rest_client import execute_openai_request
+from app.clients.openai_rest_client import execute_openai_request
 
 
-async def analyze_metric_with_openai(
+async def rate_metric_with_openai(
     prompt: str,
 ) -> dict[str, Any]:
     response = await execute_openai_request(
@@ -53,5 +54,4 @@ async def analyze_metric_with_openai(
 
     content = response["choices"][0]["message"]["content"]
 
-    import json
     return json.loads(content)

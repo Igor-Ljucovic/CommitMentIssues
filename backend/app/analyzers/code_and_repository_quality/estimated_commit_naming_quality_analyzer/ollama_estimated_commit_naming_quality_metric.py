@@ -15,8 +15,8 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
-from app.services.api.local_llm_service.local_llm_service import local_llm_analyze
-from app.services.api.local_llm_service.ollama_execute import ollama_execute
+from app.services.local_llm_service.local_llm_service import rate_metric_with_local_llm
+from app.services.local_llm_service.ollama_service import rate_metric_with_ollama
 from app.core.config import settings
 
 
@@ -45,8 +45,8 @@ async def get_ollama_estimated_commit_naming_quality_metric(
             NUM_CTX
         )
         
-        ai_result = await local_llm_analyze(
-            local_llm=ollama_execute,
+        ai_result = await rate_metric_with_local_llm(
+            local_llm=rate_metric_with_ollama,
             prompt=prompt,
             llm_model=settings.LOCAL_LLM_MODEL_QWEN25CODER7B,
             num_ctx=NUM_CTX,

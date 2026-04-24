@@ -1,4 +1,4 @@
-from app.clients.github.github_graphql_client import execute_github_graphql_query
+from app.services.github_graphql_service import fetch_github_graphql_resource
 from app.analyzers.general.last_commit_date_analyzer.last_commit_date_query import (
     LAST_COMMIT_DATE_GRAPHQL_QUERY,
 )
@@ -12,7 +12,7 @@ async def fetch_last_commit_date(
     owner: str,
     repository_name: str,
 ) -> dict:
-    repository = await execute_github_graphql_query(
+    repository = await fetch_github_graphql_resource(
         query=LAST_COMMIT_DATE_GRAPHQL_QUERY,
         variables={
             "owner": owner,
