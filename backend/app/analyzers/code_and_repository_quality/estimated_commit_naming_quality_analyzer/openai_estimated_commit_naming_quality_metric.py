@@ -15,6 +15,7 @@ from app.services.openai_service import rate_metric_with_openai
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
+from app.core.config import settings
 
 
 async def get_openai_estimated_commit_naming_quality_metric(
@@ -37,8 +38,14 @@ async def get_openai_estimated_commit_naming_quality_metric(
             repository_name=repository_name,
         )
 
-        prompt = build_estimated_commit_naming_quality_prompt(result[COMMIT_MESSAGES])
-        ai_result = await rate_metric_with_openai(prompt=prompt)
+        prompt = build_estimated_commit_naming_quality_prompt(
+            commit_messages=result[COMMIT_MESSAGES],
+            num_ctx=subcategory_config.num_ctx,
+        )
+        ai_result = await rate_metric_with_openai(
+            prompt=prompt, 
+            model=settings.OPENAI_MODEL,
+        )
 
         rating = ai_result.get("rating")
         explanation = ai_result.get("explanation")

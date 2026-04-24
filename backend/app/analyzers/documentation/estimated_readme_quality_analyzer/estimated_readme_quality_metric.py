@@ -14,6 +14,7 @@ from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
 from app.services.openai_service import rate_metric_with_openai
+from app.core.config import settings
 
 
 async def get_github_readme_quality_metric(
@@ -35,9 +36,12 @@ async def get_github_readme_quality_metric(
             owner=owner,
             repository_name=repository_name,
         )
-        prompt = build_estimated_readme_quality_prompt(readme_data=readme_data)
 
-        ai_result = await rate_metric_with_openai(prompt=prompt)
+        prompt = build_estimated_readme_quality_prompt(readme_data=readme_data)
+        ai_result = await rate_metric_with_openai(
+            prompt=prompt, 
+            model=settings.OPENAI_MODEL,
+        )
 
         rating = round(float(ai_result["rating"]) / 100, 2)
         

@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     OPENAI_API_BASE_URL: str = "https://api.openai.com/v1"
     OPENAI_API_KEY: str = ""
     OPENAI_REQUEST_TIMEOUT_SECONDS: int = 60
+    OPENAI_MODEL: str = "gpt-4.1-mini"
 
     LOCAL_LLM_PROVIDER: str = "ollama"
     LOCAL_LLM_BASE_URL: str = "http://localhost:11434"

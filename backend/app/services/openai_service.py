@@ -6,11 +6,12 @@ from app.clients.openai_rest_client import execute_openai_request
 
 async def rate_metric_with_openai(
     prompt: str,
+    model: str
 ) -> dict[str, Any]:
     response = await execute_openai_request(
         endpoint="/chat/completions",
         json_body={
-            "model": "gpt-4.1-mini",
+            "model": model,
             "messages": [
                 {
                     "role": "system",
