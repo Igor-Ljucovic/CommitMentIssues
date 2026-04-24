@@ -1,16 +1,17 @@
-from pathlib import Path
+from io import BytesIO
 
 from docx import Document
 
-from ..github_links import (
+from app.services.file_service.github_links import (
     clean_url,
     extract_github_links_from_text,
-    is_github_url,
+    is_github_repo_url,
+    normalize_github_repo_url,
 )
 
 
-def extract_links_from_docx(file_path: Path) -> set[str]:
-    document = Document(file_path)
+def extract_links_from_docx_bytes(file_bytes: bytes) -> list[str]:
+    document = Document(BytesIO(file_bytes))
     links: set[str] = set()
 
     visible_text = "\n".join(paragraph.text for paragraph in document.paragraphs)
@@ -20,7 +21,9 @@ def extract_links_from_docx(file_path: Path) -> set[str]:
         target_ref = getattr(rel, "target_ref", None)
         if isinstance(target_ref, str):
             cleaned_url = clean_url(target_ref)
-            if is_github_url(cleaned_url):
-                links.add(cleaned_url)
+            normalized_url = normalize_github_repo_url(cleaned_url)
 
-    return links
+            if is_github_repo_url(normalized_url):
+                links.add(normalized_url)
+
+    return sorted(links)

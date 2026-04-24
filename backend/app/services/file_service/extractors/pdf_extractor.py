@@ -1,16 +1,17 @@
-from pathlib import Path
+from io import BytesIO
 
 from pypdf import PdfReader
 
-from ..github_links import (
+from app.services.file_service.github_links import (
     clean_url,
     extract_github_links_from_text,
-    is_github_url,
+    is_github_repo_url,
+    normalize_github_repo_url,
 )
 
 
-def extract_links_from_pdf(file_path: Path) -> set[str]:
-    reader = PdfReader(str(file_path))
+def extract_links_from_pdf_bytes(file_bytes: bytes) -> list[str]:
+    reader = PdfReader(BytesIO(file_bytes))
     links: set[str] = set()
 
     for page in reader.pages:
@@ -31,9 +32,11 @@ def extract_links_from_pdf(file_path: Path) -> set[str]:
                     uri = action.get("/URI")
                     if isinstance(uri, str):
                         cleaned_url = clean_url(uri)
-                        if is_github_url(cleaned_url):
-                            links.add(cleaned_url)
+                        normalized_url = normalize_github_repo_url(cleaned_url)
+
+                        if is_github_repo_url(normalized_url):
+                            links.add(normalized_url)
             except Exception:
                 continue
 
-    return links
+    return sorted(links)
