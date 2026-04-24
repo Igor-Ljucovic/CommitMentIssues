@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.schemas.analysis_request_schemas import AnalysisRequest
-from app.services.api.analysis_service.analysis_service import analyze
+from app.services.analysis_service.analysis_service import analyze
 from app.utils.response_trimmer import trim_analysis_response
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])

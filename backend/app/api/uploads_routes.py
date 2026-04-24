@@ -1,7 +1,7 @@
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 
 from app.schemas.upload_schemas import UploadResponse
-from app.services.api.file_service import process_uploaded_files
+from app.services.file_service import process_uploaded_files
 
 router = APIRouter(prefix="/uploads", tags=["uploads"])
 

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.schemas.auth_schemas import AuthRequestBase
-from app.services.api.auth_service import (
+from app.services.auth_service import (
     DuplicateEmailError,
     login_user,
     signup_user,
