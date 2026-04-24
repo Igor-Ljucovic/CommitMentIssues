@@ -36,7 +36,6 @@ async def _get_total_files_metric(
         default_branch_name: str | None = None
 
         if total_files is None:
-            print("zvan je API githubov")
             result = await fetch_total_files(
                 owner=owner,
                 repository_name=repository_name,
