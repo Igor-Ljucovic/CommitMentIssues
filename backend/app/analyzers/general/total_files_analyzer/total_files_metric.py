@@ -14,7 +14,7 @@ from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_co
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
-from app.analyzers.common.metric_utils import get_metadata_value
+from app.analyzers.common.metadata_utils import get_metadata_value
 
 
 async def _get_total_files_metric(

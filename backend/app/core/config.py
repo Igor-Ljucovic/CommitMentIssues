@@ -27,7 +27,7 @@ class Settings(BaseSettings):
 
     LOCAL_LLM_PROVIDER: str = "ollama"
     LOCAL_LLM_BASE_URL: str = "http://localhost:11434"
-    LOCAL_LLM_MODEL: str = "qwen2.5-coder:7b"
+    LOCAL_LLM_MODEL_QWEN25CODER7B: str = "qwen2.5-coder:7b"
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",

@@ -4,6 +4,7 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
     ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_KEY,
     ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_NAME,
     ESTIMATED_COMMIT_NAMING_QUALITY_SUBCATEGORY_NAME,
+    NUM_CTX,
 )
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.estimated_commit_naming_quality_fetch import (
     fetch_estimated_commit_naming_quality_data,
@@ -14,7 +15,9 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
-from app.services.api.local_llm_service import analyze_metric_with_local_llm
+from app.services.api.local_llm_service.local_llm_service import local_llm_analyze
+from app.services.api.local_llm_service.ollama_execute import ollama_execute
+from app.core.config import settings
 
 
 async def get_ollama_estimated_commit_naming_quality_metric(
@@ -37,8 +40,17 @@ async def get_ollama_estimated_commit_naming_quality_metric(
             repository_name=repository_name,
         )
 
-        prompt = build_estimated_commit_naming_quality_prompt(result[COMMIT_MESSAGES])
-        ai_result = await analyze_metric_with_local_llm(prompt)
+        prompt = build_estimated_commit_naming_quality_prompt(
+            result[COMMIT_MESSAGES], 
+            NUM_CTX
+        )
+        
+        ai_result = await local_llm_analyze(
+            local_llm=ollama_execute,
+            prompt=prompt,
+            llm_model=settings.LOCAL_LLM_MODEL_QWEN25CODER7B,
+            num_ctx=NUM_CTX,
+        )
 
         rating = ai_result.get("rating")
         explanation = ai_result.get("explanation")

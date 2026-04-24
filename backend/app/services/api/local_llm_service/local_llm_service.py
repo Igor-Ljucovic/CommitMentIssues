@@ -1,34 +1,18 @@
 import json
-from typing import Any
+from typing import Any, Callable, Awaitable
 
-from app.clients.ollama.ollama_client import execute_ollama_chat
 from app.core.config import settings
 
 
-OLLAMA_METRIC_ANALYSIS_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "properties": {
-        "rating": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 10,
-        },
-        "explanation": {
-            "type": "string",
-            "maxLength": 250,
-        },
-    },
-    "required": ["rating", "explanation"],
-    "additionalProperties": False,
-}
-
-
-async def analyze_metric_with_local_llm(
+async def local_llm_analyze(
+    local_llm: Callable[..., Awaitable[dict[str, Any]]],
     prompt: str,
+    llm_model: str,
+    num_ctx: int = 4096,
 ) -> dict[str, Any]:
-    response = await execute_ollama_chat(
+    response = await local_llm(
         base_url=settings.LOCAL_LLM_BASE_URL,
-        model=settings.LOCAL_LLM_MODEL,
+        model=llm_model,
         messages=[
             {
                 "role": "system",
@@ -39,10 +23,10 @@ async def analyze_metric_with_local_llm(
             },
             {
                 "role": "user",
-                "content": prompt[:5000],
+                "content": prompt,
             },
         ],
-        format_schema=OLLAMA_METRIC_ANALYSIS_SCHEMA,
+        num_ctx=num_ctx,
     )
 
     content = response.get("message", {}).get("content", "").strip()

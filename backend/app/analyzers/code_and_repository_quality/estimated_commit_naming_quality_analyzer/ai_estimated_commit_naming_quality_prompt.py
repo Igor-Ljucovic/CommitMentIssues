@@ -3,10 +3,12 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
     ESTIMATED_COMMIT_NAMING_QUALITY_SAMPLE_SIZE,
 )
 from app.analyzers.common.list_utils import random_list_sample
+from app.analyzers.common.prompt_utils import prompt_character_limit
 
 
 def build_estimated_commit_naming_quality_prompt(
     commit_messages: list,
+    num_ctx: int,
 ) -> str:
     commit_messages_sample = random_list_sample(
             samples=commit_messages,
@@ -20,7 +22,7 @@ def build_estimated_commit_naming_quality_prompt(
     formatted_commit_messages_sample = "\n".join(
         f"{index + 1}. {message}"
         for index, message in enumerate(commit_messages_sample)
-    )[:5000]
+    )
 
     template = """
 You are analyzing the naming quality of Git commit messages in a GitHub repository.
@@ -76,8 +78,8 @@ Commit messages:
 \"\"\"
 {formatted_commit_messages_sample}
 \"\"\"
-""".strip()
+"""
 
     return template.format(
         formatted_commit_messages_sample=formatted_commit_messages_sample,
-    )
+    )[:prompt_character_limit(num_ctx=num_ctx)]

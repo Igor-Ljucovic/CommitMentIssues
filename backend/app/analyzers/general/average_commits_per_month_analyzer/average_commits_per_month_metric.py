@@ -1,4 +1,4 @@
-from app.analyzers.common.metric_utils import get_metadata_value
+from app.analyzers.common.metadata_utils import get_metadata_value
 from app.analyzers.general.average_commits_per_month_analyzer.average_commits_per_month_calculate import (
     calculate_average_commits_per_month,
 )
