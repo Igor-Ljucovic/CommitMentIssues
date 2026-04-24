@@ -3,6 +3,7 @@ from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_rea
     ESTIMATED_README_QUALITY_METRIC_KEY,
     ESTIMATED_README_QUALITY_METRIC_NAME,
     ESTIMATED_README_QUALITY_SUBCATEGORY_NAME,
+    NUM_CTX
 )
 from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_readme_quality_fetch import (
     fetch_estimated_readme_quality_input,
@@ -37,10 +38,13 @@ async def get_github_readme_quality_metric(
             repository_name=repository_name,
         )
 
-        prompt = build_estimated_readme_quality_prompt(readme_data=readme_data)
+        prompt = build_estimated_readme_quality_prompt(
+            readme_data=readme_data, 
+            num_ctx=NUM_CTX,
+        )
         ai_result = await rate_metric_with_openai(
             prompt=prompt, 
-            model=settings.OPENAI_MODEL,
+            model=settings.OPENAI_MODEL_GPT41MINI,
         )
 
         rating = round(float(ai_result["rating"]) / 100, 2)

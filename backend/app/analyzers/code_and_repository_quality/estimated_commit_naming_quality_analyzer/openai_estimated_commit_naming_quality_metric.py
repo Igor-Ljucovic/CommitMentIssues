@@ -4,6 +4,7 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
     ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_KEY,
     ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_NAME,
     ESTIMATED_COMMIT_NAMING_QUALITY_SUBCATEGORY_NAME,
+    NUM_CTX
 )
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.estimated_commit_naming_quality_fetch import (
     fetch_estimated_commit_naming_quality_data,
@@ -44,7 +45,8 @@ async def get_openai_estimated_commit_naming_quality_metric(
         )
         ai_result = await rate_metric_with_openai(
             prompt=prompt, 
-            model=settings.OPENAI_MODEL,
+            model=settings.OPENAI_MODEL_GPT41MINI,
+            num_ctx=NUM_CTX,
         )
 
         rating = ai_result.get("rating")
@@ -59,7 +61,7 @@ async def get_openai_estimated_commit_naming_quality_metric(
         return RepositoryMetricResult(
             metric_key=ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_KEY,
             metric_name=ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_NAME,
-            value=round(rating * 0.1, 2),
+            value=round(rating / 100, 2),
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
             message=explanation,
