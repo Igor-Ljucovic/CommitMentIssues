@@ -104,7 +104,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         tooltipText: "Excluding generated and boilerplate files",
       },
       {
-        name: "Technology Stack Count (not rdy)",
+        name: "Languages Used (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
       {
