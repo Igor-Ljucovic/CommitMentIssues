@@ -34,6 +34,5 @@ async def fetch_languages_used(
     return {
         "owner": repository["owner"]["login"],
         "repository_name": repository["name"],
-        LANGUAGES_USED_METRIC_KEY: len(languages_used),
-        "languages": languages_used,
+        LANGUAGES_USED_METRIC_KEY: languages_used,
     }

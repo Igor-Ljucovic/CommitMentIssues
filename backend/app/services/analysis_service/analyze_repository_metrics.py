@@ -17,7 +17,7 @@ from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_rea
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ollama_estimated_commit_naming_quality_metric import get_ollama_estimated_commit_naming_quality_metric
 from app.analyzers.general.stars_analyzer.stars_metric import get_stars_metric
 from app.analyzers.general.languages_used_analyzer.languages_used_metric import get_languages_used_metric
-
+from app.analyzers.general.languages_used_filtered_analyzer.languages_used_filtered_metric import get_languages_used_filtered_metric
 
 async def analyze_repository_metrics(
     request: AnalysisRequest,
@@ -32,7 +32,7 @@ async def analyze_repository_metrics(
             get_github_wiki_total_commits_metric,
             get_total_forks_metric,
             get_stars_metric,
-            get_languages_used_metric,
+            get_languages_used_filtered_metric,
             get_total_lines_of_code_metric,
             get_total_files_filtered_metric,
             get_github_readme_quality_metric,
@@ -42,6 +42,7 @@ async def analyze_repository_metrics(
             [
                 get_average_commits_per_month_metric,
                 get_total_files_metric,
+                get_languages_used_metric,
             ],
         ],
         no_repositories_warning=(
