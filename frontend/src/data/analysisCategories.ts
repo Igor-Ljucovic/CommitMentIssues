@@ -106,10 +106,12 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
       {
         name: "Languages Used (not rdy)",
         parameters: createStandardIntRangeParameters(),
+        tooltipText: "Includes non-programming languages (HTML, CSS, Shell etc.)",
       },
       {
         name: "Languages Used (filtered) (not rdy)",
         parameters: createStandardIntRangeParameters(),
+        tooltipText: "Includes only the programming languages (Python, JavaScript, C#, Java etc.)",
       },
       {
         name: "Total Forks (not rdy)",
