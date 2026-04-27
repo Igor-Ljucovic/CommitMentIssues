@@ -108,6 +108,10 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
+        name: "Languages Used (filtered) (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+      },
+      {
         name: "Total Forks (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
