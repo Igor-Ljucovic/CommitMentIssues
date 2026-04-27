@@ -15,6 +15,7 @@ from app.analyzers.general.total_lines_of_code_analyzer.total_lines_of_code_metr
 from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_metric import get_total_files_filtered_metric
 from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_readme_quality_metric import get_github_readme_quality_metric
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ollama_estimated_commit_naming_quality_metric import get_ollama_estimated_commit_naming_quality_metric
+from app.analyzers.general.stars_analyzer.stars_metric import get_stars_metric
 
 
 async def analyze_repository_metrics(
@@ -29,6 +30,7 @@ async def analyze_repository_metrics(
             get_pull_request_acceptance_rate_metric,
             get_github_wiki_total_commits_metric,
             get_total_forks_metric,
+            get_stars_metric,
             get_total_lines_of_code_metric,
             get_total_files_filtered_metric,
             get_github_readme_quality_metric,
