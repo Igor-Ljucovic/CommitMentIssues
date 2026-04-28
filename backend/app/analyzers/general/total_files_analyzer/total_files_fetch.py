@@ -2,9 +2,7 @@ from app.analyzers.general.total_files_analyzer.total_files_constants import (
     DEFAULT_BRANCH_NAME,
     TOTAL_FILES_METRIC_KEY,
 )
-from app.analyzers.common.tree_utils import (
-    count_matching_tree_entries,
-)
+from app.analyzers.common.tree_utils import filter_matching_tree_entries
 from app.services.github_rest_service import fetch_github_rest_resource
 
 
@@ -20,7 +18,6 @@ async def fetch_total_files(
     if not default_branch:
         raise RuntimeError("Could not determine the repository default branch.")
 
-    # "tree" - list of all items in the repository (in the JSON format)
     tree_data = await fetch_github_rest_resource(
         f"/repos/{owner}/{repository_name}/git/trees/{default_branch}",
         params={"recursive": "1"},
@@ -35,7 +32,7 @@ async def fetch_total_files(
     if not isinstance(tree_entries, list):
         raise RuntimeError("Could not read repository tree entries.")
 
-    total_files =  total_files = count_matching_tree_entries(
+    total_files = filter_matching_tree_entries(
         tree_entries,
         # Blob = file, tree = directory
         predicate=lambda entry: entry.get("type") == "blob"
@@ -47,5 +44,4 @@ async def fetch_total_files(
         "repository_name": repository_data.get("name", repository_name),
         DEFAULT_BRANCH_NAME: default_branch,
         TOTAL_FILES_METRIC_KEY: total_files,
-        # "tree_entries": tree_entries,
     }

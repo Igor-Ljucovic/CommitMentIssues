@@ -40,7 +40,7 @@ async def _get_total_files_metric(
                 owner=owner,
                 repository_name=repository_name,
             )
-            total_files = result[TOTAL_FILES_METRIC_KEY]
+            total_files = len(result[TOTAL_FILES_METRIC_KEY])
             default_branch_name = result[DEFAULT_BRANCH_NAME]
 
         return RepositoryMetricResult(

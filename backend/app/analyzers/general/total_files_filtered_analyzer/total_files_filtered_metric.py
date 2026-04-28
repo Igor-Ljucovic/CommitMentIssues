@@ -8,8 +8,8 @@ from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_co
 from app.analyzers.general.total_files_analyzer.total_files_constants import (
     TOTAL_FILES_METRIC_KEY,
 )
-from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_fetch import (
-    fetch_total_files_filtered,
+from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_calculate import (
+    total_files_filtered_calculate,
 )
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
@@ -31,23 +31,26 @@ async def get_total_files_filtered_metric(
     try:
         owner, repository_name = repository.get_owner_and_repository_name()
 
-        result = await fetch_total_files_filtered(
+        result = await total_files_filtered_calculate(
             owner=owner,
             repository_name=repository_name,
         )
+
+        total_files_filtered = result[TOTAL_FILES_FILTERED_METRIC_KEY]
+        total_files = result[TOTAL_FILES_METRIC_KEY]
         
         return RepositoryMetricResult(
             metric_key=TOTAL_FILES_FILTERED_METRIC_KEY,
             metric_name=TOTAL_FILES_FILTERED_METRIC_NAME,
-            value=result[TOTAL_FILES_FILTERED_METRIC_KEY],
+            value=total_files_filtered,
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
             # TOTAL_FILES_METRIC_KEY is used in another
             # metric to reduce redundant API calls
-            metadata={TOTAL_FILES_METRIC_KEY: result[TOTAL_FILES_METRIC_KEY]},
+            metadata={TOTAL_FILES_METRIC_KEY: total_files},
             message=(
-                f'Filtered file count fetched from default branch '
-                f'"{result[DEFAULT_BRANCH_NAME]}". '
+                f'Successfully fetched total file count from default branch '
+                f'"{result[DEFAULT_BRANCH_NAME]}".'
             ),
         )
     except Exception as exc:
