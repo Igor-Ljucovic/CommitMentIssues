@@ -19,7 +19,7 @@ from app.analyzers.general.stars_analyzer.stars_metric import get_stars_metric
 from app.analyzers.general.languages_used_analyzer.languages_used_metric import get_languages_used_metric
 from app.analyzers.general.languages_used_filtered_analyzer.languages_used_filtered_metric import get_languages_used_filtered_metric
 from app.analyzers.general.total_branches_analyzer.total_branches_metric import get_total_branches_metric
-
+from app.analyzers.general.average_commit_size_analyzer.average_commit_size_metric import get_average_commit_size_metric
 
 
 async def analyze_repository_metrics(
@@ -30,6 +30,7 @@ async def analyze_repository_metrics(
         metric_executors=[
             get_total_branches_metric,
             get_total_commits_metric,
+            get_average_commit_size_metric,
             get_first_commit_date_metric,
             get_last_commit_date_metric,
             get_pull_request_acceptance_rate_metric,
