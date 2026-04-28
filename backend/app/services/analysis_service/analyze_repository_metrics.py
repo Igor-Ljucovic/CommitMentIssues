@@ -18,6 +18,9 @@ from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_a
 from app.analyzers.general.stars_analyzer.stars_metric import get_stars_metric
 from app.analyzers.general.languages_used_analyzer.languages_used_metric import get_languages_used_metric
 from app.analyzers.general.languages_used_filtered_analyzer.languages_used_filtered_metric import get_languages_used_filtered_metric
+from app.analyzers.general.total_branches_analyzer.total_branches_metric import get_total_branches_metric
+
+
 
 async def analyze_repository_metrics(
     request: AnalysisRequest,
@@ -25,6 +28,7 @@ async def analyze_repository_metrics(
     return await analyze_repository(
         request=request,
         metric_executors=[
+            get_total_branches_metric,
             get_total_commits_metric,
             get_first_commit_date_metric,
             get_last_commit_date_metric,
