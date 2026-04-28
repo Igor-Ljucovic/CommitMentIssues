@@ -61,7 +61,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
     title: "General",
     items: [
       {
-        name: "Total Git Branches (not rdy)",
+        name: "Total Branches (not rdy)",
         parameters: createStandardIntRangeParameters(),
       },
       {
