@@ -83,7 +83,12 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
       {
         name: "Average Commit Size (not rdy)",
         parameters: createStandardIntRangeParameters(),
-        tooltipText: "In lines of code, excluding generated and boilerplate files",
+        tooltipText: "In lines of text",
+      },
+      {
+        name: "Median Commit Size (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+        tooltipText: "In lines of text",
       },
       {
         name: "Total Lines of Code",
