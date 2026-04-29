@@ -4,7 +4,6 @@ from app.schemas.analysis_request_schemas import AnalysisRequest
 from app.schemas.analysis_response_schemas import AnalysisResponse
 
 from app.analyzers.collaboration.pull_request_acceptance_rate_analyzer.pull_request_acceptance_rate_metric import get_pull_request_acceptance_rate_metric
-from app.analyzers.documentation.github_wiki_total_commits_analyzer.github_wiki_total_commits_metric import get_github_wiki_total_commits_metric
 from app.analyzers.general.average_commits_per_month_analyzer.average_commits_per_month_metric import get_average_commits_per_month_metric
 from app.analyzers.general.first_commit_date_analyzer.first_commit_date_metric import get_first_commit_date_metric
 from app.analyzers.general.last_commit_date_analyzer.last_commit_date_metric import get_last_commit_date_metric
@@ -37,7 +36,6 @@ async def analyze_repository_metrics(
             get_first_commit_date_metric,
             get_last_commit_date_metric,
             get_pull_request_acceptance_rate_metric,
-            get_github_wiki_total_commits_metric,
             get_total_forks_metric,
             get_stars_metric,
             get_languages_used_filtered_metric,

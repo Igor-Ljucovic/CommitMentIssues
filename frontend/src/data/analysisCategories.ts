@@ -175,24 +175,8 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
     title: "Documentation",
     items: [
       {
-        name: "README Total Commits (not rdy)",
-        parameters: createStandardIntRangeParameters(),
-      },
-      {
-        name: "README Length (not rdy)",
-        parameters: createStandardIntRangeParameters(),
-      },
-      {
         name: "Estimated README Quality ⭐",
         parameters: createPercentageRangeParameters(),
-      },
-      {
-        name: "GitHub Wiki Total Commits",
-        parameters: createStandardIntRangeParameters(),
-      },
-      {
-        name: "GitHub Wiki Length (not rdy)",
-        parameters: createStandardIntRangeParameters(),
       },
       {
         name: "Estimated GitHub Wiki Quality ⭐ (not rdy)",
