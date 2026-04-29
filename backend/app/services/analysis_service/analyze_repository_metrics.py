@@ -20,6 +20,7 @@ from app.analyzers.general.languages_used_analyzer.languages_used_metric import 
 from app.analyzers.general.languages_used_filtered_analyzer.languages_used_filtered_metric import get_languages_used_filtered_metric
 from app.analyzers.general.total_branches_analyzer.total_branches_metric import get_total_branches_metric
 from app.analyzers.general.average_commit_size_analyzer.average_commit_size_metric import get_average_commit_size_metric
+from app.analyzers.general.median_commit_size_analyzer.median_commit_size_metric import get_median_commit_size_metric
 
 
 async def analyze_repository_metrics(
@@ -45,6 +46,7 @@ async def analyze_repository_metrics(
         ],
         subsequent_phases=[
             [
+                get_median_commit_size_metric,
                 get_average_commits_per_month_metric,
                 get_total_files_metric,
                 get_languages_used_metric,

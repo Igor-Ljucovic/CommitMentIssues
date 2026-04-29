@@ -6,11 +6,7 @@ from app.analyzers.general.average_commit_size_analyzer.average_commit_size_cons
     AVERAGE_COMMIT_SIZE_METRIC_NAME,
     AVERAGE_COMMIT_SIZE_CATEGORY_NAME,
     AVERAGE_COMMIT_SIZE_SUBCATEGORY_NAME,
-    BRANCH_NAME,
-    SAMPLED_COMMITS_COUNT,
-    TOTAL_ADDITIONS,
-    TOTAL_DELETIONS,
-    COMMIT_SIZE_SAMPLES
+    COMMIT_SIZE_SAMPLES,
 )
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
@@ -37,8 +33,6 @@ async def get_average_commit_size_metric(
             repository_name=repository_name,
         )
 
-        total_additions = result[TOTAL_ADDITIONS]
-        total_deletions = result[TOTAL_DELETIONS]
         commit_size_samples = result[COMMIT_SIZE_SAMPLES]
 
         return RepositoryMetricResult(
@@ -47,17 +41,8 @@ async def get_average_commit_size_metric(
             value=result[AVERAGE_COMMIT_SIZE_METRIC_KEY],
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
-            metadata={
-                SAMPLED_COMMITS_COUNT: len(commit_size_samples),
-                TOTAL_ADDITIONS: total_additions,
-                TOTAL_DELETIONS: total_deletions,
-                COMMIT_SIZE_SAMPLES: commit_size_samples,
-            },
-            message=(
-                f'Average commit size calculated from '
-                f'{len(commit_size_samples)} commits on branch '
-                f'"{result[BRANCH_NAME]}".'
-            ),
+            metadata={COMMIT_SIZE_SAMPLES: commit_size_samples},
+            message=('Average Commit Size calculated successfully'),
         )
     except Exception as exc:
         return RepositoryMetricResult(
