@@ -88,8 +88,8 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
       {
         name: "Average Commit Size (filtered) (not rdy)",
         parameters: createStandardIntRangeParameters(),
-        tooltipText: "Outlier commits with 4x or more lines of text than "+
-        "the average will not be counted",
+        tooltipText: "In lines of text. " + 
+        "Excludes commits with at least 4x more changed lines than the average",
       },
       {
         name: "Median Commit Size (not rdy)",
@@ -97,13 +97,21 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         tooltipText: "In lines of text",
       },
       {
+        name: "Median Commit Size (filtered) (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+        tooltipText: "In lines of text. " + 
+        "Excludes commits with at least 4x more changed lines than the average"
+      },
+      {
         name: "Total Lines of Code",
         parameters: createStandardIntRangeParameters(),
+        tooltipText: "Total lines of text. A line of code is too hard to define."
       },
       {
         name: "Total Lines of Code (filtered) ⭐ (not rdy)",
         parameters: createStandardIntRangeParameters(),
-        tooltipText: "Excluding generated and boilerplate files",
+        tooltipText: "Total lines of text. A line of code is too hard to define." + 
+        "Excluding generated and boilerplate files",
       },
       {
         name: "Total Files",
