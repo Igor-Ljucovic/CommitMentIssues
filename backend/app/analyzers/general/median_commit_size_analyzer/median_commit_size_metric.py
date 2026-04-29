@@ -40,7 +40,6 @@ async def _get_median_commit_size_metric(
         owner, repository_name = repository.get_owner_and_repository_name()
 
         if commit_size_samples is None:
-            print("API poziv izvrsen")
             result = await average_commit_size_calculate(
                 owner=owner,
                 repository_name=repository_name,
