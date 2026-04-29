@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from typing import TypeVar
 
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
@@ -8,7 +7,7 @@ T = TypeVar("T")
 
 def get_metadata_value(
     prior_results: list[RepositoryMetricResult],
-    predicate: Callable[[RepositoryMetricResult], bool],
+    metric_keys: list[str],
     key: str,
     expected_type: type[T],
 ) -> T | None:
@@ -16,7 +15,7 @@ def get_metadata_value(
         (
             metric
             for metric in prior_results
-            if predicate(metric)
+            if metric.metric_key in metric_keys
         ),
         None,
     )
