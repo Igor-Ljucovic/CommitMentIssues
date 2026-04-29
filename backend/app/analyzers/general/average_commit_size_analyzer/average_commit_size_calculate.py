@@ -34,7 +34,7 @@ async def average_commit_size_calculate(
     
     sampled_commits_count = len(sampled_commit_nodes)
     
-    average_commit_size = (
+    average_commit_size = round(
         (total_additions + total_deletions) / sampled_commits_count
         if sampled_commits_count > 0
         else 0
