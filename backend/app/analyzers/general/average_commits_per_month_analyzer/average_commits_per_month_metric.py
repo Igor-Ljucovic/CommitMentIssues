@@ -107,19 +107,19 @@ async def get_average_commits_per_month_metric(
         repository,
         total_commits=get_metadata_value(
             prior_results,
-            lambda metric: metric.metric_key == TOTAL_COMMITS_METRIC_KEY,
+            [TOTAL_COMMITS_METRIC_KEY],
             TOTAL_COMMITS_METRIC_KEY,
             int,
         ),
         first_commit_date=get_metadata_value(
             prior_results,
-            lambda metric: metric.metric_key == FIRST_COMMIT_DATE_METRIC_KEY,
+            [FIRST_COMMIT_DATE_METRIC_KEY],
             FIRST_COMMIT_DATE_METRIC_KEY,
             str,
         ),
         last_commit_date=get_metadata_value(
             prior_results,
-            lambda metric: metric.metric_key == LAST_COMMIT_DATE_METRIC_KEY,
+            [LAST_COMMIT_DATE_METRIC_KEY],
             LAST_COMMIT_DATE_METRIC_KEY,
             str,
         ),

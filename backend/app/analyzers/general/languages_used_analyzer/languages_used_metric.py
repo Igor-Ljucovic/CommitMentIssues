@@ -74,7 +74,7 @@ async def get_languages_used_metric(
         repository,
         languages_used=get_metadata_value(
             prior_results,
-            lambda metric: metric.metric_key == LANGUAGES_USED_FILTERED_METRIC_KEY,
+            [LANGUAGES_USED_FILTERED_METRIC_KEY],
             LANGUAGES_USED_METRIC_KEY,
             list,
         ),

@@ -10,6 +10,9 @@ from app.analyzers.general.average_commit_size_analyzer.average_commit_size_cons
     AVERAGE_COMMIT_SIZE_METRIC_KEY,
     COMMIT_SIZE_SAMPLES,
 )
+from app.analyzers.general.average_commit_size_filtered_analyzer.average_commit_size_filtered_constants import (
+    AVERAGE_COMMIT_SIZE_FILTERED_METRIC_KEY,
+)
 from app.analyzers.general.median_commit_size_analyzer.median_commit_size_constants import (
     MEDIAN_COMMIT_SIZE_METRIC_KEY,
     MEDIAN_COMMIT_SIZE_METRIC_NAME,
@@ -40,6 +43,7 @@ async def _get_median_commit_size_metric(
         owner, repository_name = repository.get_owner_and_repository_name()
 
         if commit_size_samples is None:
+            # we are calling the average commit size to reduce redundant API calls
             result = await average_commit_size_calculate(
                 owner=owner,
                 repository_name=repository_name,
@@ -54,6 +58,7 @@ async def _get_median_commit_size_metric(
             value=median_commit_size,
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
+            metadata={COMMIT_SIZE_SAMPLES: commit_size_samples},
             message=('Median Commit Size calculated successfully'),
         )
     except Exception as exc:
@@ -78,7 +83,10 @@ async def get_median_commit_size_metric(
         repository,
         commit_size_samples=get_metadata_value(
             prior_results,
-            lambda metric: metric.metric_key == AVERAGE_COMMIT_SIZE_METRIC_KEY,
+            [
+                AVERAGE_COMMIT_SIZE_METRIC_KEY, 
+                AVERAGE_COMMIT_SIZE_FILTERED_METRIC_KEY,
+            ],
             COMMIT_SIZE_SAMPLES,
             list,
         ),

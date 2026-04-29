@@ -77,7 +77,7 @@ async def get_total_files_metric(
         repository,
         total_files=get_metadata_value(
             prior_results,
-            lambda metric: metric.metric_key == TOTAL_FILES_FILTERED_METRIC_KEY,
+            [TOTAL_FILES_FILTERED_METRIC_KEY],
             TOTAL_FILES_METRIC_KEY,
             int,
         ),

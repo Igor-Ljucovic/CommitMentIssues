@@ -48,12 +48,16 @@ async def analyze_repository_metrics(
         ],
         subsequent_phases=[
             [
-                get_median_commit_size_metric,
                 get_average_commit_size_filtered_metric,
-                get_median_commit_size_filtered_metric,
                 get_average_commits_per_month_metric,
                 get_total_files_metric,
                 get_languages_used_metric,
+            ],
+            [
+                get_median_commit_size_metric,
+            ],
+            [
+                get_median_commit_size_filtered_metric
             ],
         ],
         no_repositories_warning=(
