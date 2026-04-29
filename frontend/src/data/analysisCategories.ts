@@ -86,6 +86,12 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         tooltipText: "In lines of text",
       },
       {
+        name: "Average Commit Size (filtered) (not rdy)",
+        parameters: createStandardIntRangeParameters(),
+        tooltipText: "Outlier commits with 4x or more lines of text than "+
+        "the average will not be counted",
+      },
+      {
         name: "Median Commit Size (not rdy)",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "In lines of text",
