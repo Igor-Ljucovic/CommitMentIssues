@@ -42,6 +42,8 @@ async def _get_median_commit_size_metric(
     try:
         owner, repository_name = repository.get_owner_and_repository_name()
 
+        used_existing_samples = commit_size_samples is not None
+
         if commit_size_samples is None:
             # we are calling the average commit size to reduce redundant API calls
             result = await average_commit_size_calculate(
@@ -58,7 +60,9 @@ async def _get_median_commit_size_metric(
             value=median_commit_size,
             weight=subcategory_config.weight,
             status=MetricStatus.SUCCESS,
-            metadata={COMMIT_SIZE_SAMPLES: commit_size_samples},
+            metadata=None if used_existing_samples else {
+                COMMIT_SIZE_SAMPLES: commit_size_samples
+            },
             message=('Median Commit Size calculated successfully'),
         )
     except Exception as exc:
