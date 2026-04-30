@@ -11,16 +11,14 @@ def build_estimated_readme_quality_prompt(
     template = """
 You are analyzing the quality of a GitHub repository README.
 
-Score the README using this EXACT rubric (you can also rate partial points, e.g. 0.35/1.0):
+Score the README using this EXACT rubric (you can also rate partial points, e.g. 6.35/10.0):
 
-1. Grammar & Clarity (0.0–15.0)
+1. Grammar & Clarity (0.0–10.0)
 2. Formatting & Structure (0.0–15.0)
-3. Technologies Listed (0.0–20.0)
-4. Technology Explanation (0.0–10.0)
-5. Setup Instructions (0.0–10.0)
-6. Usage Examples (0.0–10.0)
-7. Project Description (0.0–10.0)
-8. Content Depth/Length (0.0–10.0)
+3. Tech Stack (0.0–25.0)
+4. Setup Instructions (0.0–10.0)
+5. Project purpose (who would use it and how) (0.0–20.0)
+6. Project Description (0.0–20.0)
 
 Rules:
 - Total score MUST be the sum (0.0–100.0)
