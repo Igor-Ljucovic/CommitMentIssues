@@ -13,6 +13,7 @@ from app.analyzers.general.total_files_analyzer.total_files_metric import get_to
 from app.analyzers.general.total_lines_of_code_analyzer.total_lines_of_code_metric import get_total_lines_of_code_metric
 from app.analyzers.general.total_files_filtered_analyzer.total_files_filtered_metric import get_total_files_filtered_metric
 from app.analyzers.documentation.estimated_readme_quality_analyzer.estimated_readme_quality_metric import get_github_readme_quality_metric
+from app.analyzers.documentation.estimated_github_wiki_quality_analyzer.estimated_github_wiki_quality_metric import get_github_wiki_quality_metric
 from app.analyzers.code_and_repository_quality.estimated_commit_naming_quality_analyzer.ollama_estimated_commit_naming_quality_metric import get_ollama_estimated_commit_naming_quality_metric
 from app.analyzers.general.stars_analyzer.stars_metric import get_stars_metric
 from app.analyzers.general.languages_used_analyzer.languages_used_metric import get_languages_used_metric
@@ -42,6 +43,7 @@ async def analyze_repository_metrics(
             get_total_lines_of_code_metric,
             get_total_files_filtered_metric,
             get_github_readme_quality_metric,
+            get_github_wiki_quality_metric,
             get_ollama_estimated_commit_naming_quality_metric,
         ],
         subsequent_phases=[
