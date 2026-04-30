@@ -61,7 +61,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
     title: "General",
     items: [
       {
-        name: "Total Branches (not rdy)",
+        name: "Total Branches",
         parameters: createStandardIntRangeParameters(),
       },
       {
@@ -81,23 +81,23 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Average Commit Size (not rdy)",
+        name: "Average Commit Size",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "In lines of text",
       },
       {
-        name: "Average Commit Size (filtered) (not rdy)",
+        name: "Average Commit Size (filtered)",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "In lines of text. " + 
         "Excludes commits with at least 4x more changed lines than the average",
       },
       {
-        name: "Median Commit Size (not rdy)",
+        name: "Median Commit Size",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "In lines of text",
       },
       {
-        name: "Median Commit Size (filtered) (not rdy)",
+        name: "Median Commit Size (filtered)",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "In lines of text. " + 
         "Excludes commits with at least 4x more changed lines than the average"
@@ -108,7 +108,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         tooltipText: "Total lines of text. A line of code is too hard to define."
       },
       {
-        name: "Total Lines of Code (filtered) ⭐ (not rdy)",
+        name: "Total Lines of Code (filtered) ⭐",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "Total lines of text. A line of code is too hard to define." + 
         "Excluding generated and boilerplate files",
@@ -118,26 +118,26 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Total Files (filtered) ⭐ (not rdy)",
+        name: "Total Files (filtered) ⭐",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "Excluding generated and boilerplate files",
       },
       {
-        name: "Languages Used (not rdy)",
+        name: "Languages Used",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "Includes non-programming languages (HTML, CSS, Shell etc.)",
       },
       {
-        name: "Languages Used (filtered) (not rdy)",
+        name: "Languages Used (filtered)",
         parameters: createStandardIntRangeParameters(),
         tooltipText: "Includes only the programming languages (Python, JavaScript, C#, Java etc.)",
       },
       {
-        name: "Total Forks (not rdy)",
+        name: "Total Forks",
         parameters: createStandardIntRangeParameters(),
       },
       {
-        name: "Stars (not rdy)",
+        name: "Stars",
         parameters: createStandardIntRangeParameters(),
       },
     ],
@@ -179,7 +179,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
         parameters: createPercentageRangeParameters(),
       },
       {
-        name: "Estimated GitHub Wiki Quality ⭐ (not rdy)",
+        name: "Estimated GitHub Wiki Quality ⭐",
         parameters: createPercentageRangeParameters(),
       },
     ],
@@ -188,7 +188,7 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
     title: "Code & Repository Quality",
     items: [
       { 
-        name: "Estimated Commit Naming Quality ⭐ (not rdy)",
+        name: "Estimated Commit Naming Quality ⭐",
         parameters: createPercentageRangeParameters(),
       },
       { 
