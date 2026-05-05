@@ -23,6 +23,7 @@ from app.analyzers.general.average_commit_size_analyzer.average_commit_size_metr
 from app.analyzers.general.median_commit_size_analyzer.median_commit_size_metric import get_median_commit_size_metric
 from app.analyzers.general.average_commit_size_filtered_analyzer.average_commit_size_filtered_metric import get_average_commit_size_filtered_metric
 from app.analyzers.general.median_commit_size_filtered_analyzer.median_commit_size_filtered_metric import get_median_commit_size_filtered_metric
+from app.analyzers.code_and_repository_quality.libraries_used_analyzer.libraries_used_metric import get_libraries_used_metric
 
 
 async def analyze_repository_metrics(
@@ -45,6 +46,7 @@ async def analyze_repository_metrics(
             get_github_readme_quality_metric,
             get_github_wiki_quality_metric,
             get_ollama_estimated_commit_naming_quality_metric,
+            get_libraries_used_metric,
         ],
         subsequent_phases=[
             [

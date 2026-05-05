@@ -141,3 +141,8 @@ webencodings==0.5.1
 websocket-client==1.8.0
 widgetsnbextension==4.0.13
 wsproto==1.2.0
+tree-sitter>=0.22.0
+tree-sitter-python
+tree-sitter-java
+tree-sitter-javascript
+tree-sitter-c-sharp

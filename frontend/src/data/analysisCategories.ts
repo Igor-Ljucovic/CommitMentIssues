@@ -187,7 +187,12 @@ export const ANALYSIS_CATEGORIES: AnalysisCategory[] = [
   {
     title: "Code & Repository Quality",
     items: [
-      { 
+      {
+        name: "Libraries Used",
+        parameters: createStandardIntRangeParameters(),
+        tooltipText: "Number of unique third-party libraries detected via static analysis (tree-sitter). Supports Python, Java, C#, JavaScript/TypeScript.",
+      },
+      {
         name: "Estimated Commit Naming Quality ⭐",
         parameters: createPercentageRangeParameters(),
       },
