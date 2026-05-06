@@ -24,6 +24,7 @@ from app.analyzers.general.median_commit_size_analyzer.median_commit_size_metric
 from app.analyzers.general.average_commit_size_filtered_analyzer.average_commit_size_filtered_metric import get_average_commit_size_filtered_metric
 from app.analyzers.general.median_commit_size_filtered_analyzer.median_commit_size_filtered_metric import get_median_commit_size_filtered_metric
 from app.analyzers.code_and_repository_quality.libraries_used_analyzer.libraries_used_metric import get_libraries_used_metric
+from app.analyzers.general.total_lines_of_code_filtered_analyzer.total_lines_of_code_filtered_metric import get_total_lines_of_code_filtered_metric
 
 
 async def analyze_repository_metrics(
@@ -54,6 +55,7 @@ async def analyze_repository_metrics(
                 get_total_files_metric,
                 get_languages_used_metric,
                 get_libraries_used_metric,
+                get_total_lines_of_code_filtered_metric,
             ],
             [
                 get_median_commit_size_metric,
