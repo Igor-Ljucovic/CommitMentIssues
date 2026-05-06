@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any
 
 from app.core.config import settings
@@ -5,6 +6,7 @@ from app.core.config import settings
 from app.clients.github_rest_client import (
     execute_github_rest_request,
     github_rest_get_bytes,
+    github_rest_stream_to_file,
 )
 
 
@@ -30,3 +32,13 @@ async def fetch_github_rest_bytes(path: str) -> bytes:
         "X-GitHub-Api-Version": "2026-03-10",
     }
     return await github_rest_get_bytes(url, headers)
+
+
+async def download_github_tarball(path: str, dest: Path) -> None:
+    url = f"https://api.github.com{path}" if path.startswith("/") else path
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {settings.GITHUB_TOKEN}",
+        "X-GitHub-Api-Version": "2026-03-10",
+    }
+    await github_rest_stream_to_file(url, headers, dest)

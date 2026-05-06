@@ -4,8 +4,7 @@ import sys
 from tree_sitter import Language, Parser
 import tree_sitter_python as tspython
 
-from app.analyzers.code_and_repository_quality.libraries_used_analyzer.detectors.detector_utils import (
-    fetch_blob_text,
+from app.analyzers.code_and_repository_quality.libraries_used_analyzer.detectors.utils import (
     walk_nodes,
     get_node_text,
 )
@@ -15,24 +14,20 @@ _PYTHON_STDLIB: frozenset[str] = frozenset(sys.stdlib_module_names)
 _parser: Parser | None = None
 
 
-def get_local_python_identifiers(tree_items: list) -> frozenset[str]:
-    """Returns names that should be treated as local Python identifiers (not 3rd-party)"""
+def get_local_python_identifiers_from_paths(file_paths: list[str]) -> frozenset[str]:
     names: set[str] = set()
-    for item in tree_items:
-        item_type = item.get("type")
-        path = item.get("path", "")
+    for path in file_paths:
         parts = path.split("/")
-
-        if item_type == "tree":
-            names.add(parts[-1])
-        elif item_type == "blob":
-            filename = parts[-1]
-            if filename == "__init__.py" and len(parts) >= 2:
-                names.add(parts[-2])
-            elif filename.endswith(".py"):
-                stem = filename[:-3]
-                if stem and stem != "__init__":
-                    names.add(stem)
+        for part in parts[:-1]:
+            if part:
+                names.add(part)
+        filename = parts[-1]
+        if filename == "__init__.py" and len(parts) >= 2:
+            names.add(parts[-2])
+        elif filename.endswith(".py"):
+            stem = filename[:-3]
+            if stem and stem != "__init__":
+                names.add(stem)
     return frozenset(names)
 
 
@@ -67,30 +62,15 @@ def parse_python_imports(
     return results
 
 
-async def get_python_declared_packages(
-    owner: str,
-    repository_name: str,
-    tree_items: list,
+def get_python_declared_packages_from_content(
+    requirements_contents: list[str],
+    pyproject_contents: list[str],
 ) -> frozenset[str]:
-    """Read requirements.txt/pyproject.toml and return declared package names."""
     declared: set[str] = set()
-    config_files = {"requirements.txt", "pyproject.toml"}
-    for item in tree_items:
-        if item.get("type") != "blob":
-            continue
-        filename = item.get("path", "").split("/")[-1].lower()
-        if filename not in config_files:
-            continue
-        blob_sha = item.get("sha")
-        if not blob_sha:
-            continue
-        text = await fetch_blob_text(owner, repository_name, blob_sha)
-        if not text:
-            continue
-        if filename == "requirements.txt":
-            declared.update(_parse_requirements_txt(text))
-        elif filename == "pyproject.toml":
-            declared.update(_parse_pyproject_toml(text))
+    for content in requirements_contents:
+        declared.update(_parse_requirements_txt(content))
+    for content in pyproject_contents:
+        declared.update(_parse_pyproject_toml(content))
     return frozenset(declared)
 
 

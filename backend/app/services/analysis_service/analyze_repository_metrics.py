@@ -46,7 +46,6 @@ async def analyze_repository_metrics(
             get_github_readme_quality_metric,
             get_github_wiki_quality_metric,
             get_ollama_estimated_commit_naming_quality_metric,
-            get_libraries_used_metric,
         ],
         subsequent_phases=[
             [
@@ -54,6 +53,7 @@ async def analyze_repository_metrics(
                 get_average_commits_per_month_metric,
                 get_total_files_metric,
                 get_languages_used_metric,
+                get_libraries_used_metric,
             ],
             [
                 get_median_commit_size_metric,

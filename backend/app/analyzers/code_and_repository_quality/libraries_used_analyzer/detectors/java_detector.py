@@ -1,40 +1,20 @@
 import re
 
-from app.analyzers.code_and_repository_quality.libraries_used_analyzer.detectors.detector_utils import (
-    fetch_blob_text,
-)
-
 _GRADLE_CONFIGS = (
     r'(?:implementation|api|compileOnly|runtimeOnly|'
     r'testImplementation|testCompileOnly|annotationProcessor)'
 )
 
 
-async def get_java_libraries(
-    owner: str,
-    repository_name: str,
-    tree_items: list,
+def get_java_libraries_from_content(
+    pom_xml_contents: list[str],
+    gradle_contents: list[str],
 ) -> set[str]:
-    """Read pom.xml (Maven) and build.gradle (Groovy) files and return 
-    declared Maven/Gradle dependencies (since Java projects use 1 of these 2)."""
     libraries: set[str] = set()
-    build_files = {"pom.xml", "build.gradle", "build.gradle.kts"}
-    for item in tree_items:
-        if item.get("type") != "blob":
-            continue
-        filename = item.get("path", "").split("/")[-1].lower()
-        if filename not in build_files:
-            continue
-        blob_sha = item.get("sha")
-        if not blob_sha:
-            continue
-        text = await fetch_blob_text(owner, repository_name, blob_sha)
-        if not text:
-            continue
-        if filename == "pom.xml":
-            libraries.update(_parse_pom_xml_config(text))
-        else:
-            libraries.update(_parse_build_gradle(text))
+    for content in pom_xml_contents:
+        libraries.update(_parse_pom_xml_config(content))
+    for content in gradle_contents:
+        libraries.update(_parse_build_gradle(content))
     return libraries
 
 

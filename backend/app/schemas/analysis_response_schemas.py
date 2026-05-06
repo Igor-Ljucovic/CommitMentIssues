@@ -1,5 +1,5 @@
 from typing import Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr
 
 
 class RepositoryMetricResult(BaseModel):
@@ -12,6 +12,10 @@ class RepositoryMetricResult(BaseModel):
     status: str = Field(..., min_length=1)
     metadata: dict[str, Any] | None = None
     message: str | None = None
+    # Excluded from serialization, used to pass large or non-JSON-serializable
+    # values (e.g. a Path to a cached repo tarball) from a phase-1 metric to a
+    # phase-2 metric that depends on it, without exposing them in the API response.
+    _transient: dict[str, Any] = PrivateAttr(default_factory=dict)
 
 
 class RepositoryAnalysisResult(BaseModel):

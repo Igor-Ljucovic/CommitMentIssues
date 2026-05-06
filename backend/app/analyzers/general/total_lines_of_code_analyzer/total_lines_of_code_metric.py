@@ -35,7 +35,7 @@ async def get_total_lines_of_code_metric(
             repository_name=repository_name,
         )
 
-        return RepositoryMetricResult(
+        metric_result = RepositoryMetricResult(
             metric_key=TOTAL_LINES_OF_CODE_METRIC_KEY,
             metric_name=TOTAL_LINES_OF_CODE_METRIC_NAME,
             value=result[TOTAL_LINES_OF_CODE_METRIC_KEY],
@@ -47,6 +47,8 @@ async def get_total_lines_of_code_metric(
                 f'{result[SKIPPED_BINARY_FILES]} binary files.'
             ),
         )
+        metric_result._transient["tarball_path"] = result["tarball_path"]
+        return metric_result
     except Exception as exc:
         return RepositoryMetricResult(
             metric_key=TOTAL_LINES_OF_CODE_METRIC_KEY,

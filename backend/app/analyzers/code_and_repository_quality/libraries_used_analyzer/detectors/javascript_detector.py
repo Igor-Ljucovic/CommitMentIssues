@@ -3,8 +3,7 @@ import json
 from tree_sitter import Language, Parser
 import tree_sitter_javascript as tsjavascript
 
-from app.analyzers.code_and_repository_quality.libraries_used_analyzer.detectors.detector_utils import (
-    fetch_blob_text,
+from app.analyzers.code_and_repository_quality.libraries_used_analyzer.detectors.utils import (
     walk_nodes,
     get_node_text,
 )
@@ -21,24 +20,12 @@ _NODE_STDLIB: frozenset[str] = frozenset({
 _parser: Parser | None = None
 
 
-async def get_js_declared_packages(
-    owner: str,
-    repository_name: str,
-    tree_items: list,
+def get_js_declared_packages_from_content(
+    package_json_contents: list[str],
 ) -> frozenset[str]:
-    """Read package.json files and return declared npm package names."""
     declared: set[str] = set()
-    for item in tree_items:
-        if item.get("type") != "blob":
-            continue
-        if item.get("path", "").split("/")[-1] != "package.json":
-            continue
-        blob_sha = item.get("sha")
-        if not blob_sha:
-            continue
-        text = await fetch_blob_text(owner, repository_name, blob_sha)
-        if text:
-            declared.update(_parse_package_json(text))
+    for content in package_json_contents:
+        declared.update(_parse_package_json(content))
     return frozenset(declared)
 
 

@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any
 import httpx
 
@@ -76,10 +77,25 @@ async def _execute_github_rest_request_raw(
 
 
 async def github_rest_get_bytes(url: str, headers: dict[str, str]) -> bytes:
+    # Unused legacy method for keeping tarball archives in memory, the system
+    # currently uses the more memory-efficient github_rest_stream_to_file instead, 
+    # but still keeping this method around in case we need it for smaller resources in the future. 
     async with httpx.AsyncClient(follow_redirects=True, timeout=120.0) as client:
         response = await client.get(url, headers=headers)
         response.raise_for_status()
         return response.content
+
+
+async def github_rest_stream_to_file(url: str, headers: dict[str, str], dest: Path) -> None:
+    """Downloads a URL directly to disk in 64 KB chunks without buffering the full
+    response in memory. Used instead of github_rest_get_bytes when the response is
+    large (e.g. repository tarballs) to avoid holding hundreds of MB in RAM."""
+    async with httpx.AsyncClient(follow_redirects=True, timeout=120.0) as client:
+        async with client.stream("GET", url, headers=headers) as response:
+            response.raise_for_status()
+            with dest.open("wb") as f:
+                async for chunk in response.aiter_bytes(chunk_size=65536):
+                    f.write(chunk)
 
 
 def _raise_for_github_rest_error(response: httpx.Response) -> None:

@@ -1,5 +1,5 @@
-import io
 import tarfile
+from pathlib import Path
 
 from app.analyzers.general.total_lines_of_code_analyzer.total_lines_of_code_constants import (
     COUNTED_FILES,
@@ -7,9 +7,10 @@ from app.analyzers.general.total_lines_of_code_analyzer.total_lines_of_code_cons
     SKIPPED_BINARY_FILES,
     TOTAL_LINES_OF_CODE_METRIC_KEY,
 )
+from app.core.config import GITHUB_REPOS_DIR
 from app.services.github_rest_service import (
     fetch_github_rest_resource,
-    fetch_github_rest_bytes,
+    download_github_tarball,
 )
 
 
@@ -25,16 +26,20 @@ async def fetch_total_lines_of_code(
     if not default_branch:
         raise RuntimeError("Could not determine the repository default branch.")
 
-    # Single request for the entire repo content (tar file from GitHub's CDN).
-    tarball_bytes = await fetch_github_rest_bytes(
-        f"/repos/{owner}/{repository_name}/tarball/{default_branch}"
-    )
+    GITHUB_REPOS_DIR.mkdir(parents=True, exist_ok=True)
+    tarball_path = GITHUB_REPOS_DIR / f"{owner}-{repository_name}.tar.gz"
+
+    if not tarball_path.exists():
+        await download_github_tarball(
+            f"/repos/{owner}/{repository_name}/tarball/{default_branch}",
+            tarball_path,
+        )
 
     total_lines_of_code = 0
     counted_files = 0
     skipped_binary_files = 0
 
-    with tarfile.open(fileobj=io.BytesIO(tarball_bytes), mode="r:gz") as tar:
+    with tarfile.open(tarball_path, mode="r:gz") as tar:
         for member in tar:
             if not member.isfile():
                 continue
@@ -44,7 +49,7 @@ async def fetch_total_lines_of_code(
                 continue
 
             file_bytes = file_obj.read()
-            line_count, is_text_file = count_lines_from_bytes(file_bytes)
+            line_count, is_text_file = count_newlines_from_bytes(file_bytes)
 
             if not is_text_file:
                 skipped_binary_files += 1
@@ -60,11 +65,12 @@ async def fetch_total_lines_of_code(
         COUNTED_FILES: counted_files,
         SKIPPED_BINARY_FILES: skipped_binary_files,
         TOTAL_LINES_OF_CODE_METRIC_KEY: total_lines_of_code,
+        "tarball_path": tarball_path,
     }
 
 
-def count_lines_from_bytes(blob_bytes: bytes) -> tuple[int, bool]:
-    # Counts total number of \n-s, not actual lines of code
+def count_newlines_from_bytes(blob_bytes: bytes) -> tuple[int, bool]:
+    """Counts total number of newline characters, not actual lines of code"""
     if not blob_bytes:
         return 0, True
 
