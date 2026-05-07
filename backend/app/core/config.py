@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-GITHUB_REPOS_DIR = BASE_DIR / "uploads" / "github_repositories"
+GITHUB_REPOSITORIES_DIRECTORY = BASE_DIR / "uploads" / "github_repositories"
 
 
 class Settings(BaseSettings):

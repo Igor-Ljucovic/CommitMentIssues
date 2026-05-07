@@ -3,38 +3,12 @@ from pathlib import Path
 
 from app.analyzers.general.total_lines_of_code_analyzer.total_lines_of_code_constants import (
     COUNTED_FILES,
-    DEFAULT_BRANCH_NAME,
     SKIPPED_BINARY_FILES,
     TOTAL_LINES_OF_CODE_METRIC_KEY,
 )
-from app.core.config import GITHUB_REPOS_DIR
-from app.services.github_rest_service import (
-    fetch_github_rest_resource,
-    download_github_tarball,
-)
 
 
-async def fetch_total_lines_of_code(
-    owner: str,
-    repository_name: str,
-) -> dict:
-    repository_data = await fetch_github_rest_resource(
-        f"/repos/{owner}/{repository_name}"
-    )
-
-    default_branch = repository_data.get("default_branch")
-    if not default_branch:
-        raise RuntimeError("Could not determine the repository default branch.")
-
-    GITHUB_REPOS_DIR.mkdir(parents=True, exist_ok=True)
-    tarball_path = GITHUB_REPOS_DIR / f"{owner}-{repository_name}.tar.gz"
-
-    if not tarball_path.exists():
-        await download_github_tarball(
-            f"/repos/{owner}/{repository_name}/tarball/{default_branch}",
-            tarball_path,
-        )
-
+def fetch_total_lines_of_code(tarball_path: Path) -> dict:
     total_lines_of_code = 0
     counted_files = 0
     skipped_binary_files = 0
@@ -59,13 +33,9 @@ async def fetch_total_lines_of_code(
             counted_files += 1
 
     return {
-        "owner": repository_data.get("owner", {}).get("login", owner),
-        "repository_name": repository_data.get("name", repository_name),
-        DEFAULT_BRANCH_NAME: default_branch,
         COUNTED_FILES: counted_files,
         SKIPPED_BINARY_FILES: skipped_binary_files,
         TOTAL_LINES_OF_CODE_METRIC_KEY: total_lines_of_code,
-        "tarball_path": tarball_path,
     }
 
 
@@ -74,7 +44,6 @@ def count_newlines_from_bytes(blob_bytes: bytes) -> tuple[int, bool]:
     if not blob_bytes:
         return 0, True
 
-    # Null byte presence is a reliable binary-file heuristic.
     if b"\x00" in blob_bytes:
         return 0, False
 

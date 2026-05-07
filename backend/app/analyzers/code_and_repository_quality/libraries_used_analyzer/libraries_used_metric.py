@@ -10,10 +10,8 @@ from app.analyzers.code_and_repository_quality.libraries_used_analyzer.libraries
 from app.analyzers.code_and_repository_quality.libraries_used_analyzer.libraries_used_fetch import (
     fetch_libraries_used,
 )
-from app.analyzers.general.total_lines_of_code_analyzer.total_lines_of_code_constants import (
-    TOTAL_LINES_OF_CODE_METRIC_KEY,
-)
 from app.analyzers.common.metadata_utils import get_transient_value
+from app.analyzers.common.constants import REPOSITORY_TARBALL_METRIC_KEY
 from app.common.metric_status import MetricStatus
 from app.schemas.analysis_request_schemas import AnalysisRequest, RepositoryInput
 from app.schemas.analysis_response_schemas import RepositoryMetricResult
@@ -33,14 +31,18 @@ async def _get_libraries_used_metric(
     if subcategory_config is None:
         return None
 
-    try:
-        owner, repository_name = repository.get_owner_and_repository_name()
-
-        libraries_by_language = await fetch_libraries_used(
-            owner=owner,
-            repository_name=repository_name,
-            tarball_path=tarball_path,
+    if tarball_path is None:
+        return RepositoryMetricResult(
+            metric_key=LIBRARIES_USED_METRIC_KEY,
+            metric_name=LIBRARIES_USED_METRIC_NAME,
+            value=None,
+            weight=None,
+            status=MetricStatus.FAILED,
+            message="Repository tarball is not available.",
         )
+
+    try:
+        libraries_by_language = fetch_libraries_used(tarball_path)
 
         all_unique = {lib for libs in libraries_by_language.values() for lib in libs}
         detected_langs = [
@@ -88,7 +90,7 @@ async def get_libraries_used_metric(
         repository,
         tarball_path=get_transient_value(
             prior_results,
-            [TOTAL_LINES_OF_CODE_METRIC_KEY],
+            [REPOSITORY_TARBALL_METRIC_KEY],
             "tarball_path",
             Path,
         ),
