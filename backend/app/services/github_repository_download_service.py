@@ -27,6 +27,12 @@ async def ensure_repository_tarball(owner: str, repository_name: str) -> Path:
                 repository_data = await fetch_github_rest_resource(
                     f"/repos/{owner}/{repository_name}"
                 )
+                repo_size_kb = repository_data.get("size", 0)
+                if repo_size_kb > settings.GITHUB_MAX_REPOSITORY_SIZE_KB:
+                    raise ValueError(
+                        f"Repository size ({repo_size_kb:,} KB) exceeds the "
+                        f"{settings.GITHUB_MAX_REPOSITORY_SIZE_KB:,} KB limit."
+                    )
                 default_branch = repository_data.get("default_branch")
                 if not default_branch:
                     raise RuntimeError("Could not determine the repository default branch.")
