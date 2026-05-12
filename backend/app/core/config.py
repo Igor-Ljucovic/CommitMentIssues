@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     GITHUB_GRAPHQL_URL: str = "https://api.github.com/graphql"
     GITHUB_REST_API_BASE_URL: str = "https://api.github.com"
     GITHUB_REQUEST_TIMEOUT_SECONDS: int = 30
+    GITHUB_MAX_CONCURRENT_TARBALL_DOWNLOADS: int = 4
     
     OPENAI_API_BASE_URL: str = "https://api.openai.com/v1"
     OPENAI_API_KEY: str = ""
