@@ -52,3 +52,6 @@ async def get_first_commit_date_metric(
             metadata=None,
             message=str(exc),
         )
+
+get_first_commit_date_metric.metric_key = FIRST_COMMIT_DATE_METRIC_KEY
+get_first_commit_date_metric.get_config = lambda req: req.get_subcategory_config(FIRST_COMMIT_DATE_CATEGORY_NAME, FIRST_COMMIT_DATE_SUBCATEGORY_NAME)

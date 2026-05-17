@@ -77,3 +77,6 @@ async def get_github_wiki_quality_metric(
             status=MetricStatus.FAILED,
             message=str(exc),
         )
+
+get_github_wiki_quality_metric.metric_key = ESTIMATED_GITHUB_WIKI_QUALITY_METRIC_KEY
+get_github_wiki_quality_metric.get_config = lambda req: req.get_subcategory_config(ESTIMATED_GITHUB_WIKI_QUALITY_CATEGORY_NAME, ESTIMATED_GITHUB_WIKI_QUALITY_SUBCATEGORY_NAME)

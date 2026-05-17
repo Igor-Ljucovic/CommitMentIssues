@@ -80,3 +80,6 @@ async def get_total_lines_of_code_filtered_metric(
             Path,
         ),
     )
+
+get_total_lines_of_code_filtered_metric.metric_key = TOTAL_LINES_OF_CODE_FILTERED_METRIC_KEY
+get_total_lines_of_code_filtered_metric.get_config = lambda req: req.get_subcategory_config(TOTAL_LINES_OF_CODE_FILTERED_CATEGORY_NAME, TOTAL_LINES_OF_CODE_FILTERED_SUBCATEGORY_NAME)

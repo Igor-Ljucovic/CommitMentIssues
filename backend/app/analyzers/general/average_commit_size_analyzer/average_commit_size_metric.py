@@ -54,3 +54,6 @@ async def get_average_commit_size_metric(
             metadata=None,
             message=str(exc),
         )
+
+get_average_commit_size_metric.metric_key = AVERAGE_COMMIT_SIZE_METRIC_KEY
+get_average_commit_size_metric.get_config = lambda req: req.get_subcategory_config(AVERAGE_COMMIT_SIZE_CATEGORY_NAME, AVERAGE_COMMIT_SIZE_SUBCATEGORY_NAME)

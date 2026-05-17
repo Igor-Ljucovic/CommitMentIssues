@@ -78,3 +78,6 @@ async def get_ollama_estimated_commit_naming_quality_metric(
             status=MetricStatus.FAILED,
             message=str(exc),
         )
+
+get_ollama_estimated_commit_naming_quality_metric.metric_key = ESTIMATED_COMMIT_NAMING_QUALITY_METRIC_KEY
+get_ollama_estimated_commit_naming_quality_metric.get_config = lambda req: req.get_subcategory_config(ESTIMATED_COMMIT_NAMING_QUALITY_CATEGORY_NAME, ESTIMATED_COMMIT_NAMING_QUALITY_SUBCATEGORY_NAME)

@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     LOCAL_LLM_BASE_URL: str = "http://localhost:11434"
     LOCAL_LLM_MODEL_QWEN25CODER7B: str = "qwen2.5-coder:7b"
 
+    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_CACHE_SESSION_TTL_SECONDS: int = 1800  # 30 minutes
+
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
         extra="ignore",

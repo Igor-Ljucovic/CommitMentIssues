@@ -53,3 +53,6 @@ async def get_last_commit_date_metric(
             metadata=None,
             message=str(exc),
         )
+
+get_last_commit_date_metric.metric_key = LAST_COMMIT_DATE_METRIC_KEY
+get_last_commit_date_metric.get_config = lambda req: req.get_subcategory_config(LAST_COMMIT_DATE_CATEGORY_NAME, LAST_COMMIT_DATE_SUBCATEGORY_NAME)

@@ -82,3 +82,6 @@ async def get_total_files_metric(
             int,
         ),
     )
+
+get_total_files_metric.metric_key = TOTAL_FILES_METRIC_KEY
+get_total_files_metric.get_config = lambda req: req.get_subcategory_config(TOTAL_FILES_CATEGORY_NAME, TOTAL_FILES_SUBCATEGORY_NAME)

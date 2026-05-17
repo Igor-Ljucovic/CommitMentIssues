@@ -79,3 +79,6 @@ async def get_languages_used_metric(
             list,
         ),
     )
+
+get_languages_used_metric.metric_key = LANGUAGES_USED_METRIC_KEY
+get_languages_used_metric.get_config = lambda req: req.get_subcategory_config(LANGUAGES_USED_CATEGORY_NAME, LANGUAGES_USED_SUBCATEGORY_NAME)

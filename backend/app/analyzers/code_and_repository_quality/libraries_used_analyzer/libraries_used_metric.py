@@ -95,3 +95,6 @@ async def get_libraries_used_metric(
             Path,
         ),
     )
+
+get_libraries_used_metric.metric_key = LIBRARIES_USED_METRIC_KEY
+get_libraries_used_metric.get_config = lambda req: req.get_subcategory_config(LIBRARIES_USED_CATEGORY_NAME, LIBRARIES_USED_SUBCATEGORY_NAME)

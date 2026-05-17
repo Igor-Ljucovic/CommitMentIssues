@@ -47,3 +47,6 @@ async def get_stars_metric(
             status=MetricStatus.FAILED,
             message=str(exc),
         )
+
+get_stars_metric.metric_key = STARS_METRIC_KEY
+get_stars_metric.get_config = lambda req: req.get_subcategory_config(STARS_CATEGORY_NAME, STARS_SUBCATEGORY_NAME)

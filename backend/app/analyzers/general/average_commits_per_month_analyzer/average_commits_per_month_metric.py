@@ -124,3 +124,6 @@ async def get_average_commits_per_month_metric(
             str,
         ),
     )
+
+get_average_commits_per_month_metric.metric_key = AVERAGE_COMMITS_PER_MONTH_METRIC_KEY
+get_average_commits_per_month_metric.get_config = lambda req: req.get_subcategory_config(AVERAGE_COMMITS_PER_MONTH_CATEGORY_NAME, AVERAGE_COMMITS_PER_MONTH_SUBCATEGORY_NAME)

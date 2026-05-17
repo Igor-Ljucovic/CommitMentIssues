@@ -50,3 +50,6 @@ async def get_total_commits_metric(
             metadata=None,
             message=str(exc),
         )
+
+get_total_commits_metric.metric_key = TOTAL_COMMITS_METRIC_KEY
+get_total_commits_metric.get_config = lambda req: req.get_subcategory_config(TOTAL_COMMITS_CATEGORY_NAME, TOTAL_COMMITS_SUBCATEGORY_NAME)

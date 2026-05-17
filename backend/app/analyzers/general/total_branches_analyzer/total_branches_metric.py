@@ -49,3 +49,6 @@ async def get_total_branches_metric(
             status=MetricStatus.FAILED,
             message=str(exc),
         )
+
+get_total_branches_metric.metric_key = TOTAL_BRANCHES_METRIC_KEY
+get_total_branches_metric.get_config = lambda req: req.get_subcategory_config(TOTAL_BRANCHES_CATEGORY_NAME, TOTAL_BRANCHES_SUBCATEGORY_NAME)

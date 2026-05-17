@@ -54,3 +54,6 @@ async def get_pull_request_acceptance_rate_metric(
             status=MetricStatus.FAILED,
             message=str(exc),
         )
+
+get_pull_request_acceptance_rate_metric.metric_key = PULL_REQUEST_ACCEPTANCE_RATE_METRIC_KEY
+get_pull_request_acceptance_rate_metric.get_config = lambda req: req.get_subcategory_config(PULL_REQUEST_ACCEPTANCE_RATE_CATEGORY_NAME, PULL_REQUEST_ACCEPTANCE_RATE_SUBCATEGORY_NAME)

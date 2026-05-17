@@ -89,7 +89,7 @@ async def get_median_commit_size_filtered_metric(
         commit_size_samples=get_metadata_value(
             prior_results,
             [
-                AVERAGE_COMMIT_SIZE_METRIC_KEY, 
+                AVERAGE_COMMIT_SIZE_METRIC_KEY,
                 AVERAGE_COMMIT_SIZE_FILTERED_METRIC_KEY,
                 MEDIAN_COMMIT_SIZE_METRIC_KEY
             ],
@@ -97,3 +97,6 @@ async def get_median_commit_size_filtered_metric(
             list,
         ),
     )
+
+get_median_commit_size_filtered_metric.metric_key = MEDIAN_COMMIT_SIZE_FILTERED_METRIC_KEY
+get_median_commit_size_filtered_metric.get_config = lambda req: req.get_subcategory_config(MEDIAN_COMMIT_SIZE_FILTERED_CATEGORY_NAME, MEDIAN_COMMIT_SIZE_FILTERED_SUBCATEGORY_NAME)

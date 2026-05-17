@@ -68,3 +68,6 @@ async def get_github_readme_quality_metric(
             status=MetricStatus.FAILED,
             message=str(exc),
         )
+
+get_github_readme_quality_metric.metric_key = ESTIMATED_README_QUALITY_METRIC_KEY
+get_github_readme_quality_metric.get_config = lambda req: req.get_subcategory_config(ESTIMATED_README_QUALITY_CATEGORY_NAME, ESTIMATED_README_QUALITY_SUBCATEGORY_NAME)
